@@ -15,6 +15,13 @@ server.listen(0, async () => {
     assert.strictEqual(s, 200); assert.strictEqual(j.total_surahs, 114);
     [s, j] = await get(base, '/api/quran/1');
     assert.strictEqual(s, 200); assert.strictEqual(j.verses.length, 7);
+    [s, j] = await get(base, '/api/quran/2');
+    assert.strictEqual(s, 200); assert.strictEqual(j.verses[j.verses.length - 1].ayah, 286);
+    [s, j] = await get(base, '/api/quran/2/255');
+    assert.strictEqual(s, 200); assert.ok(j.tamil.includes('வேறு யாருமில்லை'));
+    [s, j] = await get(base, '/api/quran/114/3');   // inside a merged 1-4 block
+    assert.strictEqual(s, 200); assert.strictEqual(j.ayah, 1); assert.strictEqual(j.ayah_end, 4); assert.strictEqual(j.requested_ayah, 3);
+    for (let n = 1; n <= 114; n++) assert.strictEqual((await get(base, '/api/quran/' + n))[0], 200, 'surah ' + n);
     [s, j] = await get(base, '/api/quran/1/2');
     assert.strictEqual(s, 200); assert.strictEqual(j.ayah, 2);
     assert.strictEqual((await get(base, '/api/quran/1/99'))[0], 404);

@@ -7,13 +7,18 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 
+const cache = new Map();
 function readJson(...parts) {
   const file = path.join(ROOT, ...parts);
+  if (cache.has(file)) return cache.get(file);
+  let data = null;
   try {
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
+    data = JSON.parse(fs.readFileSync(file, 'utf8'));
   } catch (e) {
-    return null;
+    data = null;
   }
+  if (data) cache.set(file, data);
+  return data;
 }
 
 function send(res, status, body) {
@@ -61,9 +66,11 @@ function route(url) {
     if (!surah) return [404, { error: `Surah ${a} is not available yet` }];
     if (!b) return [200, surah];
     if (!isPosInt(b)) return [400, { error: 'ayah must be a positive integer' }];
-    const verse = (surah.verses || []).find((v) => v.ayah === +b);
+    // The TNTJ/PJ translation sometimes translates several ayahs as one block (ayah..ayah_end).
+    const n = +b;
+    const verse = (surah.verses || []).find((v) => v.ayah <= n && n <= (v.ayah_end || v.ayah));
     if (!verse) return [404, { error: `Ayah ${b} not found in surah ${a}` }];
-    return [200, { surah: surah.surah, name: surah.name, source: surah.source, ...verse }];
+    return [200, { surah: surah.surah, name: surah.name, source: surah.source, requested_ayah: n, ...verse }];
   }
 
   if (kind === 'hadith' && a === 'bukhari') {
@@ -85,7 +92,7 @@ function route(url) {
     for (const f of fs.existsSync(surahDir) ? fs.readdirSync(surahDir) : []) {
       const s = readJson('quran', 'surah', f);
       for (const v of (s && s.verses) || []) {
-        if (v.tamil && v.tamil.includes(q)) results.push({ type: 'quran', surah: s.surah, ayah: v.ayah, tamil: v.tamil });
+        if (v.tamil && v.tamil.includes(q)) results.push({ type: 'quran', surah: s.surah, ayah: v.ayah, ayah_end: v.ayah_end, tamil: v.tamil });
       }
     }
     const hDir = path.join(ROOT, 'hadith', 'bukhari');
