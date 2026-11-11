@@ -1,0 +1,35 @@
+{
+ "surah": 105,
+ "name_arabic": "الفيل",
+ "name_transliteration": "Al-Fil",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَٰبِ ٱلْفِيلِ",
+   "simple": "بسم الله الرحمن الرحيم ألم تر كيف فعل ربك بأصحاب الفيل"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "أَلَمْ يَجْعَلْ كَيْدَهُمْ فِى تَضْلِيلٍ",
+   "simple": "ألم يجعل كيدهم في تضليل"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ",
+   "simple": "وأرسل عليهم طيرا أبابيل"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "تَرْمِيهِم بِحِجَارَةٍ مِّن سِجِّيلٍ",
+   "simple": "ترميهم بحجارة من سجيل"
+  },
+  {
+   "ayah": 5,
+   "uthmani": "فَجَعَلَهُمْ كَعَصْفٍ مَّأْكُولٍۭ",
+   "simple": "فجعلهم كعصف مأكول"
+  }
+ ]
+}

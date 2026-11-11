@@ -27,6 +27,7 @@ npm test
   The translator sometimes translates several ayahs as one passage. Those entries carry `ayah` and `ayah_end`
   (e.g. 114:1-4), and `GET /api/quran/114/3` returns that block with `requested_ayah: 3`.
   Al-Fatiha uses the standard numbering (bismillah = ayah 1, 7 ayahs).
+- **Quran (Arabic):** all 6,236 verses in Uthmani and plain script from the open Tanzil text (CC BY 3.0, copied verbatim, so it must not be edited), in `quran/arabic/`. `/api/quran/:surah/:ayah` now returns `arabic` and `arabic_simple` next to the Tamil.
 - **Hadith (Bukhari):** 7,493 of the 7,563 numbered hadith (97 chapters), extracted from the 7-volume Tamil Sahih al-Bukhari PDF with `tools/bukhari_extract.py`. About 70 numbers (e.g. 441, 2315, 3327) are not present in that edition and return 404; a few passages printed under several numbers carry `shared_with`. The `narrator` field is best-effort and is empty when the narrator is not named in the opening sentence.
 - **Hadith (Muslim):** 5,759 of the numbers 1-5771 (54 chapters) plus the 95-hadith introduction, extracted from the Tamil Sahih Muslim PDF with `tools/muslim_extract.py`. Numbers 1324-1325 and 3545-3554 do not exist in that edition and return 404. `narrator` is best-effort.
 - **Hadith (Abu Dawud, partial):** 368 hadith of numbers 1-390. A partial Tamil translation; 151, 220-fix, 268 and 277-296 are missing in the source (the second "210" in the source is stored as 220).

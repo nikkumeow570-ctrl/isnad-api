@@ -1,0 +1,35 @@
+{
+ "surah": 113,
+ "name_arabic": "الفلق",
+ "name_transliteration": "Al-Falaq",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ",
+   "simple": "بسم الله الرحمن الرحيم قل أعوذ برب الفلق"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "مِن شَرِّ مَا خَلَقَ",
+   "simple": "من شر ما خلق"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ",
+   "simple": "ومن شر غاسق إذا وقب"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ",
+   "simple": "ومن شر النفاثات في العقد"
+  },
+  {
+   "ayah": 5,
+   "uthmani": "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+   "simple": "ومن شر حاسد إذا حسد"
+  }
+ ]
+}

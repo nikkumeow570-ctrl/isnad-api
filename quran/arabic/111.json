@@ -1,0 +1,35 @@
+{
+ "surah": 111,
+ "name_arabic": "المسد",
+ "name_transliteration": "Al-Masad",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ تَبَّتْ يَدَآ أَبِى لَهَبٍ وَتَبَّ",
+   "simple": "بسم الله الرحمن الرحيم تبت يدا أبي لهب وتب"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "مَآ أَغْنَىٰ عَنْهُ مَالُهُۥ وَمَا كَسَبَ",
+   "simple": "ما أغنى عنه ماله وما كسب"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ",
+   "simple": "سيصلى نارا ذات لهب"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "وَٱمْرَأَتُهُۥ حَمَّالَةَ ٱلْحَطَبِ",
+   "simple": "وامرأته حمالة الحطب"
+  },
+  {
+   "ayah": 5,
+   "uthmani": "فِى جِيدِهَا حَبْلٌ مِّن مَّسَدٍۭ",
+   "simple": "في جيدها حبل من مسد"
+  }
+ ]
+}

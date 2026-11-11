@@ -1,0 +1,25 @@
+{
+ "surah": 108,
+ "name_arabic": "الكوثر",
+ "name_transliteration": "Al-Kawthar",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِنَّآ أَعْطَيْنَٰكَ ٱلْكَوْثَرَ",
+   "simple": "بسم الله الرحمن الرحيم إنا أعطيناك الكوثر"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "فَصَلِّ لِرَبِّكَ وَٱنْحَرْ",
+   "simple": "فصل لربك وانحر"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ",
+   "simple": "إن شانئك هو الأبتر"
+  }
+ ]
+}

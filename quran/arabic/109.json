@@ -1,0 +1,40 @@
+{
+ "surah": 109,
+ "name_arabic": "الكافرون",
+ "name_transliteration": "Al-Kaafiroon",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ يَٰٓأَيُّهَا ٱلْكَٰفِرُونَ",
+   "simple": "بسم الله الرحمن الرحيم قل يا أيها الكافرون"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "لَآ أَعْبُدُ مَا تَعْبُدُونَ",
+   "simple": "لا أعبد ما تعبدون"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "وَلَآ أَنتُمْ عَٰبِدُونَ مَآ أَعْبُدُ",
+   "simple": "ولا أنتم عابدون ما أعبد"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "وَلَآ أَنَا۠ عَابِدٌ مَّا عَبَدتُّمْ",
+   "simple": "ولا أنا عابد ما عبدتم"
+  },
+  {
+   "ayah": 5,
+   "uthmani": "وَلَآ أَنتُمْ عَٰبِدُونَ مَآ أَعْبُدُ",
+   "simple": "ولا أنتم عابدون ما أعبد"
+  },
+  {
+   "ayah": 6,
+   "uthmani": "لَكُمْ دِينُكُمْ وَلِىَ دِينِ",
+   "simple": "لكم دينكم ولي دين"
+  }
+ ]
+}

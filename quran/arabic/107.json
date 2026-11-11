@@ -1,0 +1,45 @@
+{
+ "surah": 107,
+ "name_arabic": "الماعون",
+ "name_transliteration": "Al-Maa'un",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَرَءَيْتَ ٱلَّذِى يُكَذِّبُ بِٱلدِّينِ",
+   "simple": "بسم الله الرحمن الرحيم أرأيت الذي يكذب بالدين"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "فَذَٰلِكَ ٱلَّذِى يَدُعُّ ٱلْيَتِيمَ",
+   "simple": "فذلك الذي يدع اليتيم"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ",
+   "simple": "ولا يحض على طعام المسكين"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "فَوَيْلٌ لِّلْمُصَلِّينَ",
+   "simple": "فويل للمصلين"
+  },
+  {
+   "ayah": 5,
+   "uthmani": "ٱلَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ",
+   "simple": "الذين هم عن صلاتهم ساهون"
+  },
+  {
+   "ayah": 6,
+   "uthmani": "ٱلَّذِينَ هُمْ يُرَآءُونَ",
+   "simple": "الذين هم يراءون"
+  },
+  {
+   "ayah": 7,
+   "uthmani": "وَيَمْنَعُونَ ٱلْمَاعُونَ",
+   "simple": "ويمنعون الماعون"
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "surah": 94,
+ "name_arabic": "الشرح",
+ "name_transliteration": "Ash-Sharh",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَلَمْ نَشْرَحْ لَكَ صَدْرَكَ",
+   "simple": "بسم الله الرحمن الرحيم ألم نشرح لك صدرك"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "وَوَضَعْنَا عَنكَ وِزْرَكَ",
+   "simple": "ووضعنا عنك وزرك"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "ٱلَّذِىٓ أَنقَضَ ظَهْرَكَ",
+   "simple": "الذي أنقض ظهرك"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "وَرَفَعْنَا لَكَ ذِكْرَكَ",
+   "simple": "ورفعنا لك ذكرك"
+  },
+  {
+   "ayah": 5,
+   "uthmani": "فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+   "simple": "فإن مع العسر يسرا"
+  },
+  {
+   "ayah": 6,
+   "uthmani": "إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+   "simple": "إن مع العسر يسرا"
+  },
+  {
+   "ayah": 7,
+   "uthmani": "فَإِذَا فَرَغْتَ فَٱنصَبْ",
+   "simple": "فإذا فرغت فانصب"
+  },
+  {
+   "ayah": 8,
+   "uthmani": "وَإِلَىٰ رَبِّكَ فَٱرْغَب",
+   "simple": "وإلى ربك فارغب"
+  }
+ ]
+}

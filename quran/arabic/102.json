@@ -1,0 +1,50 @@
+{
+ "surah": 102,
+ "name_arabic": "التكاثر",
+ "name_transliteration": "At-Takaathur",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَلْهَىٰكُمُ ٱلتَّكَاثُرُ",
+   "simple": "بسم الله الرحمن الرحيم ألهاكم التكاثر"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "حَتَّىٰ زُرْتُمُ ٱلْمَقَابِرَ",
+   "simple": "حتى زرتم المقابر"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "كَلَّا سَوْفَ تَعْلَمُونَ",
+   "simple": "كلا سوف تعلمون"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ",
+   "simple": "ثم كلا سوف تعلمون"
+  },
+  {
+   "ayah": 5,
+   "uthmani": "كَلَّا لَوْ تَعْلَمُونَ عِلْمَ ٱلْيَقِينِ",
+   "simple": "كلا لو تعلمون علم اليقين"
+  },
+  {
+   "ayah": 6,
+   "uthmani": "لَتَرَوُنَّ ٱلْجَحِيمَ",
+   "simple": "لترون الجحيم"
+  },
+  {
+   "ayah": 7,
+   "uthmani": "ثُمَّ لَتَرَوُنَّهَا عَيْنَ ٱلْيَقِينِ",
+   "simple": "ثم لترونها عين اليقين"
+  },
+  {
+   "ayah": 8,
+   "uthmani": "ثُمَّ لَتُسْـَٔلُنَّ يَوْمَئِذٍ عَنِ ٱلنَّعِيمِ",
+   "simple": "ثم لتسألن يومئذ عن النعيم"
+  }
+ ]
+}

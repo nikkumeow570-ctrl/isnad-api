@@ -1,0 +1,30 @@
+{
+ "surah": 112,
+ "name_arabic": "الإخلاص",
+ "name_transliteration": "Al-Ikhlaas",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ هُوَ ٱللَّهُ أَحَدٌ",
+   "simple": "بسم الله الرحمن الرحيم قل هو الله أحد"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "ٱللَّهُ ٱلصَّمَدُ",
+   "simple": "الله الصمد"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
+   "simple": "لم يلد ولم يولد"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
+   "simple": "ولم يكن له كفوا أحد"
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "surah": 106,
+ "name_arabic": "قريش",
+ "name_transliteration": "Quraish",
+ "type": "meccan",
+ "source": "Tanzil Quran Text (Uthmani, Simple Clean)",
+ "license": "Tanzil Quran text, CC BY 3.0, verbatim copy. https://tanzil.net/docs/text_license",
+ "verses": [
+  {
+   "ayah": 1,
+   "uthmani": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ لِإِيلَٰفِ قُرَيْشٍ",
+   "simple": "بسم الله الرحمن الرحيم لإيلاف قريش"
+  },
+  {
+   "ayah": 2,
+   "uthmani": "إِۦلَٰفِهِمْ رِحْلَةَ ٱلشِّتَآءِ وَٱلصَّيْفِ",
+   "simple": "إيلافهم رحلة الشتاء والصيف"
+  },
+  {
+   "ayah": 3,
+   "uthmani": "فَلْيَعْبُدُوا۟ رَبَّ هَٰذَا ٱلْبَيْتِ",
+   "simple": "فليعبدوا رب هذا البيت"
+  },
+  {
+   "ayah": 4,
+   "uthmani": "ٱلَّذِىٓ أَطْعَمَهُم مِّن جُوعٍ وَءَامَنَهُم مِّنْ خَوْفٍۭ",
+   "simple": "الذي أطعمهم من جوع وآمنهم من خوف"
+  }
+ ]
+}
