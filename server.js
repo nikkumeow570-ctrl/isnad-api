@@ -45,8 +45,10 @@ function route(url) {
         'GET /api/quran',
         'GET /api/quran/:surah',
         'GET /api/quran/:surah/:ayah',
-        'GET /api/hadith/bukhari',
-        'GET /api/hadith/bukhari/:number',
+        'GET /api/hadith',
+        'GET /api/hadith/:book            (bukhari, muslim)',
+        'GET /api/hadith/:book/:number',
+        'GET /api/hadith/muslim/intro/:number',
         'GET /api/search?q=<text>',
       ],
     }];
@@ -73,14 +75,19 @@ function route(url) {
     return [200, { surah: surah.surah, name: surah.name, source: surah.source, requested_ayah: n, ...verse }];
   }
 
-  if (kind === 'hadith' && a === 'bukhari') {
-    if (!b) {
-      const idx = readJson('hadith', 'bukhari', 'index.json');
-      return idx ? [200, idx] : [500, { error: 'Hadith index missing' }];
-    }
-    if (!isPosInt(b)) return [400, { error: 'hadith number must be a positive integer' }];
-    const h = readJson('hadith', 'bukhari', `${b}.json`);
-    if (!h) return [404, { error: `Hadith ${b} is not available yet` }];
+  if (kind === 'hadith') {
+    const books = fs.readdirSync(path.join(ROOT, 'hadith'), { withFileTypes: true })
+      .filter((d) => d.isDirectory() && fs.existsSync(path.join(ROOT, 'hadith', d.name, 'index.json'))).map((d) => d.name);
+    if (!a) return [200, { books: books.map((id) => { const i = readJson('hadith', id, 'index.json'); return { id, book: i.book, total_hadiths: i.total_hadiths, available: i.available }; }) }];
+    if (!books.includes(a)) return [404, { error: `Unknown hadith book '${a}'`, books }];
+    if (!b) return [200, readJson('hadith', a, 'index.json')];
+    // an introduction/ side series that is numbered separately (Muslim's muqaddima)
+    const sub = b === 'intro' ? 'intro' : null;
+    const num = sub ? parts[4] : b;
+    if (sub && !num) return [400, { error: 'give an introduction hadith number, e.g. /api/hadith/muslim/intro/1' }];
+    if (!isPosInt(num)) return [400, { error: 'hadith number must be a positive integer' }];
+    const h = sub ? readJson('hadith', a, 'intro', `${num}.json`) : readJson('hadith', a, `${num}.json`);
+    if (!h) return [404, { error: `Hadith ${num} is not available in ${a}${sub ? ' introduction' : ''}` }];
     return [200, h];
   }
 
@@ -95,11 +102,13 @@ function route(url) {
         if (v.tamil && v.tamil.includes(q)) results.push({ type: 'quran', surah: s.surah, ayah: v.ayah, ayah_end: v.ayah_end, tamil: v.tamil });
       }
     }
-    const hDir = path.join(ROOT, 'hadith', 'bukhari');
-    for (const f of fs.existsSync(hDir) ? fs.readdirSync(hDir) : []) {
-      if (f === 'index.json') continue;
-      const h = readJson('hadith', 'bukhari', f);
-      if (h && h.tamil && h.tamil.includes(q)) results.push({ type: 'hadith', book: h.book, number: h.number, narrator: h.narrator, tamil: h.tamil });
+    for (const bk of ['bukhari', 'muslim']) {
+      const hDir = path.join(ROOT, 'hadith', bk);
+      for (const f of fs.existsSync(hDir) ? fs.readdirSync(hDir) : []) {
+        if (f === 'index.json' || !f.endsWith('.json')) continue;
+        const h = readJson('hadith', bk, f);
+        if (h && h.tamil && h.tamil.includes(q)) results.push({ type: 'hadith', book_id: bk, book: h.book, number: h.number, narrator: h.narrator, tamil: h.tamil });
+      }
     }
     return [200, { query: q, count: results.length, results: results.slice(0, 50) }];
   }
