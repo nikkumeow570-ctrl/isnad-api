@@ -37,7 +37,7 @@ server.listen(0, async () => {
     [s, j] = await get(base, '/api/quran/1/1');
     [s, j] = await get(base, '/api/quran/114/arabic');
     assert.strictEqual(s, 200); assert.strictEqual(j.verses.length, 6);
-    assert.strictEqual((await get(base, '/api/hadith'))[1].books.length, 5);
+    assert.strictEqual((await get(base, '/api/hadith'))[1].books.length, 6);
     assert.strictEqual((await get(base, '/api/hadith/muslim'))[1].total_hadiths, 5771);
     [s, j] = await get(base, '/api/hadith/muslim/1442');
     assert.strictEqual(s, 200); assert.strictEqual(j.chapter, 7);
@@ -45,6 +45,11 @@ server.listen(0, async () => {
     assert.strictEqual(s, 200); assert.strictEqual(j.part, 'introduction');
     assert.strictEqual((await get(base, '/api/hadith/muslim/3545'))[0], 404);
     assert.strictEqual((await get(base, '/api/hadith/nope'))[0], 404);
+    [s, j] = await get(base, '/api/hadith/lulu/1');
+    assert.strictEqual(s, 200); assert.strictEqual(j.grade, 'muttafaqun_alayhi'); assert.ok(j.bukhari_number > 0);
+    [s, j] = await get(base, '/api/articles/hadith-classification');
+    assert.strictEqual(s, 200); assert.strictEqual(j.sections.length, 8);
+    assert.strictEqual((await get(base, '/api/articles/nope'))[0], 404);
     assert.strictEqual((await get(base, '/api/dua'))[1].collections.length, 5);
     [s, j] = await get(base, '/api/dua/thogupu-nabimozhi/1');
     assert.strictEqual(s, 200); assert.ok(j.arabic.length > 5);

@@ -48,12 +48,14 @@ function route(url) {
         'GET /api/quran/:surah/arabic     (whole surah, Uthmani + simple)',
         'GET /api/quran/:surah/english    (Pickthall + Yusuf Ali)',
         'GET /api/hadith',
-        'GET /api/hadith/:book            (bukhari, muslim, abudawud, riyadussalihin, shamail)',
+        'GET /api/hadith/:book            (bukhari, muslim, abudawud, riyadussalihin, shamail, lulu)',
         'GET /api/hadith/:book/:number',
         'GET /api/hadith/muslim/intro/:number',
         'GET /api/dua                     (collections of duas and a supplication article)',
         'GET /api/dua/:collection',
         'GET /api/dua/:collection/:number',
+        'GET /api/articles                (reference articles, e.g. hadith classification)',
+        'GET /api/articles/:id',
         'GET /api/search?q=<text>',
       ],
     }];
@@ -119,6 +121,13 @@ function route(url) {
     if (!isPosInt(b)) return [400, { error: 'item number must be a positive integer' }];
     const item = col.items.find((x) => x.number === +b);
     return item ? [200, { collection: a, collection_title: col.title, ...item }] : [404, { error: `Item ${b} not found in ${a}` }];
+  }
+
+  if (kind === 'articles') {
+    const idx = readJson('articles', 'index.json');
+    if (!a) return [200, idx];
+    if (!idx.articles.some((x) => x.id === a)) return [404, { error: `Unknown article '${a}'`, articles: idx.articles.map((x) => x.id) }];
+    return [200, readJson('articles', `${a}.json`)];
   }
 
   if (kind === 'search') {

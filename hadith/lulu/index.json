@@ -1,0 +1,482 @@
+{
+  "book": "அல்லுஃலுவு வல்மர்ஜான்",
+  "title_arabic": "اللؤلؤ والمرجان فيما اتفق عليه الشيخان",
+  "title_english": "Al-Lu'lu' wal-Marjan (The Pearl and the Coral: 1,906 Muttafaqun Alayhi Hadiths Agreed Upon by Imam Bukhari and Imam Muslim)",
+  "source": "IslamKalvi.com; translators நெல்லை இப்னு கலாம் ரசூல் மற்றும் எம். முஜிபுர் ரஹ்மான் உமரீ",
+  "partial": true,
+  "note": "Only 18 of the 1,906 hadith are in this data so far. Every hadith in this book is agreed upon by both Bukhari and Muslim (muttafaqun alayhi), the highest grade of authenticity.",
+  "total_hadiths": 1906,
+  "available": 18,
+  "kitabs": [
+    {
+      "kitab": 1,
+      "arabic": "كتاب الإيمان",
+      "title": "ஈமான் (இறைநம்பிக்கை)",
+      "hadith_range": "1-128",
+      "available": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "kitab": 2,
+      "arabic": "كتاب الطهارة",
+      "title": "தூய்மை (உளூ மற்றும் சுத்தம்)",
+      "hadith_range": "129-184",
+      "available": [
+        9
+      ]
+    },
+    {
+      "kitab": 3,
+      "arabic": "كتاب الحيض",
+      "title": "மாதவிடாய் மற்றும் குளிப்புச் சட்டங்கள்",
+      "hadith_range": "185-227",
+      "available": []
+    },
+    {
+      "kitab": 4,
+      "arabic": "كتاب الصلاة",
+      "title": "தொழுகை",
+      "hadith_range": "228-308",
+      "available": []
+    },
+    {
+      "kitab": 5,
+      "arabic": "كتاب المساجد ومواضع الصلاة",
+      "title": "பள்ளிவாசல்களும் தொழுமிடங்களும்",
+      "hadith_range": "309-400",
+      "available": []
+    },
+    {
+      "kitab": 6,
+      "arabic": "كتاب صلاة المسافرين وقصرها",
+      "title": "பயணிகளின் தொழுகையும் இரவுத் தொழுகையும்",
+      "hadith_range": "401-486",
+      "available": []
+    },
+    {
+      "kitab": 7,
+      "arabic": "كتاب الجمعة",
+      "title": "ஜும்ஆ தொழுகை",
+      "hadith_range": "487-508",
+      "available": []
+    },
+    {
+      "kitab": 8,
+      "arabic": "كتاب صلاة العيدين",
+      "title": "இரு பெருநாள் தொழுகைகள்",
+      "hadith_range": "509-518",
+      "available": []
+    },
+    {
+      "kitab": 9,
+      "arabic": "كتاب صلاة الاستسقاء",
+      "title": "மழைத் தொழுகை",
+      "hadith_range": "519-525",
+      "available": []
+    },
+    {
+      "kitab": 10,
+      "arabic": "كتاب الكسوف",
+      "title": "கிரகணத் தொழுகை",
+      "hadith_range": "526-537",
+      "available": []
+    },
+    {
+      "kitab": 11,
+      "arabic": "كتاب الجنائز",
+      "title": "ஜனாஸா (இறந்தவர்களின்) சட்டங்கள்",
+      "hadith_range": "538-577",
+      "available": []
+    },
+    {
+      "kitab": 12,
+      "arabic": "كتاب الزكاة",
+      "title": "ஜகாத் மற்றும் தர்மம்",
+      "hadith_range": "578-649",
+      "available": [
+        10
+      ]
+    },
+    {
+      "kitab": 13,
+      "arabic": "كتاب الصيام",
+      "title": "நோன்பு",
+      "hadith_range": "650-721",
+      "available": [
+        11
+      ]
+    },
+    {
+      "kitab": 14,
+      "arabic": "كتاب الاعتكاف",
+      "title": "இஃதிகாஃப்",
+      "hadith_range": "722-727",
+      "available": []
+    },
+    {
+      "kitab": 15,
+      "arabic": "كتاب الحج",
+      "title": "ஹஜ் மற்றும் உம்ரா",
+      "hadith_range": "728-886",
+      "available": []
+    },
+    {
+      "kitab": 16,
+      "arabic": "كتاب النكاح",
+      "title": "திருமணம் (நிக்காஹ்)",
+      "hadith_range": "887-937",
+      "available": []
+    },
+    {
+      "kitab": 17,
+      "arabic": "كتاب الرضاع",
+      "title": "பால்குடி உறவுச் சட்டங்கள்",
+      "hadith_range": "938-954",
+      "available": []
+    },
+    {
+      "kitab": 18,
+      "arabic": "كتاب الطلاق",
+      "title": "விவாகரத்து (தலாக்)",
+      "hadith_range": "955-974",
+      "available": []
+    },
+    {
+      "kitab": 19,
+      "arabic": "كتاب اللعان",
+      "title": "லிஆன் (சாப அழைப்புப் பிரமாணம்)",
+      "hadith_range": "975-981",
+      "available": []
+    },
+    {
+      "kitab": 20,
+      "arabic": "كتاب العتق",
+      "title": "அடிமைகளை விடுதலை செய்தல்",
+      "hadith_range": "982-994",
+      "available": []
+    },
+    {
+      "kitab": 21,
+      "arabic": "كتاب البيوع",
+      "title": "வியாபாரம் மற்றும் கொடுக்கல் வாங்கல்",
+      "hadith_range": "995-1029",
+      "available": []
+    },
+    {
+      "kitab": 22,
+      "arabic": "كتاب المساقاة والمزارعة",
+      "title": "நீர்ப்பாசன ஒப்பந்தமும் நிலக் குத்தகையும்",
+      "hadith_range": "1030-1069",
+      "available": [
+        12
+      ]
+    },
+    {
+      "kitab": 23,
+      "arabic": "كتاب الفرائض",
+      "title": "வாரிசுரிமைச் சட்டங்கள் (ஃபராஇழ்)",
+      "hadith_range": "1070-1076",
+      "available": []
+    },
+    {
+      "kitab": 24,
+      "arabic": "كتاب الهبات",
+      "title": "அன்பளிப்புகள் (ஹிபா)",
+      "hadith_range": "1077-1086",
+      "available": []
+    },
+    {
+      "kitab": 25,
+      "arabic": "كتاب الوصايا",
+      "title": "மரண சாசனம் (வஸிய்யத்)",
+      "hadith_range": "1087-1093",
+      "available": []
+    },
+    {
+      "kitab": 26,
+      "arabic": "كتاب النذر",
+      "title": "நேர்ச்சை (நத்ர்)",
+      "hadith_range": "1094-1102",
+      "available": []
+    },
+    {
+      "kitab": 27,
+      "arabic": "كتاب الأيمان",
+      "title": "சத்தியங்கள் (அய்மான்)",
+      "hadith_range": "1103-1122",
+      "available": []
+    },
+    {
+      "kitab": 28,
+      "arabic": "كتاب القسامة والمحاربين والقصاص والديات",
+      "title": "கஸாமா, பழிக்குப் பழி மற்றும் இழப்பீட்டுத் தொகை",
+      "hadith_range": "1123-1144",
+      "available": []
+    },
+    {
+      "kitab": 29,
+      "arabic": "كتاب الحدود",
+      "title": "குற்றவியல் தண்டனைகள் (ஹுதூத்)",
+      "hadith_range": "1145-1166",
+      "available": []
+    },
+    {
+      "kitab": 30,
+      "arabic": "كتاب الأقضية",
+      "title": "நீதித் தீர்ப்புகள் (அக்ளியா)",
+      "hadith_range": "1167-1178",
+      "available": []
+    },
+    {
+      "kitab": 31,
+      "arabic": "كتاب اللقطة",
+      "title": "வழியில் கண்டெடுக்கப்பட்ட பொருட்கள் (லுக்தா)",
+      "hadith_range": "1179-1185",
+      "available": []
+    },
+    {
+      "kitab": 32,
+      "arabic": "كتاب الجهاد والسير",
+      "title": "ஜிஹாத் மற்றும் வரலாற்றுப் போர்கள்",
+      "hadith_range": "1186-1264",
+      "available": []
+    },
+    {
+      "kitab": 33,
+      "arabic": "كتاب الإمارة",
+      "title": "ஆட்சித் தலைமை மற்றும் நிர்வாகம் (இமாரா)",
+      "hadith_range": "1265-1326",
+      "available": [
+        13
+      ]
+    },
+    {
+      "kitab": 34,
+      "arabic": "كتاب الصيد والذبائح",
+      "title": "வேட்டையாடுதலும் அறுக்கப்படும் பிராணிகளும்",
+      "hadith_range": "1327-1348",
+      "available": []
+    },
+    {
+      "kitab": 35,
+      "arabic": "كتاب الأضاحي",
+      "title": "குர்பானி (உழ்ஹிய்யா)",
+      "hadith_range": "1349-1359",
+      "available": []
+    },
+    {
+      "kitab": 36,
+      "arabic": "كتاب الأشربة",
+      "title": "பானங்கள் மற்றும் உணவு ஒழுக்கங்கள்",
+      "hadith_range": "1360-1410",
+      "available": []
+    },
+    {
+      "kitab": 37,
+      "arabic": "كتاب اللباس والزينة",
+      "title": "ஆடை மற்றும் அலங்காரம்",
+      "hadith_range": "1411-1459",
+      "available": []
+    },
+    {
+      "kitab": 38,
+      "arabic": "كتاب الآداب",
+      "title": "நல்லொழுக்கங்கள் (அல்-ஆதாப்)",
+      "hadith_range": "1460-1492",
+      "available": []
+    },
+    {
+      "kitab": 39,
+      "arabic": "كتاب السلام",
+      "title": "ஸலாம் கூறுதல் மற்றும் மருத்துவம்",
+      "hadith_range": "1493-1547",
+      "available": []
+    },
+    {
+      "kitab": 40,
+      "arabic": "كتاب الألفاظ من الأدب وغيرها",
+      "title": "நாவடக்கம் மற்றும் வார்த்தைப் பிரயோக ஒழுங்குகள்",
+      "hadith_range": "1548-1556",
+      "available": []
+    },
+    {
+      "kitab": 41,
+      "arabic": "كتاب الشعر",
+      "title": "கவிதை குறித்து",
+      "hadith_range": "1557-1560",
+      "available": []
+    },
+    {
+      "kitab": 42,
+      "arabic": "كتاب الرؤيا",
+      "title": "கனவுகளும் அவற்றின் விளக்கமும்",
+      "hadith_range": "1561-1575",
+      "available": []
+    },
+    {
+      "kitab": 43,
+      "arabic": "كتاب الفضائل",
+      "title": "நபி (ஸல்) அவர்களின் மற்றும் பிற நபிமார்களின் சிறப்புகள்",
+      "hadith_range": "1576-1645",
+      "available": [
+        14
+      ]
+    },
+    {
+      "kitab": 44,
+      "arabic": "كتاب فضائل الصحابة",
+      "title": "நபித்தோழர்களின் (ஸஹாபாக்களின்) சிறப்புகள்",
+      "hadith_range": "1646-1748",
+      "available": []
+    },
+    {
+      "kitab": 45,
+      "arabic": "كتاب البر والصلة والآداب",
+      "title": "பெற்றோர் நலம், உறவைப் பேணுதல் மற்றும் நற்பண்புகள்",
+      "hadith_range": "1749-1804",
+      "available": [
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "kitab": 46,
+      "arabic": "كتاب القدر",
+      "title": "விதி (அல்-கத்ர்)",
+      "hadith_range": "1805-1816",
+      "available": []
+    },
+    {
+      "kitab": 47,
+      "arabic": "كتاب العلم",
+      "title": "கல்வி (அல்-இல்ம்)",
+      "hadith_range": "1817-1823",
+      "available": []
+    },
+    {
+      "kitab": 48,
+      "arabic": "كتاب الذكر والدعاء والتوبة والاستغفار",
+      "title": "திக்ர், துஆ, தவ்பா மற்றும் பாவமன்னிப்பு",
+      "hadith_range": "1824-1856",
+      "available": [
+        18
+      ]
+    },
+    {
+      "kitab": 49,
+      "arabic": "كتاب التوبة",
+      "title": "பாவமன்னிப்புத் தேடுதல் (தவ்பா) மற்றும் இஃப்க் நிகழ்வு",
+      "hadith_range": "1857-1870",
+      "available": []
+    },
+    {
+      "kitab": 50,
+      "arabic": "كتاب صفات المنافقين وأحكامهم",
+      "title": "நயவஞ்சகர்களின் பண்புகள்",
+      "hadith_range": "1871-1875",
+      "available": []
+    },
+    {
+      "kitab": 51,
+      "arabic": "كتاب صفة القيامة والجنة والنار",
+      "title": "மறுமை நாள், சொர்க்கம் மற்றும் நரகத்தின் தன்மைகள்",
+      "hadith_range": "1876-1884",
+      "available": []
+    },
+    {
+      "kitab": 52,
+      "arabic": "كتاب الجنة وصفة نعيمها وأهلها",
+      "title": "சொர்க்கத்தின் அருட்கொடைகளும் சொர்க்கவாசிகளும்",
+      "hadith_range": "1885-1892",
+      "available": []
+    },
+    {
+      "kitab": 53,
+      "arabic": "كتاب الفتن وأشراط الساعة",
+      "title": "குழப்பங்களும் (ஃபித்னா) மறுமை நாளின் அடையாளங்களும்",
+      "hadith_range": "1893-1900",
+      "available": []
+    },
+    {
+      "kitab": 54,
+      "arabic": "كتاب الزهد والرقائق والتفسير",
+      "title": "இறையச்சம், இதயசுத்தி (அஸ்-ஸுஹ்த்) மற்றும் தஃப்ஸீர் (விரிவுரை)",
+      "hadith_range": "1901-1906",
+      "available": []
+    }
+  ],
+  "chapters": [
+    {
+      "chapter": 1,
+      "title": "ஈமான் (இறைநம்பிக்கை)",
+      "start": 1,
+      "end": 8,
+      "count": 8
+    },
+    {
+      "chapter": 2,
+      "title": "தூய்மை (உளூ மற்றும் சுத்தம்)",
+      "start": 9,
+      "end": 9,
+      "count": 1
+    },
+    {
+      "chapter": 12,
+      "title": "ஜகாத் மற்றும் தர்மம்",
+      "start": 10,
+      "end": 10,
+      "count": 1
+    },
+    {
+      "chapter": 13,
+      "title": "நோன்பு",
+      "start": 11,
+      "end": 11,
+      "count": 1
+    },
+    {
+      "chapter": 22,
+      "title": "நீர்ப்பாசன ஒப்பந்தமும் நிலக் குத்தகையும்",
+      "start": 12,
+      "end": 12,
+      "count": 1
+    },
+    {
+      "chapter": 33,
+      "title": "ஆட்சித் தலைமை மற்றும் நிர்வாகம் (இமாரா)",
+      "start": 13,
+      "end": 13,
+      "count": 1
+    },
+    {
+      "chapter": 43,
+      "title": "நபி (ஸல்) அவர்களின் மற்றும் பிற நபிமார்களின் சிறப்புகள்",
+      "start": 14,
+      "end": 14,
+      "count": 1
+    },
+    {
+      "chapter": 45,
+      "title": "பெற்றோர் நலம், உறவைப் பேணுதல் மற்றும் நற்பண்புகள்",
+      "start": 15,
+      "end": 17,
+      "count": 3
+    },
+    {
+      "chapter": 48,
+      "title": "திக்ர், துஆ, தவ்பா மற்றும் பாவமன்னிப்பு",
+      "start": 18,
+      "end": 18,
+      "count": 1
+    }
+  ]
+}

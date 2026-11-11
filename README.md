@@ -36,7 +36,9 @@ npm test
 - **Hadith (Riyad as-Salihin, Part 1 only):** 57 hadith (1-56 and 60) with explanations. Hadith printed together carry `shared_with`.
 - **Hadith (Shama'il at-Tirmidhi):** 388 hadith. This is the Shama'il, not Jami' at-Tirmidhi. Its Tamil is machine-translated from English and often unreadable, so each record also has `english`, `commentary_english` and `tamil_is_machine_translated: true`.
 - **Duas:** `/api/dua` lists 5 collections in `dua/`: the FRTJ Duakkalin Thogupu split into etiquettes (23), prophetic duas (19, with Arabic) and Quranic duas (16, Arabic, Tamil, French); 75 authentic duas with references; and the article *Iraivnidam Kaiyenthungal* (18 sections). In the 75-dua collection the source has Tamil transliteration and meaning but no Arabic script.
-- **Tools:** `tools/import_dua_json.py`, `tools/import_json_books.py`, `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
+- **Hadith (Al-Lu'lu' wal-Marjan):** 18 of the 1,906 hadith so far, each agreed upon by Bukhari and Muslim (`grade: muttafaqun_alayhi`), with `bukhari_number` and `muslim_number` cross-references. The index lists all 54 kitabs and their ranges.
+- **Articles:** `/api/articles/hadith-classification` is P. Jainul Abideen's *Sariyana Hadith Thavarana Hadith* (sahih, da'if, mawdu' and other terms). It explains grading but is not a list of graded hadith. Bukhari and Muslim indexes carry `grade_default: sahih`.
+- **Tools:** `tools/import_misc_json.py`, `tools/import_dua_json.py`, `tools/import_json_books.py`, `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
 - **Copyright:** the translations belong to their publishers (TNTJ and the Bukhari translators). Check licensing before redistributing or deploying publicly.
 
 ## Deploy
