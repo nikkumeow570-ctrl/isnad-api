@@ -1,0 +1,79 @@
+{
+ "surah": 95,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "By the fig and the olive"
+    },
+    {
+     "ayah": 2,
+     "text": "By Mount Sinai"
+    },
+    {
+     "ayah": 3,
+     "text": "And by this land made safe"
+    },
+    {
+     "ayah": 4,
+     "text": "Surely We created man of the best stature"
+    },
+    {
+     "ayah": 5,
+     "text": "Then we reduced him to the lowest of the low"
+    },
+    {
+     "ayah": 6,
+     "text": "Save those who believe and do good works, and theirs is a reward unfailing"
+    },
+    {
+     "ayah": 7,
+     "text": "So who henceforth will give the lie to thee about the judgment"
+    },
+    {
+     "ayah": 8,
+     "text": "Is not Allah the most conclusive of all judges"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "By the Fig and the Olive"
+    },
+    {
+     "ayah": 2,
+     "text": "And the Mount of Sinai"
+    },
+    {
+     "ayah": 3,
+     "text": "And this City of security"
+    },
+    {
+     "ayah": 4,
+     "text": "We have indeed created man in the best of moulds"
+    },
+    {
+     "ayah": 5,
+     "text": "Then do We abase him (to be) the lowest of the low"
+    },
+    {
+     "ayah": 6,
+     "text": "Except such as believe and do righteous deeds: For they shall have a reward unfailing"
+    },
+    {
+     "ayah": 7,
+     "text": "Then what can, after this, contradict thee, as to the judgment (to come)"
+    },
+    {
+     "ayah": 8,
+     "text": "Is not Allah the wisest of judges"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "surah": 105,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Hast thou not seen how thy Lord dealt with the owners of the Elephant"
+    },
+    {
+     "ayah": 2,
+     "text": "Did He not bring their stratagem to naught"
+    },
+    {
+     "ayah": 3,
+     "text": "And send against them swarms of flying creatures"
+    },
+    {
+     "ayah": 4,
+     "text": "Which pelted them with stones of baked clay"
+    },
+    {
+     "ayah": 5,
+     "text": "And made them like green crops devoured (by cattle)"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Seest thou not how thy Lord dealt with the Companions of the Elephant"
+    },
+    {
+     "ayah": 2,
+     "text": "Did He not make their treacherous plan go astray"
+    },
+    {
+     "ayah": 3,
+     "text": "And He sent against them Flights of Birds"
+    },
+    {
+     "ayah": 4,
+     "text": "Striking them with stones of baked clay"
+    },
+    {
+     "ayah": 5,
+     "text": "Then did He make them like an empty field of stalks and straw, (of which the corn) has been eaten up"
+    }
+   ]
+  }
+ }
+}

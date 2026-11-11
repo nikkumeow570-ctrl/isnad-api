@@ -1,0 +1,55 @@
+{
+ "surah": 97,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Lo! We revealed it on the Night of Predestination"
+    },
+    {
+     "ayah": 2,
+     "text": "Ah, what will convey unto thee what the Night of Power is"
+    },
+    {
+     "ayah": 3,
+     "text": "The Night of Power is better than a thousand months"
+    },
+    {
+     "ayah": 4,
+     "text": "The angels and the Spirit descend therein, by the permission of their Lord, with all decrees"
+    },
+    {
+     "ayah": 5,
+     "text": "(The night is) Peace until the rising of the dawn"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "We have indeed revealed this (Message) in the Night of Power"
+    },
+    {
+     "ayah": 2,
+     "text": "And what will explain to thee what the night of power is"
+    },
+    {
+     "ayah": 3,
+     "text": "The Night of Power is better than a thousand months"
+    },
+    {
+     "ayah": 4,
+     "text": "Therein come down the angels and the Spirit by Allah's permission, on every errand"
+    },
+    {
+     "ayah": 5,
+     "text": "Peace!... This until the rise of morn"
+    }
+   ]
+  }
+ }
+}

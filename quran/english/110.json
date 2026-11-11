@@ -1,0 +1,39 @@
+{
+ "surah": 110,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "When Allah's succour and the triumph cometh"
+    },
+    {
+     "ayah": 2,
+     "text": "And thou seest mankind entering the religion of Allah in troops"
+    },
+    {
+     "ayah": 3,
+     "text": "Then hymn the praises of thy Lord, and seek forgiveness of Him. Lo! He is ever ready to show mercy"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "When comes the Help of Allah, and Victory"
+    },
+    {
+     "ayah": 2,
+     "text": "And thou dost see the people enter Allah's Religion in crowds"
+    },
+    {
+     "ayah": 3,
+     "text": "Celebrate the praises of thy Lord, and pray for His Forgiveness: For He is Oft-Returning (in Grace and Mercy)"
+    }
+   ]
+  }
+ }
+}

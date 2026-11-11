@@ -1,0 +1,79 @@
+{
+ "surah": 99,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "When Earth is shaken with her (final) earthquake"
+    },
+    {
+     "ayah": 2,
+     "text": "And Earth yieldeth up her burdens"
+    },
+    {
+     "ayah": 3,
+     "text": "And man saith: What aileth her"
+    },
+    {
+     "ayah": 4,
+     "text": "That day she will relate her chronicles"
+    },
+    {
+     "ayah": 5,
+     "text": "Because thy Lord inspireth her"
+    },
+    {
+     "ayah": 6,
+     "text": "That day mankind will issue forth in scattered groups to be shown their deeds"
+    },
+    {
+     "ayah": 7,
+     "text": "And whoso doeth good an atom's weight will see it then"
+    },
+    {
+     "ayah": 8,
+     "text": "And whoso doeth ill an atom's weight will see it then"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "When the earth is shaken to her (utmost) convulsion"
+    },
+    {
+     "ayah": 2,
+     "text": "And the earth throws up her burdens (from within)"
+    },
+    {
+     "ayah": 3,
+     "text": "And man cries (distressed): 'What is the matter with her"
+    },
+    {
+     "ayah": 4,
+     "text": "On that Day will she declare her tidings"
+    },
+    {
+     "ayah": 5,
+     "text": "For that thy Lord will have given her inspiration"
+    },
+    {
+     "ayah": 6,
+     "text": "On that Day will men proceed in companies sorted out, to be shown the deeds that they (had done)"
+    },
+    {
+     "ayah": 7,
+     "text": "Then shall anyone who has done an atom's weight of good, see it"
+    },
+    {
+     "ayah": 8,
+     "text": "And anyone who has done an atom's weight of evil, shall see it"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,71 @@
+{
+ "surah": 107,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Hast thou observed him who belieth religion"
+    },
+    {
+     "ayah": 2,
+     "text": "That is he who repelleth the orphan"
+    },
+    {
+     "ayah": 3,
+     "text": "And urgeth not the feeding of the needy"
+    },
+    {
+     "ayah": 4,
+     "text": "Ah, woe unto worshippers"
+    },
+    {
+     "ayah": 5,
+     "text": "Who are heedless of their prayer"
+    },
+    {
+     "ayah": 6,
+     "text": "Who would be seen (at worship)"
+    },
+    {
+     "ayah": 7,
+     "text": "Yet refuse small kindnesses"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Seest thou one who denies the Judgment (to come)"
+    },
+    {
+     "ayah": 2,
+     "text": "Then such is the (man) who repulses the orphan (with harshness)"
+    },
+    {
+     "ayah": 3,
+     "text": "And encourages not the feeding of the indigent"
+    },
+    {
+     "ayah": 4,
+     "text": "So woe to the worshippers"
+    },
+    {
+     "ayah": 5,
+     "text": "Who are neglectful of their prayers"
+    },
+    {
+     "ayah": 6,
+     "text": "Those who (want but) to be seen (of men)"
+    },
+    {
+     "ayah": 7,
+     "text": "But refuse (to supply) (even) neighbourly needs"
+    }
+   ]
+  }
+ }
+}

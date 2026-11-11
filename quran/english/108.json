@@ -1,0 +1,39 @@
+{
+ "surah": 108,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Lo! We have given thee Abundance"
+    },
+    {
+     "ayah": 2,
+     "text": "So pray unto thy Lord, and sacrifice"
+    },
+    {
+     "ayah": 3,
+     "text": "Lo! it is thy insulter (and not thou) who is without posterity"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "To thee have We granted the Fount (of Abundance)"
+    },
+    {
+     "ayah": 2,
+     "text": "Therefore to thy Lord turn in Prayer and Sacrifice"
+    },
+    {
+     "ayah": 3,
+     "text": "For he who hateth thee, he will be cut off (from Future Hope)"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,63 @@
+{
+ "surah": 114,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Say: I seek refuge in the Lord of mankind"
+    },
+    {
+     "ayah": 2,
+     "text": "The King of mankind"
+    },
+    {
+     "ayah": 3,
+     "text": "The god of mankind"
+    },
+    {
+     "ayah": 4,
+     "text": "From the evil of the sneaking whisperer"
+    },
+    {
+     "ayah": 5,
+     "text": "Who whispereth in the hearts of mankind"
+    },
+    {
+     "ayah": 6,
+     "text": "Of the jinn and of mankind"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Say: I seek refuge with the Lord and Cherisher of Mankind"
+    },
+    {
+     "ayah": 2,
+     "text": "The King (or Ruler) of Mankind"
+    },
+    {
+     "ayah": 3,
+     "text": "The god (or judge) of Mankind"
+    },
+    {
+     "ayah": 4,
+     "text": "From the mischief of the Whisperer (of Evil), who withdraws (after his whisper)"
+    },
+    {
+     "ayah": 5,
+     "text": "(The same) who whispers into the hearts of Mankind"
+    },
+    {
+     "ayah": 6,
+     "text": "Among Jinns and among men"
+    }
+   ]
+  }
+ }
+}

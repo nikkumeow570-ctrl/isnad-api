@@ -1,0 +1,55 @@
+{
+ "surah": 113,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Say: I seek refuge in the Lord of the Daybreak"
+    },
+    {
+     "ayah": 2,
+     "text": "From the evil of that which He created"
+    },
+    {
+     "ayah": 3,
+     "text": "From the evil of the darkness when it is intense"
+    },
+    {
+     "ayah": 4,
+     "text": "And from the evil of malignant witchcraft"
+    },
+    {
+     "ayah": 5,
+     "text": "And from the evil of the envier when he envieth"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Say: I seek refuge with the Lord of the Dawn"
+    },
+    {
+     "ayah": 2,
+     "text": "From the mischief of created things"
+    },
+    {
+     "ayah": 3,
+     "text": "From the mischief of Darkness as it overspreads"
+    },
+    {
+     "ayah": 4,
+     "text": "From the mischief of those who practise secret arts"
+    },
+    {
+     "ayah": 5,
+     "text": "And from the mischief of the envious one as he practises envy"
+    }
+   ]
+  }
+ }
+}

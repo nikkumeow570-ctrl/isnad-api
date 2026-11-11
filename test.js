@@ -32,7 +32,9 @@ server.listen(0, async () => {
     assert.strictEqual(s, 200); assert.strictEqual(j.number, 1);
     assert.strictEqual((await get(base, '/api/hadith/bukhari/abc'))[0], 400);
     [s, j] = await get(base, '/api/quran/1/1');
-    assert.strictEqual(s, 200); assert.ok(j.arabic.includes('بِسْمِ'));
+    assert.strictEqual(s, 200); assert.ok(j.arabic.includes('بِسْمِ')); assert.ok(j.english.pickthall.includes('Allah'));
+    [s, j] = await get(base, '/api/quran/1/english'); assert.strictEqual(s, 200); assert.strictEqual(j.translations.yusufali.verses.length, 7);
+    [s, j] = await get(base, '/api/quran/1/1');
     [s, j] = await get(base, '/api/quran/114/arabic');
     assert.strictEqual(s, 200); assert.strictEqual(j.verses.length, 6);
     assert.strictEqual((await get(base, '/api/hadith'))[1].books.length, 5);

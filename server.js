@@ -46,6 +46,7 @@ function route(url) {
         'GET /api/quran/:surah',
         'GET /api/quran/:surah/:ayah      (Tamil + Arabic)',
         'GET /api/quran/:surah/arabic     (whole surah, Uthmani + simple)',
+        'GET /api/quran/:surah/english    (Pickthall + Yusuf Ali)',
         'GET /api/hadith',
         'GET /api/hadith/:book            (bukhari, muslim, abudawud, riyadussalihin, shamail)',
         'GET /api/hadith/:book/:number',
@@ -75,6 +76,10 @@ function route(url) {
       const ar = readJson('quran', 'arabic', `${a}.json`);
       return ar ? [200, ar] : [404, { error: `Arabic text for surah ${a} is not available` }];
     }
+    if (b === 'english') {
+      const en = readJson('quran', 'english', `${a}.json`);
+      return en ? [200, en] : [404, { error: `English text for surah ${a} is not available` }];
+    }
     if (!isPosInt(b)) return [400, { error: 'ayah must be a positive integer' }];
     // The TNTJ/PJ translation sometimes translates several ayahs as one block (ayah..ayah_end).
     const n = +b;
@@ -82,7 +87,10 @@ function route(url) {
     if (!verse) return [404, { error: `Ayah ${b} not found in surah ${a}` }];
     const ar = readJson('quran', 'arabic', `${a}.json`);
     const av = ar && ar.verses.find((v) => v.ayah === n);
-    return [200, { surah: surah.surah, name: surah.name, source: surah.source, requested_ayah: n, ...(av ? { arabic: av.uthmani, arabic_simple: av.simple } : {}), ...verse }];
+    const en = readJson('quran', 'english', `${a}.json`);
+    const english = {};
+    for (const [k, t] of Object.entries((en && en.translations) || {})) { const ev = t.verses.find((v) => v.ayah === n); if (ev) english[k] = ev.text; }
+    return [200, { surah: surah.surah, name: surah.name, source: surah.source, requested_ayah: n, ...(av ? { arabic: av.uthmani, arabic_simple: av.simple } : {}), english, ...verse }];
   }
 
   if (kind === 'hadith') {

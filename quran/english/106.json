@@ -1,0 +1,47 @@
+{
+ "surah": 106,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "For the taming of Qureysh"
+    },
+    {
+     "ayah": 2,
+     "text": "For their taming (We cause) the caravans to set forth in winter and summer"
+    },
+    {
+     "ayah": 3,
+     "text": "So let them worship the Lord of this House"
+    },
+    {
+     "ayah": 4,
+     "text": "Who hath fed them against hunger and hath made them safe from fear"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "For the covenants (of security and safeguard enjoyed) by the Quraish"
+    },
+    {
+     "ayah": 2,
+     "text": "Their covenants (covering) journeys by winter and summer"
+    },
+    {
+     "ayah": 3,
+     "text": "Let them adore the Lord of this House"
+    },
+    {
+     "ayah": 4,
+     "text": "Who provides them with food against hunger, and with security against fear (of danger)"
+    }
+   ]
+  }
+ }
+}

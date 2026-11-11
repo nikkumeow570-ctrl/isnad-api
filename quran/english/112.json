@@ -1,0 +1,47 @@
+{
+ "surah": 112,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Say: He is Allah, the One"
+    },
+    {
+     "ayah": 2,
+     "text": "Allah, the eternally Besought of all"
+    },
+    {
+     "ayah": 3,
+     "text": "He begetteth not nor was begotten"
+    },
+    {
+     "ayah": 4,
+     "text": "And there is none comparable unto Him"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Say: He is Allah, the One and Only"
+    },
+    {
+     "ayah": 2,
+     "text": "Allah, the Eternal, Absolute"
+    },
+    {
+     "ayah": 3,
+     "text": "He begetteth not, nor is He begotten"
+    },
+    {
+     "ayah": 4,
+     "text": "And there is none like unto Him"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,71 @@
+{
+ "surah": 1,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "In the name of Allah, the Beneficent, the Merciful"
+    },
+    {
+     "ayah": 2,
+     "text": "Praise be to Allah, Lord of the Worlds"
+    },
+    {
+     "ayah": 3,
+     "text": "The Beneficent, the Merciful"
+    },
+    {
+     "ayah": 4,
+     "text": "Master of the Day of Judgment"
+    },
+    {
+     "ayah": 5,
+     "text": "Thee (alone) we worship; Thee (alone) we ask for help"
+    },
+    {
+     "ayah": 6,
+     "text": "Show us the straight path"
+    },
+    {
+     "ayah": 7,
+     "text": "The path of those whom Thou hast favoured; Not the (path) of those who earn Thine anger nor of those who go astray"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "In the name of Allah, Most Gracious, Most Merciful"
+    },
+    {
+     "ayah": 2,
+     "text": "Praise be to Allah, the Cherisher and Sustainer of the worlds"
+    },
+    {
+     "ayah": 3,
+     "text": "Most Gracious, Most Merciful"
+    },
+    {
+     "ayah": 4,
+     "text": "Master of the Day of Judgment"
+    },
+    {
+     "ayah": 5,
+     "text": "Thee do we worship, and Thine aid we seek"
+    },
+    {
+     "ayah": 6,
+     "text": "Show us the straight way"
+    },
+    {
+     "ayah": 7,
+     "text": "The way of those on whom Thou hast bestowed Thy Grace, those whose (portion) is not wrath, and who go not astray"
+    }
+   ]
+  }
+ }
+}

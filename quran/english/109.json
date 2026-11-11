@@ -1,0 +1,63 @@
+{
+ "surah": 109,
+ "translations": {
+  "pickthall": {
+   "translator": "Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Say: O disbelievers"
+    },
+    {
+     "ayah": 2,
+     "text": "I worship not that which ye worship"
+    },
+    {
+     "ayah": 3,
+     "text": "Nor worship ye that which I worship"
+    },
+    {
+     "ayah": 4,
+     "text": "And I shall not worship that which ye worship"
+    },
+    {
+     "ayah": 5,
+     "text": "Nor will ye worship that which I worship"
+    },
+    {
+     "ayah": 6,
+     "text": "Unto you your religion, and unto me my religion"
+    }
+   ]
+  },
+  "yusufali": {
+   "translator": "Abdullah Yusuf Ali, The Holy Quran (1934), public domain",
+   "verses": [
+    {
+     "ayah": 1,
+     "text": "Say: O ye that reject Faith"
+    },
+    {
+     "ayah": 2,
+     "text": "I worship not that which ye worship"
+    },
+    {
+     "ayah": 3,
+     "text": "Nor will ye worship that which I worship"
+    },
+    {
+     "ayah": 4,
+     "text": "And I will not worship that which ye have been wont to worship"
+    },
+    {
+     "ayah": 5,
+     "text": "Nor will ye worship that which I worship"
+    },
+    {
+     "ayah": 6,
+     "text": "To you be your Way, and to me mine"
+    }
+   ]
+  }
+ }
+}
