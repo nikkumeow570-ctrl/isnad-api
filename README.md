@@ -29,7 +29,10 @@ npm test
   Al-Fatiha uses the standard numbering (bismillah = ayah 1, 7 ayahs).
 - **Hadith (Bukhari):** 7,493 of the 7,563 numbered hadith (97 chapters), extracted from the 7-volume Tamil Sahih al-Bukhari PDF with `tools/bukhari_extract.py`. About 70 numbers (e.g. 441, 2315, 3327) are not present in that edition and return 404; a few passages printed under several numbers carry `shared_with`. The `narrator` field is best-effort and is empty when the narrator is not named in the opening sentence.
 - **Hadith (Muslim):** 5,759 of the numbers 1-5771 (54 chapters) plus the 95-hadith introduction, extracted from the Tamil Sahih Muslim PDF with `tools/muslim_extract.py`. Numbers 1324-1325 and 3545-3554 do not exist in that edition and return 404. `narrator` is best-effort.
-- **Tools:** `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
+- **Hadith (Abu Dawud, partial):** 368 hadith of numbers 1-390. A partial Tamil translation; 151, 220-fix, 268 and 277-296 are missing in the source (the second "210" in the source is stored as 220).
+- **Hadith (Riyad as-Salihin, Part 1 only):** 57 hadith (1-56 and 60) with explanations. Hadith printed together carry `shared_with`.
+- **Hadith (Shama'il at-Tirmidhi):** 388 hadith. This is the Shama'il, not Jami' at-Tirmidhi. Its Tamil is machine-translated from English and often unreadable, so each record also has `english`, `commentary_english` and `tamil_is_machine_translated: true`.
+- **Tools:** `tools/import_json_books.py`, `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
 - **Copyright:** the translations belong to their publishers (TNTJ and the Bukhari translators). Check licensing before redistributing or deploying publicly.
 
 ## Deploy

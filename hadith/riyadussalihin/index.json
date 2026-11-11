@@ -1,0 +1,45 @@
+{
+  "book": "ரியாளுஸ் ஸாலிஹீன்",
+  "source": "Tamil translation by K.J. Masthan Ali Baqavi (Part 1 only)",
+  "partial": true,
+  "note": "Only Part 1 (hadith 1-56 and 60). Hadith 57-59 are missing in the source PDF.",
+  "total_hadiths": 60,
+  "available": 57,
+  "chapters": [
+    {
+      "chapter": 1,
+      "title": "நிய்யத் - எண்ணமும் அதன் தூய்மையும்",
+      "start": 1,
+      "end": 12,
+      "count": 12
+    },
+    {
+      "chapter": 2,
+      "title": "தௌபா – பாவ மீட்சி தேடல்",
+      "start": 13,
+      "end": 24,
+      "count": 12
+    },
+    {
+      "chapter": 3,
+      "title": "பொறுமை",
+      "start": 25,
+      "end": 53,
+      "count": 29
+    },
+    {
+      "chapter": 4,
+      "title": "உண்மை",
+      "start": 54,
+      "end": 56,
+      "count": 3
+    },
+    {
+      "chapter": 5,
+      "title": "இறை கண்காணிப்பு",
+      "start": 60,
+      "end": 60,
+      "count": 1
+    }
+  ]
+}

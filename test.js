@@ -31,7 +31,7 @@ server.listen(0, async () => {
     [s, j] = await get(base, '/api/hadith/bukhari/1');
     assert.strictEqual(s, 200); assert.strictEqual(j.number, 1);
     assert.strictEqual((await get(base, '/api/hadith/bukhari/abc'))[0], 400);
-    assert.strictEqual((await get(base, '/api/hadith'))[1].books.length, 2);
+    assert.strictEqual((await get(base, '/api/hadith'))[1].books.length, 5);
     assert.strictEqual((await get(base, '/api/hadith/muslim'))[1].total_hadiths, 5771);
     [s, j] = await get(base, '/api/hadith/muslim/1442');
     assert.strictEqual(s, 200); assert.strictEqual(j.chapter, 7);
@@ -39,6 +39,13 @@ server.listen(0, async () => {
     assert.strictEqual(s, 200); assert.strictEqual(j.part, 'introduction');
     assert.strictEqual((await get(base, '/api/hadith/muslim/3545'))[0], 404);
     assert.strictEqual((await get(base, '/api/hadith/nope'))[0], 404);
+    [s, j] = await get(base, '/api/hadith/abudawud/220');
+    assert.strictEqual(s, 200); assert.strictEqual(j.chapter, 86);
+    assert.strictEqual((await get(base, '/api/hadith/abudawud/277'))[0], 404);
+    [s, j] = await get(base, '/api/hadith/riyadussalihin/13');
+    assert.strictEqual(s, 200); assert.deepStrictEqual(j.shared_with, [14]);
+    [s, j] = await get(base, '/api/hadith/shamail/331');
+    assert.strictEqual(s, 200); assert.ok(j.english.length > 20);
     [s, j] = await get(base, '/api/search?q=' + encodeURIComponent('அல்லாஹ்'));
     assert.strictEqual(s, 200); assert.ok(j.count > 0);
     console.log('All tests passed');

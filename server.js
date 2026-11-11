@@ -46,7 +46,7 @@ function route(url) {
         'GET /api/quran/:surah',
         'GET /api/quran/:surah/:ayah',
         'GET /api/hadith',
-        'GET /api/hadith/:book            (bukhari, muslim)',
+        'GET /api/hadith/:book            (bukhari, muslim, abudawud, riyadussalihin, shamail)',
         'GET /api/hadith/:book/:number',
         'GET /api/hadith/muslim/intro/:number',
         'GET /api/search?q=<text>',
@@ -102,7 +102,7 @@ function route(url) {
         if (v.tamil && v.tamil.includes(q)) results.push({ type: 'quran', surah: s.surah, ayah: v.ayah, ayah_end: v.ayah_end, tamil: v.tamil });
       }
     }
-    for (const bk of ['bukhari', 'muslim']) {
+    for (const bk of fs.readdirSync(path.join(ROOT, 'hadith'))) {
       const hDir = path.join(ROOT, 'hadith', bk);
       for (const f of fs.existsSync(hDir) ? fs.readdirSync(hDir) : []) {
         if (f === 'index.json' || !f.endsWith('.json')) continue;
