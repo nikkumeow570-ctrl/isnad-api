@@ -15,6 +15,54 @@
       "author": "onlinepj.com",
       "sections": 247,
       "path": "articles/tholugai-sattam.json"
+    },
+    {
+      "id": "sarf-tamil",
+      "title": "ஸர்ஃப் (الصرف) — அரபி சொல்லிலக்கணம்",
+      "title_english": "Sarf in Tamil (Complete Textbook of Arabic Morphology & Verb Conjugation)",
+      "kind": "course",
+      "author": "",
+      "sections": 13,
+      "path": "articles/sarf-tamil.json",
+      "quality_note": "The Arabic examples were extracted from the PDF with reversed or scrambled letter order, so use the Tamil explanation and check the Arabic against the PDF."
+    },
+    {
+      "id": "tajweed-rules",
+      "title": "தஜ்வீத் உடைய சட்டங்கள் (أحكام التجويد)",
+      "title_english": "Tajweed Rules in Tamil & Arabic (Flowcharts, Tables, and Articulation Diagrams)",
+      "kind": "course",
+      "author": "M.I. Seyed Mohamed Buhari",
+      "sections": 26,
+      "path": "articles/tajweed-rules.json",
+      "quality_note": "These are slides with flowcharts and tables. The text was read in scattered order and contains stray characters, so each slide is only a rough guide to the PDF."
+    },
+    {
+      "id": "orirai-kolgai",
+      "title": "குர்ஆன் கூறும் ஓரிறைக் கொள்கை",
+      "title_english": "Kuran Koorum Orirai Kolgai (Monotheism / Tawheed as Taught by the Holy Quran)",
+      "kind": "book",
+      "author": "பி. ஜைனுல் ஆபிதீன் (P. Jainul Abideen)",
+      "sections": 100,
+      "path": "articles/orirai-kolgai.json"
+    },
+    {
+      "id": "quran-reading-easily",
+      "title": "ஓதுவோம் வாருங்கள்... திருக்குர்ஆனை எளிதாக ஓத....",
+      "title_english": "Al-Quraanai Elidhil Odhida (Learn to Recite the Holy Quran Easily)",
+      "kind": "course",
+      "author": "இஸ்லாமிய ஊழியன் க. சே. செய்யது அஹமது கனி (சவுதி அரேபியா)",
+      "sections": 28,
+      "path": "articles/quran-reading-easily.json"
+    },
+    {
+      "id": "quran-ilakkanam",
+      "title": "குர்ஆன் மற்றும் நபிமொழிகளிலிருந்து இலக்கணம் (குறுகிய பயிற்சி எண் 1)",
+      "title_english": "Al-Quraan Ilakkanam — Understand Al-Qur'an Academy Short Course 1 (Quranic & Prophetic Prayers with Arabic Grammar via TPI)",
+      "kind": "course",
+      "author": "டாக்டர் அப்துல் அஜீஸ் அப்துர் ரஹீம் (Dr. Abdulazeez Abdulraheem, Understand Al-Qur'an Academy)",
+      "sections": 19,
+      "path": "articles/quran-ilakkanam.json",
+      "quality_note": "Arabic words in this course were extracted with reversed letter order (for example 'ميحرلا' for 'الرحيم'). Use the Tamil text and check the Arabic against the PDF."
     }
   ]
 }

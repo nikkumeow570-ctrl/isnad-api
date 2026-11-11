@@ -52,6 +52,9 @@ server.listen(0, async () => {
     [s, j] = await get(base, '/api/articles/hadith-classification');
     assert.strictEqual(s, 200); assert.strictEqual(j.sections.length, 8);
     assert.strictEqual((await get(base, '/api/articles/nope'))[0], 404);
+    [s, j] = await get(base, '/api/articles/orirai-kolgai');
+    assert.strictEqual(s, 200); assert.strictEqual(j.sections.length, 100); assert.ok(j.sections[0].verses.length > 5);
+    assert.strictEqual((await get(base, '/api/articles'))[1].articles.length, 7);
     [s, j] = await get(base, '/api/articles/tholugai-sattam');
     assert.strictEqual(s, 200); assert.ok(j.sections.length > 200);
     [s, j] = await get(base, '/api/search?q=' + encodeURIComponent('உளூ'));

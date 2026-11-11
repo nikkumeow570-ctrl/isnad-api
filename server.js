@@ -153,10 +153,13 @@ function route(url) {
     for (const ar of (aIdx && aIdx.articles) || []) {
       const doc = readJson('articles', `${ar.id}.json`);
       for (const sec of doc.sections) {
-        const body = JSON.stringify(sec.blocks || sec);
-        if ((sec.heading || sec.title_tamil || '').includes(q) || body.includes(q)) {
-          const hit = (sec.blocks || []).find((b) => b.text.includes(q));
-          results.push({ type: 'article', article: ar.id, section: sec.number || sec.section_id, title: sec.heading || sec.title_tamil, tamil: hit ? hit.text : undefined });
+        const title = sec.heading || sec.title || sec.title_tamil || '';
+        const hit = (sec.blocks || []).find((b) => b.text.includes(q));
+        const text = sec.text || '';
+        const at = text.indexOf(q);
+        if (title.includes(q) || hit || at >= 0 || JSON.stringify(sec).includes(q)) {
+          const snippet = hit ? hit.text : at >= 0 ? text.slice(Math.max(0, at - 60), at + 140) : undefined;
+          results.push({ type: 'article', article: ar.id, section: sec.number || sec.section_id, title, tamil: snippet });
         }
       }
     }
