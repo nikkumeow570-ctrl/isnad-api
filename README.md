@@ -25,7 +25,9 @@ npm test
   The translator sometimes translates several ayahs as one passage. Those entries carry `ayah` and `ayah_end`
   (e.g. 114:1-4), and `GET /api/quran/114/3` returns that block with `requested_ayah: 3`.
   Al-Fatiha uses the standard numbering (bismillah = ayah 1, 7 ayahs).
-- **Hadith (Bukhari):** only hadith 1 so far (sample). Add files as `hadith/bukhari/N.json`; the API picks them up automatically.
+- **Hadith (Bukhari):** 7,493 of the 7,563 numbered hadith (97 chapters), extracted from the 7-volume Tamil Sahih al-Bukhari PDF with `tools/bukhari_extract.py`. About 70 numbers (e.g. 441, 2315, 3327) are not present in that edition and return 404; a few passages printed under several numbers carry `shared_with`. The `narrator` field is best-effort and is empty when the narrator is not named in the opening sentence.
+- **Tools:** `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
+- **Copyright:** the translations belong to their publishers (TNTJ and the Bukhari translators). Check licensing before redistributing or deploying publicly.
 
 ## Deploy
 Any Node host works (Render, Railway, Fly.io). Build: none. Start command: `npm start`. The `PORT` env var is respected.
