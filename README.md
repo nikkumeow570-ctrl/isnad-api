@@ -16,6 +16,7 @@ npm test
 | `GET /api/quran` | Surah index |
 | `GET /api/quran/:surah` | One surah with all verses |
 | `GET /api/quran/:surah/:ayah` | A single verse |
+| `GET /api/dua`, `/api/dua/:collection`, `/api/dua/:collection/:number` | Duas and supplication articles |
 | `GET /api/hadith` | List of available hadith books |
 | `GET /api/hadith/:book` | Chapter index (`bukhari`, `muslim`) |
 | `GET /api/hadith/:book/:number` | A single hadith |
@@ -33,7 +34,8 @@ npm test
 - **Hadith (Abu Dawud, partial):** 368 hadith of numbers 1-390. A partial Tamil translation; 151, 220-fix, 268 and 277-296 are missing in the source (the second "210" in the source is stored as 220).
 - **Hadith (Riyad as-Salihin, Part 1 only):** 57 hadith (1-56 and 60) with explanations. Hadith printed together carry `shared_with`.
 - **Hadith (Shama'il at-Tirmidhi):** 388 hadith. This is the Shama'il, not Jami' at-Tirmidhi. Its Tamil is machine-translated from English and often unreadable, so each record also has `english`, `commentary_english` and `tamil_is_machine_translated: true`.
-- **Tools:** `tools/import_json_books.py`, `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
+- **Duas:** `/api/dua` lists 5 collections in `dua/`: the FRTJ Duakkalin Thogupu split into etiquettes (23), prophetic duas (19, with Arabic) and Quranic duas (16, Arabic, Tamil, French); 75 authentic duas with references; and the article *Iraivnidam Kaiyenthungal* (18 sections). In the 75-dua collection the source has Tamil transliteration and meaning but no Arabic script.
+- **Tools:** `tools/import_dua_json.py`, `tools/import_json_books.py`, `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
 - **Copyright:** the translations belong to their publishers (TNTJ and the Bukhari translators). Check licensing before redistributing or deploying publicly.
 
 ## Deploy

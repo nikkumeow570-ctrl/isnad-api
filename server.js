@@ -50,6 +50,9 @@ function route(url) {
         'GET /api/hadith/:book            (bukhari, muslim, abudawud, riyadussalihin, shamail)',
         'GET /api/hadith/:book/:number',
         'GET /api/hadith/muslim/intro/:number',
+        'GET /api/dua                     (collections of duas and a supplication article)',
+        'GET /api/dua/:collection',
+        'GET /api/dua/:collection/:number',
         'GET /api/search?q=<text>',
       ],
     }];
@@ -98,6 +101,18 @@ function route(url) {
     return [200, h];
   }
 
+  if (kind === 'dua') {
+    const idx = readJson('dua', 'index.json');
+    if (!idx) return [500, { error: 'Dua index missing' }];
+    if (!a) return [200, idx];
+    if (!idx.collections.some((c) => c.id === a)) return [404, { error: `Unknown dua collection '${a}'`, collections: idx.collections.map((c) => c.id) }];
+    const col = readJson('dua', `${a}.json`);
+    if (!b) return [200, col];
+    if (!isPosInt(b)) return [400, { error: 'item number must be a positive integer' }];
+    const item = col.items.find((x) => x.number === +b);
+    return item ? [200, { collection: a, collection_title: col.title, ...item }] : [404, { error: `Item ${b} not found in ${a}` }];
+  }
+
   if (kind === 'search') {
     const q = (url.searchParams.get('q') || '').trim();
     if (q.length < 2) return [400, { error: 'q must be at least 2 characters' }];
@@ -115,6 +130,14 @@ function route(url) {
         if (f === 'index.json' || !f.endsWith('.json')) continue;
         const h = readJson('hadith', bk, f);
         if (h && h.tamil && h.tamil.includes(q)) results.push({ type: 'hadith', book_id: bk, book: h.book, number: h.number, narrator: h.narrator, tamil: h.tamil });
+      }
+    }
+    const dIdx = readJson('dua', 'index.json');
+    for (const c of (dIdx && dIdx.collections) || []) {
+      const col = readJson('dua', `${c.id}.json`);
+      for (const it of col.items) {
+        const body = [it.title, it.tamil, it.text].filter(Boolean).join('\n');
+        if (body.includes(q)) results.push({ type: 'dua', collection: c.id, number: it.number, title: it.title, tamil: it.tamil || it.text });
       }
     }
     return [200, { query: q, count: results.length, results: results.slice(0, 50) }];

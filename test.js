@@ -43,6 +43,13 @@ server.listen(0, async () => {
     assert.strictEqual(s, 200); assert.strictEqual(j.part, 'introduction');
     assert.strictEqual((await get(base, '/api/hadith/muslim/3545'))[0], 404);
     assert.strictEqual((await get(base, '/api/hadith/nope'))[0], 404);
+    assert.strictEqual((await get(base, '/api/dua'))[1].collections.length, 5);
+    [s, j] = await get(base, '/api/dua/thogupu-nabimozhi/1');
+    assert.strictEqual(s, 200); assert.ok(j.arabic.length > 5);
+    [s, j] = await get(base, '/api/dua/duas-authentic/1');
+    assert.strictEqual(s, 200); assert.ok(j.references.length > 0);
+    assert.strictEqual((await get(base, '/api/dua/nope'))[0], 404);
+    assert.strictEqual((await get(base, '/api/dua/thogupu-quran/999'))[0], 404);
     [s, j] = await get(base, '/api/hadith/abudawud/220');
     assert.strictEqual(s, 200); assert.strictEqual(j.chapter, 86);
     assert.strictEqual((await get(base, '/api/hadith/abudawud/277'))[0], 404);

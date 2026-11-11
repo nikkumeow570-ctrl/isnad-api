@@ -1,0 +1,39 @@
+{
+  "collections": [
+    {
+      "id": "thogupu-adab",
+      "title": "பிரார்த்தனை செய்யும் ஒழுக்கங்கள்",
+      "kind": "etiquette",
+      "count": 23,
+      "path": "dua/thogupu-adab.json"
+    },
+    {
+      "id": "thogupu-nabimozhi",
+      "title": "நபிமொழி துஆக்கள்",
+      "kind": "dua",
+      "count": 19,
+      "path": "dua/thogupu-nabimozhi.json"
+    },
+    {
+      "id": "thogupu-quran",
+      "title": "திருக்குர்ஆன் துஆக்கள்",
+      "kind": "dua",
+      "count": 16,
+      "path": "dua/thogupu-quran.json"
+    },
+    {
+      "id": "duas-authentic",
+      "title": "ஆதாரப்பூர்வமான நபிமொழி மற்றும் திருக்குர்ஆன் துஆக்கள்",
+      "kind": "dua",
+      "count": 75,
+      "path": "dua/duas-authentic.json"
+    },
+    {
+      "id": "iraivnidam-kaiyenthungal",
+      "title": "இறைவனிடம் கையேந்துங்கள்!",
+      "kind": "article",
+      "count": 18,
+      "path": "dua/iraivnidam-kaiyenthungal.json"
+    }
+  ]
+}
