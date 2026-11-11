@@ -47,6 +47,8 @@ server.listen(0, async () => {
     assert.strictEqual((await get(base, '/api/hadith/nope'))[0], 404);
     [s, j] = await get(base, '/api/hadith/lulu/1');
     assert.strictEqual(s, 200); assert.strictEqual(j.grade, 'muttafaqun_alayhi'); assert.ok(j.bukhari_number > 0);
+    assert.strictEqual((await get(base, '/api/hadith/lulu'))[1].available > 1800, true);
+    assert.strictEqual((await get(base, '/api/hadith/lulu/60'))[0], 404);
     [s, j] = await get(base, '/api/articles/hadith-classification');
     assert.strictEqual(s, 200); assert.strictEqual(j.sections.length, 8);
     assert.strictEqual((await get(base, '/api/articles/nope'))[0], 404);

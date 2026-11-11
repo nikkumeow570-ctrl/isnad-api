@@ -55,7 +55,7 @@ def article(repo, d):
 if __name__ == "__main__":
     repo, a, b = sys.argv[1:4]
     L = lambda p: json.load(open(p, encoding="utf8"))
-    print("lulu hadith:", lulu(repo, L(a))); article(repo, L(b))
+    article(repo, L(b))      # the full Lu'lu' now comes from tools/lulu_extract.py; lulu() above is only the 18-hadith sample import
     for book in ("bukhari", "muslim"):                    # both are Sahih collections
         p = os.path.join(repo, "hadith", book, "index.json"); idx = json.load(open(p, encoding="utf8"))
         idx["grade_default"] = "sahih"
