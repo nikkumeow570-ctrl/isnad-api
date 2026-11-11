@@ -149,6 +149,17 @@ function route(url) {
         if (h && h.tamil && h.tamil.includes(q)) results.push({ type: 'hadith', book_id: bk, book: h.book, number: h.number, narrator: h.narrator, tamil: h.tamil });
       }
     }
+    const aIdx = readJson('articles', 'index.json');
+    for (const ar of (aIdx && aIdx.articles) || []) {
+      const doc = readJson('articles', `${ar.id}.json`);
+      for (const sec of doc.sections) {
+        const body = JSON.stringify(sec.blocks || sec);
+        if ((sec.heading || sec.title_tamil || '').includes(q) || body.includes(q)) {
+          const hit = (sec.blocks || []).find((b) => b.text.includes(q));
+          results.push({ type: 'article', article: ar.id, section: sec.number || sec.section_id, title: sec.heading || sec.title_tamil, tamil: hit ? hit.text : undefined });
+        }
+      }
+    }
     const dIdx = readJson('dua', 'index.json');
     for (const c of (dIdx && dIdx.collections) || []) {
       const col = readJson('dua', `${c.id}.json`);
@@ -157,7 +168,10 @@ function route(url) {
         if (body.includes(q)) results.push({ type: 'dua', collection: c.id, number: it.number, title: it.title, tamil: it.tamil || it.text });
       }
     }
-    return [200, { query: q, count: results.length, results: results.slice(0, 50) }];
+    const counts = {}; const shown = {};
+    for (const r of results) counts[r.type] = (counts[r.type] || 0) + 1;
+    const limited = results.filter((r) => (shown[r.type] = (shown[r.type] || 0) + 1) <= 20);      // at most 20 per type so every type is visible
+    return [200, { query: q, count: results.length, counts, results: limited }];
   }
 
   return [404, { error: 'Not found' }];

@@ -7,6 +7,14 @@
       "author": "பி. ஜைனுல் ஆபிதீன் (P. Jainul Abideen)",
       "sections": 8,
       "path": "articles/hadith-classification.json"
+    },
+    {
+      "id": "tholugai-sattam",
+      "title": "தொழுகையின் சட்டங்கள்",
+      "title_english": "Rules of the Prayer (Tholugai Sattam)",
+      "author": "onlinepj.com",
+      "sections": 247,
+      "path": "articles/tholugai-sattam.json"
     }
   ]
 }
