@@ -57,7 +57,7 @@ function route(url) {
         'GET /api/dua/:collection/:number',
         'GET /api/articles                (reference articles, e.g. hadith classification)',
         'GET /api/articles/:id',
-        'GET /api/prayer?lat=&lng=&tz=5.5&date=YYYY-MM-DD&method=karachi|mwl|isna|egypt|makkah&asr=shafi|hanafi  (prayer times + qibla)',
+        'GET /api/prayer?lat=&lng=&tz=5.5&date=YYYY-MM-DD&method=tntj|karachi|mwl|isna|egypt|makkah&asr=shafi|hanafi  (prayer times + qibla)',
         'GET /api/search?q=<text>',
       ],
     }];
@@ -140,7 +140,7 @@ function route(url) {
     const ds = q.get('date') || new Date(Date.now() + tz * 3600e3).toISOString().slice(0, 10);
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(ds);
     if (!m) return [400, { error: 'date must be YYYY-MM-DD' }];
-    const method = q.get('method') || 'karachi', asr = q.get('asr') || 'shafi';
+    const method = q.get('method') || 'tntj', asr = q.get('asr') || 'shafi';
     if (!prayer.METHODS[method]) return [400, { error: 'method must be one of ' + Object.keys(prayer.METHODS).join(', ') }];
     if (!['shafi', 'hanafi'].includes(asr)) return [400, { error: 'asr must be shafi or hanafi' }];
     const opts = { method, asr, fajrAngle: q.get('fajr') != null ? num('fajr') : undefined, ishaAngle: q.get('isha') != null ? num('isha') : undefined };

@@ -48,7 +48,7 @@ label.set{display:block;margin:14px 0 6px;font-weight:700}
 // ---------- storage & settings ----------
 const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const CITIES=[["சென்னை · Chennai",13.0827,80.2707,5.5],["கோயம்புத்தூர் · Coimbatore",11.0168,76.9558,5.5],["மதுரை · Madurai",9.9252,78.1198,5.5],["திருச்சி · Tiruchirappalli",10.7905,78.7047,5.5],["சேலம் · Salem",11.6643,78.1460,5.5],["திருநெல்வேலி · Tirunelveli",8.7139,77.7567,5.5],["ஈரோடு · Erode",11.3410,77.7172,5.5],["திருப்பூர் · Tiruppur",11.1085,77.3411,5.5],["வேலூர் · Vellore",12.9165,79.1325,5.5],["தஞ்சாவூர் · Thanjavur",10.7870,79.1378,5.5],["திண்டுக்கல் · Dindigul",10.3673,77.9803,5.5],["நாகர்கோவில் · Nagercoil",8.1833,77.4119,5.5],["தூத்துக்குடி · Thoothukudi",8.7642,78.1348,5.5],["கொழும்பு · Colombo",6.9271,79.8612,5.5],["கோலாலம்பூர் · Kuala Lumpur",3.1390,101.6869,8],["சிங்கப்பூர் · Singapore",1.3521,103.8198,8],["துபாய் · Dubai",25.2048,55.2708,4],["தோஹா · Doha",25.2854,51.5310,3],["ரியாத் · Riyadh",24.7136,46.6753,3]];
-let S=Object.assign({lang:'ta',lat:13.0827,lng:80.2707,tz:5.5,place:CITIES[0][0],asr:'shafi',method:'karachi',hijriAdj:0,english:false},store.get('settings',{}));
+let S=Object.assign({lang:'ta',lat:13.0827,lng:80.2707,tz:5.5,place:CITIES[0][0],asr:'shafi',method:'tntj',hijriAdj:0,english:false},store.get('settings',{}));
 const save=()=>store.set('settings',S);
 const T={
  today:["இன்று","Today"],services:["சேவைகள்","Services"],settings:["அமைப்புகள்","Settings"],

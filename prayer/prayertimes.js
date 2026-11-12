@@ -13,6 +13,7 @@
 
   // Fajr angle, Isha angle (or {isha_minutes} after Maghrib). The exact local angles are a choice; check against your local timetable.
   const METHODS = {
+    tntj:    { name: 'TNTJ / JAQH (Fajr 18°, Isha 18°, Dhuhr +1 min)', fajr: 18, isha: 18, dhuhr_minutes: 1 },
     mwl:     { name: 'Muslim World League', fajr: 18, isha: 17 },
     karachi: { name: 'Univ. of Islamic Sciences, Karachi', fajr: 18, isha: 18 },
     isna:    { name: 'ISNA (North America)', fajr: 15, isha: 15 },
@@ -36,7 +37,7 @@
 
   function compute(year, month, day, lat, lng, tz, opts) {
     opts = opts || {};
-    const m = METHODS[opts.method || 'karachi'] || METHODS.karachi;
+    const m = METHODS[opts.method || 'tntj'] || METHODS.tntj;
     const fajrA = opts.fajrAngle != null ? opts.fajrAngle : m.fajr;
     const ishaA = opts.ishaAngle != null ? opts.ishaAngle : m.isha;
     const ishaMin = opts.ishaAngle != null ? null : m.isha_minutes;
@@ -68,7 +69,7 @@
     const adj = tz - lng / 15;
     const r = {};
     for (const k in t) r[k] = t[k] + adj;
-    r.dhuhr += (opts.dhuhrMinutes != null ? opts.dhuhrMinutes : 0) / 60;
+    r.dhuhr += (opts.dhuhrMinutes != null ? opts.dhuhrMinutes : (m.dhuhr_minutes || 0)) / 60;
     r.maghrib = r.sunset;
     if (ishaMin != null) r.isha = r.maghrib + ishaMin / 60;
     const nightLen = fix(r.fajr + 24 - r.sunset, 24);
@@ -92,7 +93,7 @@
     const f = (h) => hhmm(h);
     return {
       date: `${year}-${String(month).padStart(2, '0')}-${String(dayN).padStart(2, '0')}`,
-      settings: { method: (opts && opts.method) || 'karachi', asr: (opts && opts.asr) === 'hanafi' ? 'hanafi' : 'shafi', tz },
+      settings: { method: (opts && opts.method) || 'tntj', asr: (opts && opts.asr) === 'hanafi' ? 'hanafi' : 'shafi', tz },
       prayers: {
         fajr:    { start: f(r.fajr),    end: f(r.sunrise) },
         sunrise: { start: f(r.sunrise) },
