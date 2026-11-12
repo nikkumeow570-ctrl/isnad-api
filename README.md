@@ -44,6 +44,9 @@ npm test
 - **Tools:** `tools/import_learning_json.py`, `tools/tholugai_extract.py`, `tools/import_misc_json.py`, `tools/import_dua_json.py`, `tools/import_json_books.py`, `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
 - **Copyright:** the translations belong to their publishers (TNTJ and the Bukhari translators). Check licensing before redistributing or deploying publicly.
 
+## Prayer times and Qibla
+`GET /api/prayer?lat=13.08&lng=80.27&tz=5.5&date=2026-11-12&asr=shafi&method=mwl` returns the five prayers with start and end times, midnight and the Qibla bearing. `asr=hanafi` uses the 2x shadow. The windows follow the Tholugai guide: Fajr to sunrise, Dhuhr until the shadow equals the object (Asr start), Asr to sunset, Maghrib until the red twilight ends (Isha start), Isha until the middle of the night. The Fajr and Isha angles are chosen by `method` (or `fajr=` and `isha=` in degrees); the guide gives no angles, so compare with your local TNTJ timetable and adjust. The same code, `prayer/prayertimes.js`, runs offline in a browser or app with no server.
+
 ## Live stream page (Arabic + Tamil)
 `/live` is a full-screen page for YouTube live (OBS "Browser Source", 1920x1080). It shows each ayah in Arabic with the Tamil translation (and English with `en=1`), advances automatically and loops. Examples: `/live?surah=18&sec=15&en=1`, `/live?surah=0` (all 114 surahs), `/live?surah=1&transparent=1` (transparent background for overlays). Options: `surah`, `from`, `to`, `sec` (minimum seconds per ayah), `en`, `loop`, `transparent`, `api` (API host if the page is hosted elsewhere). It does not play audio; add the recitation audio in OBS.
 

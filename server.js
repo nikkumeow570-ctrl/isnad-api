@@ -31,6 +31,7 @@ function send(res, status, body) {
   res.end(data);
 }
 
+const prayer = require('./prayer/prayertimes.js');
 const isPosInt = (s) => /^[1-9]\d{0,5}$/.test(s);
 
 function route(url) {
@@ -56,6 +57,7 @@ function route(url) {
         'GET /api/dua/:collection/:number',
         'GET /api/articles                (reference articles, e.g. hadith classification)',
         'GET /api/articles/:id',
+        'GET /api/prayer?lat=&lng=&tz=5.5&date=YYYY-MM-DD&method=mwl|karachi|isna|egypt|makkah&asr=shafi|hanafi  (prayer times + qibla)',
         'GET /api/search?q=<text>',
       ],
     }];
@@ -128,6 +130,23 @@ function route(url) {
     if (!a) return [200, idx];
     if (!idx.articles.some((x) => x.id === a)) return [404, { error: `Unknown article '${a}'`, articles: idx.articles.map((x) => x.id) }];
     return [200, readJson('articles', `${a}.json`)];
+  }
+
+  if (kind === 'prayer') {
+    const q = url.searchParams, num = (k, d) => (q.get(k) == null || q.get(k) === '' ? d : Number(q.get(k)));
+    const lat = num('lat'), lng = num('lng'), tz = num('tz', 5.5);
+    if (![lat, lng, tz].every(Number.isFinite) || Math.abs(lat) > 66 || Math.abs(lng) > 180 || Math.abs(tz) > 14)
+      return [400, { error: 'lat (-66..66) and lng (-180..180) are required; tz is hours from UTC (default 5.5)' }];
+    const ds = q.get('date') || new Date(Date.now() + tz * 3600e3).toISOString().slice(0, 10);
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(ds);
+    if (!m) return [400, { error: 'date must be YYYY-MM-DD' }];
+    const method = q.get('method') || 'mwl', asr = q.get('asr') || 'shafi';
+    if (!prayer.METHODS[method]) return [400, { error: 'method must be one of ' + Object.keys(prayer.METHODS).join(', ') }];
+    if (!['shafi', 'hanafi'].includes(asr)) return [400, { error: 'asr must be shafi or hanafi' }];
+    const opts = { method, asr, fajrAngle: q.get('fajr') != null ? num('fajr') : undefined, ishaAngle: q.get('isha') != null ? num('isha') : undefined };
+    const r = prayer.day(+m[1], +m[2], +m[3], lat, lng, tz, opts);
+    delete r.raw;
+    return [200, { ...r, qibla_degrees: Math.round(prayer.qibla(lat, lng) * 10) / 10, methods: prayer.METHODS }];
   }
 
   if (kind === 'search') {

@@ -81,6 +81,11 @@ server.listen(0, async () => {
     assert.strictEqual(s, 200); assert.ok(j.sections.some((x) => x.text_pdf && x.text_pdf.includes('வேண்டும்')));
     [s, j] = await get(base, '/api/articles/tajweed-rules');
     assert.ok(j.sections[0].image.endsWith('/01.png'));
+    [s, j] = await get(base, '/api/prayer?lat=13.0827&lng=80.2707&date=2026-11-12');
+    assert.strictEqual(s, 200); assert.strictEqual(j.prayers.dhuhr.start, '11:53'); assert.strictEqual(j.prayers.asr.start, '15:12');
+    [s, j] = await get(base, '/api/prayer?lat=13.0827&lng=80.2707&date=2026-11-12&asr=hanafi');
+    assert.strictEqual(j.prayers.asr.start, '16:03');
+    assert.strictEqual((await get(base, '/api/prayer?lat=abc&lng=1'))[0], 400);
     console.log('All tests passed');
     process.exit(0);
   } catch (e) { console.error(e); process.exit(1); }
