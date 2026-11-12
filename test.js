@@ -54,7 +54,7 @@ server.listen(0, async () => {
     assert.strictEqual((await get(base, '/api/articles/nope'))[0], 404);
     [s, j] = await get(base, '/api/articles/orirai-kolgai');
     assert.strictEqual(s, 200); assert.strictEqual(j.sections.length, 100); assert.ok(j.sections[0].verses.length > 5);
-    assert.strictEqual((await get(base, '/api/articles'))[1].articles.length, 7);
+    assert.strictEqual((await get(base, '/api/articles'))[1].articles.length, 8);
     [s, j] = await get(base, '/api/articles/tholugai-sattam');
     assert.strictEqual(s, 200); assert.ok(j.sections.length > 200);
     [s, j] = await get(base, '/api/search?q=' + encodeURIComponent('உளூ'));
@@ -75,6 +75,12 @@ server.listen(0, async () => {
     assert.strictEqual(s, 200); assert.ok(j.english.length > 20);
     [s, j] = await get(base, '/api/search?q=' + encodeURIComponent('அல்லாஹ்'));
     assert.strictEqual(s, 200); assert.ok(j.count > 0);
+    [s, j] = await get(base, '/api/articles/tafseer');
+    assert.strictEqual(s, 200); assert.strictEqual(j.sections.length, 30);
+    [s, j] = await get(base, '/api/articles/sarf-tamil');
+    assert.strictEqual(s, 200); assert.ok(j.sections.some((x) => x.text_pdf && x.text_pdf.includes('வேண்டும்')));
+    [s, j] = await get(base, '/api/articles/tajweed-rules');
+    assert.ok(j.sections[0].image.endsWith('/01.png'));
     console.log('All tests passed');
     process.exit(0);
   } catch (e) { console.error(e); process.exit(1); }

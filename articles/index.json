@@ -63,6 +63,13 @@
       "sections": 19,
       "path": "articles/quran-ilakkanam.json",
       "quality_note": "Arabic words in this course were extracted with reversed letter order (for example 'ميحرلا' for 'الرحيم'). Use the Tamil text and check the Arabic against the PDF."
+    },
+    {
+      "id": "tafseer",
+      "title": "தஃப்ஸீர் – குர்ஆன் விரிவுரை (முன்னுரை)",
+      "title_english": "Tafseer – Quran Explanation Course (introduction and word meanings)",
+      "sections": 30,
+      "path": "articles/tafseer.json"
     }
   ]
 }

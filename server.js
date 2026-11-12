@@ -191,6 +191,13 @@ const server = http.createServer((req, res) => {
   if (req.method !== 'GET') return send(res, 405, { error: 'Method not allowed' });
   try {
     const url = new URL(req.url, 'http://localhost');
+    const img = /^\/api\/articles\/images\/([a-z0-9-]+)\/(\d{2})\.png$/.exec(url.pathname);
+    if (img) {
+      const f = path.join(ROOT, 'articles', 'images', img[1], img[2] + '.png');
+      if (!fs.existsSync(f)) return send(res, 404, { error: 'Image not found' });
+      res.writeHead(200, { 'Content-Type': 'image/png', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=86400' });
+      return fs.createReadStream(f).pipe(res);
+    }
     const [status, body] = route(url);
     send(res, status, body);
   } catch (e) {
