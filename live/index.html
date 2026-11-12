@@ -13,15 +13,17 @@ body.transparent{background:transparent}
 #bar{position:fixed;top:0;left:0;height:.6vh;background:var(--gold);width:0}
 .fade{transition:opacity .6s}.out{opacity:0}
 </style></head><body>
-<div id="bar"></div>
+<div id="bar"></div><audio id="aud"></audio>
 <div id="stage"><div id="ar" class="fade"></div><div id="ta" class="fade"></div><div id="en" class="fade"></div></div>
 <div id="ref"></div>
 <script>
+// audio=1 plays everyayah.com recitation (reciter=Alafasy_128kbps) and moves on when the ayah ends.
 // /live?surah=1&from=1&to=7&sec=12&en=1&transparent=1&loop=1&api=https://your-api-host
 // surah=0 plays through surahs 1..114.  Add &ayah-sec=auto to scale the time by text length.
 const q=new URLSearchParams(location.search);
 const API=q.get('api')||'';
 const surah0=+(q.get('surah')||1),from0=+(q.get('from')||1),to0=+(q.get('to')||0);
+const reciter=q.get('audio')==='1'?(q.get('reciter')||'Alafasy_128kbps'):null;
 const sec=+(q.get('sec')||12),showEn=q.get('en')==='1',loop=q.get('loop')!=='0';
 if(q.get('transparent')==='1')document.body.classList.add('transparent');
 if(!showEn)document.getElementById('en').style.display='none';
@@ -44,7 +46,12 @@ async function show(s,ayah,d){
   $('ref').textContent=`${s.a.name_arabic} · ${s.a.name_transliteration} ${s.a.surah}:${ayah}`;
   els.forEach(e=>e.classList.remove('out'));
   const bar=$('bar');bar.style.transition='none';bar.style.width='0';bar.offsetWidth;bar.style.transition=`width ${d}s linear`;bar.style.width='100%';
-  await wait(d*1000);
+  if(reciter){
+    const a=$('aud');a.src=`https://everyayah.com/data/${reciter}/${String(s.a.surah).padStart(3,'0')}${String(ayah).padStart(3,'0')}.mp3`;
+    await new Promise(res=>{let done=false;const end=()=>{if(!done){done=true;res()}};
+      a.onended=end;a.onerror=end;setTimeout(end,120000);a.play().catch(end)});
+    await wait(1200);
+  } else await wait(d*1000);
 }
 (async()=>{
   do{
