@@ -86,7 +86,6 @@ server.listen(0, async () => {
     [s, j] = await get(base, '/api/prayer?lat=13.0827&lng=80.2707&date=2026-11-12&asr=hanafi');
     assert.strictEqual(j.prayers.asr.start, '16:03');
     assert.strictEqual((await get(base, '/api/prayer?lat=abc&lng=1'))[0], 400);
-    assert.strictEqual((await get(base, '/app/'))[0] === 200 || true, true);
     const sw = await fetch(base + '/app/sw.js'); assert.strictEqual(sw.status, 200);
     const pt = await fetch(base + '/prayer/prayertimes.js'); assert.strictEqual(pt.status, 200);
     console.log('All tests passed');
