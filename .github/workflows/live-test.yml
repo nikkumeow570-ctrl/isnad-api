@@ -1,0 +1,38 @@
+name: Live stream TEST (short, manual only)
+# Short test of the Arabic + Tamil YouTube live. Not for 24/7: runs stop by themselves.
+# Setup: repo Settings -> Secrets and variables -> Actions -> New secret: YT_STREAM_KEY = your YouTube stream key.
+on:
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: "Test length in minutes (max 60)"
+        default: "20"
+      query:
+        description: "Live page options"
+        default: "surah=1&audio=1&en=1"
+jobs:
+  live-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg xvfb pulseaudio fonts-noto-core fonts-noto-extra fonts-hosny-amiri
+          pip install playwright
+          playwright install --with-deps chromium
+      - name: Stream
+        env:
+          YT_KEY: ${{ secrets.YT_STREAM_KEY }}
+          LIVE_QUERY: ${{ inputs.query }}
+          W: "1280"
+          H: "720"
+          FPS: "15"
+          VBR: "2500k"
+        run: |
+          export APP_DIR="$GITHUB_WORKSPACE"
+          export CHROME_BIN="$(find ~/.cache/ms-playwright -type f -name chrome -path '*chromium-*' | head -1)"
+          export DURATION=$(( ${{ inputs.minutes }} * 60 ))
+          sed -i 's/--no-sandbox/--no-sandbox --disable-gpu/' stream/run.sh
+          bash stream/run.sh
