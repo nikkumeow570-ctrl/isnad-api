@@ -44,6 +44,9 @@ npm test
 - **Tools:** `tools/import_learning_json.py`, `tools/tholugai_extract.py`, `tools/import_misc_json.py`, `tools/import_dua_json.py`, `tools/import_json_books.py`, `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
 - **Copyright:** the translations belong to their publishers (TNTJ and the Bukhari translators). Check licensing before redistributing or deploying publicly.
 
+## Live stream page (Arabic + Tamil)
+`/live` is a full-screen page for YouTube live (OBS "Browser Source", 1920x1080). It shows each ayah in Arabic with the Tamil translation (and English with `en=1`), advances automatically and loops. Examples: `/live?surah=18&sec=15&en=1`, `/live?surah=0` (all 114 surahs), `/live?surah=1&transparent=1` (transparent background for overlays). Options: `surah`, `from`, `to`, `sec` (minimum seconds per ayah), `en`, `loop`, `transparent`, `api` (API host if the page is hosted elsewhere). It does not play audio; add the recitation audio in OBS.
+
 ## Deploy
 Any Node host works (Render, Railway, Fly.io). Build: none. Start command: `npm start`. The `PORT` env var is respected.
 

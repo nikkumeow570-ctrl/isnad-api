@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISNAD Live – Arabic + Tamil</title>
+<style>
+:root{--bg:#0b1f1a;--fg:#f4efe2;--gold:#d9b45a;--dim:#9fb5ac}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:"Noto Sans Tamil","Latha",system-ui,sans-serif}
+body.transparent{background:transparent}
+#stage{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4vh 6vw;text-align:center;gap:3.5vh}
+#ar{font-family:"Amiri","Scheherazade New","Traditional Arabic",serif;font-size:6.2vw;line-height:1.7;direction:rtl;color:var(--gold)}
+#ta{font-size:3vw;line-height:1.5}
+#en{font-size:2vw;line-height:1.5;color:var(--dim)}
+#ref{text-align:center;position:fixed;bottom:3vh;left:0;right:0;font-size:1.8vw;color:var(--dim)}
+#bar{position:fixed;top:0;left:0;height:.6vh;background:var(--gold);width:0}
+.fade{transition:opacity .6s}.out{opacity:0}
+</style></head><body>
+<div id="bar"></div>
+<div id="stage"><div id="ar" class="fade"></div><div id="ta" class="fade"></div><div id="en" class="fade"></div></div>
+<div id="ref"></div>
+<script>
+// /live?surah=1&from=1&to=7&sec=12&en=1&transparent=1&loop=1&api=https://your-api-host
+// surah=0 plays through surahs 1..114.  Add &ayah-sec=auto to scale the time by text length.
+const q=new URLSearchParams(location.search);
+const API=q.get('api')||'';
+const surah0=+(q.get('surah')||1),from0=+(q.get('from')||1),to0=+(q.get('to')||0);
+const sec=+(q.get('sec')||12),showEn=q.get('en')==='1',loop=q.get('loop')!=='0';
+if(q.get('transparent')==='1')document.body.classList.add('transparent');
+if(!showEn)document.getElementById('en').style.display='none';
+const $=id=>document.getElementById(id);
+const j=async p=>(await fetch(API+p)).json();
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function loadSurah(n){
+  const [a,t,e]=await Promise.all([j(`/api/quran/${n}/arabic`),j(`/api/quran/${n}`),showEn?j(`/api/quran/${n}/english`):null]);
+  const tm=new Map();(t.verses||[]).forEach(v=>{const end=v.ayah_end||v.ayah;for(let i=v.ayah;i<=end;i++)if(!tm.has(i))tm.set(i,{...v,first:v.ayah===i})});
+  const en=e?new Map(e.translations.pickthall.verses.map(v=>[v.ayah,v.text])):new Map();
+  return {a,tm,en};
+}
+async function show(s,ayah,d){
+  const v=s.a.verses.find(x=>x.ayah===ayah);if(!v)return;
+  const t=s.tm.get(ayah);
+  const els=['ar','ta','en'].map($);els.forEach(e=>e.classList.add('out'));await wait(600);
+  $('ar').textContent=v.uthmani;
+  $('ta').textContent=t?(t.first?t.tamil:'(முந்தைய வசனத்தின் விளக்கத்தில் தொடர்கிறது)'):'';
+  $('en').textContent=s.en.get(ayah)||'';
+  $('ref').textContent=`${s.a.name_arabic} · ${s.a.name_transliteration} ${s.a.surah}:${ayah}`;
+  els.forEach(e=>e.classList.remove('out'));
+  const bar=$('bar');bar.style.transition='none';bar.style.width='0';bar.offsetWidth;bar.style.transition=`width ${d}s linear`;bar.style.width='100%';
+  await wait(d*1000);
+}
+(async()=>{
+  do{
+    const list=surah0===0?Array.from({length:114},(_,i)=>i+1):[surah0];
+    for(const n of list){
+      let s;try{s=await loadSurah(n)}catch(e){$('ar').textContent='Cannot reach API';await wait(5000);continue}
+      const last=s.a.verses.length,to=to0&&surah0!==0?Math.min(to0,last):last;
+      for(let a=surah0===0?1:from0;a<=to;a++){
+        const t=s.tm.get(a);const len=(t?t.tamil.length:0)+(s.a.verses[a-1].uthmani.length);
+        await show(s,a,Math.max(sec,Math.min(40,len/12)));
+      }
+    }
+  }while(loop);
+})();
+</script></body></html>

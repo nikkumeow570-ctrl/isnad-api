@@ -191,6 +191,10 @@ const server = http.createServer((req, res) => {
   if (req.method !== 'GET') return send(res, 405, { error: 'Method not allowed' });
   try {
     const url = new URL(req.url, 'http://localhost');
+    if (url.pathname === '/live' || url.pathname === '/live/') {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+      return fs.createReadStream(path.join(ROOT, 'live', 'index.html')).pipe(res);
+    }
     const img = /^\/api\/articles\/images\/([a-z0-9-]+)\/(\d{2})\.png$/.exec(url.pathname);
     if (img) {
       const f = path.join(ROOT, 'articles', 'images', img[1], img[2] + '.png');
