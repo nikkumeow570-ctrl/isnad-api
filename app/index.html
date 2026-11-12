@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ta"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f3d33"><link rel="manifest" href="/app/manifest.webmanifest"><link rel="icon" href="/app/icon.svg">
+<title>ISNAD – இஸ்னாத்</title>
+<style>
+:root{--bg:#f4f1ea;--card:#fff;--ink:#14201c;--dim:#6b7a74;--line:#e4dfd3;--green:#0f5c4a;--gold:#b8892b;--accent:#e9f2ee}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1714;--card:#16231f;--ink:#eef2ef;--dim:#93a39c;--line:#25362f;--green:#4cc2a0;--gold:#e0b85a;--accent:#1b2f29}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans Tamil",system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 16px) 16px 96px}
+h1{font-size:34px;line-height:1.15;margin:12px 0 4px;font-weight:800}
+.sub{color:var(--dim);margin:0 0 16px}
+.card{background:var(--card);border-radius:22px;padding:16px 18px;margin:12px 0;border:1px solid var(--line)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row.now{color:var(--green);font-weight:800}
+.big{font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.lbl{color:var(--dim);font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{border-radius:22px;padding:16px;min-height:112px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;font-weight:700;font-size:18px;text-decoration:none;position:relative}
+.tile i{position:absolute;top:14px;left:16px;font-style:normal;font-size:26px}
+.t1{background:#0f5c4a}.t2{background:#1f6f8b}.t3{background:#8a6d1f}.t4{background:#4b4a9e}.t5{background:#9a4a2b}.t6{background:#566b2d}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom)}
+nav div{display:flex;width:100%;max-width:560px}
+nav a{flex:1;text-align:center;padding:10px 0 12px;color:var(--dim);text-decoration:none;font-size:13px}
+nav a b{display:block;font-size:22px;font-weight:400}
+nav a.on{color:var(--green);font-weight:700}
+a.back{color:var(--green);text-decoration:none;font-weight:600}
+.ar{font-family:"Amiri","Scheherazade New","Noto Naskh Arabic","Traditional Arabic",serif;font-size:28px;line-height:2;direction:rtl;text-align:right;color:var(--ink)}
+.ta{font-size:17px;margin:4px 0}.en{color:var(--dim);font-size:15px}
+.ay{padding:14px 0;border-bottom:1px solid var(--line)}.num{display:inline-block;background:var(--accent);color:var(--green);border-radius:99px;padding:0 10px;font-size:13px;font-weight:700;margin-bottom:4px}
+input,select,button{font:inherit;color:var(--ink)}
+input[type=search],input[type=number],select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+button.p{background:var(--green);color:#fff;border:0;border-radius:14px;padding:12px 18px;font-weight:700}
+button.s{background:var(--accent);border:0;border-radius:14px;padding:10px 14px;color:var(--green);font-weight:700}
+.li{display:flex;justify-content:space-between;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.li small{color:var(--dim)}
+label.set{display:block;margin:14px 0 6px;font-weight:700}
+.needle{width:160px;height:160px;border-radius:50%;border:3px solid var(--line);margin:16px auto;position:relative;transition:transform .3s}
+.needle:after{content:"";position:absolute;left:50%;top:8px;width:4px;height:70px;margin-left:-2px;background:var(--gold);border-radius:4px}
+.note{background:var(--accent);border-radius:14px;padding:10px 14px;font-size:14px;color:var(--dim)}
+</style></head><body>
+<div id="app"></div>
+<nav><div><a href="#/today" id="n0"><b>◷</b><span data-t="today"></span></a><a href="#/services" id="n1"><b>▦</b><span data-t="services"></span></a><a href="#/settings" id="n2"><b>⚙</b><span data-t="settings"></span></a></div></nav>
+<script src="/prayer/prayertimes.js"></script>
+<script>
+// ---------- storage & settings ----------
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const CITIES=[["சென்னை · Chennai",13.0827,80.2707,5.5],["கோயம்புத்தூர் · Coimbatore",11.0168,76.9558,5.5],["மதுரை · Madurai",9.9252,78.1198,5.5],["திருச்சி · Tiruchirappalli",10.7905,78.7047,5.5],["சேலம் · Salem",11.6643,78.1460,5.5],["திருநெல்வேலி · Tirunelveli",8.7139,77.7567,5.5],["ஈரோடு · Erode",11.3410,77.7172,5.5],["திருப்பூர் · Tiruppur",11.1085,77.3411,5.5],["வேலூர் · Vellore",12.9165,79.1325,5.5],["தஞ்சாவூர் · Thanjavur",10.7870,79.1378,5.5],["திண்டுக்கல் · Dindigul",10.3673,77.9803,5.5],["நாகர்கோவில் · Nagercoil",8.1833,77.4119,5.5],["தூத்துக்குடி · Thoothukudi",8.7642,78.1348,5.5],["கொழும்பு · Colombo",6.9271,79.8612,5.5],["கோலாலம்பூர் · Kuala Lumpur",3.1390,101.6869,8],["சிங்கப்பூர் · Singapore",1.3521,103.8198,8],["துபாய் · Dubai",25.2048,55.2708,4],["தோஹா · Doha",25.2854,51.5310,3],["ரியாத் · Riyadh",24.7136,46.6753,3]];
+let S=Object.assign({lang:'ta',lat:13.0827,lng:80.2707,tz:5.5,place:CITIES[0][0],asr:'shafi',method:'karachi',hijriAdj:0,english:false},store.get('settings',{}));
+const save=()=>store.set('settings',S);
+const T={
+ today:["இன்று","Today"],services:["சேவைகள்","Services"],settings:["அமைப்புகள்","Settings"],
+ quran:["குர்ஆன்","Quran"],qibla:["கிப்லா","Qibla"],hadith:["ஹதீஸ்","Hadith"],dua:["துஆக்கள்","Duas"],courses:["பாடங்கள்","Courses"],
+ fajr:["ஃபஜ்ர்","Fajr"],sunrise:["சூரிய உதயம்","Sunrise"],dhuhr:["லுஹர்","Dhuhr"],asr:["அஸ்ர்","Asr"],maghrib:["மக்ரிப்","Maghrib"],isha:["இஷா","Isha"],
+ in:["இல்","in"],next:["அடுத்த தொழுகை","Next prayer"],language:["மொழி","Language"],location:["இடம்","Location"],useloc:["என் இடத்தைப் பயன்படுத்து","Use my location"],
+ madhhab:["அஸ்ர் முறை","Asr method"],shafi:["ஷாஃபிஈ / நபிவழி (நிழல் ×1)","Shafi'i / Sunnah guide (shadow ×1)"],hanafi:["ஹனஃபி (நிழல் ×2)","Hanafi (shadow ×2)"],
+ method:["கணக்கீட்டு முறை (ஃபஜ்ர்/இஷா)","Calculation method (Fajr/Isha)"],adj:["ஹிஜ்ரி தேதி சரிசெய்தல் (நாட்கள்)","Hijri date adjustment (days)"],
+ english:["குர்ஆனில் ஆங்கில மொழிபெயர்ப்பையும் காட்டு","Also show English in Quran"],search:["தேடு…","Search…"],back:["‹ பின்","‹ Back"],
+ bearing:["கிப்லா திசை (வடக்கிலிருந்து)","Qibla bearing (from north)"],hnum:["ஹதீஸ் எண்","Hadith number"],go:["செல்","Go"],books:["நூல்கள்","Books"],
+ missing:["இந்த பதிப்பில் இந்த எண் இல்லை.","This number is not in this edition."],offline:["இணைப்பு இல்லை. முன்பு திறந்த பகுதிகள் மட்டும் கிடைக்கும்.","No connection. Only parts you opened before are available."],
+ note:["நேரங்கள் தொலைபேசியிலேயே கணக்கிடப்படுகின்றன; இணையம் தேவையில்லை.","Times are calculated on your phone; no internet needed."],
+ ayahs:["வசனங்கள்","verses"],free:["இலவசம் · விளம்பரம் இல்லை · கண்காணிப்பு இல்லை","Free · No ads · No tracking"],
+};
+const t=k=>(T[k]||[k,k])[S.lang==='en'?1:0];
+const pad=n=>String(n).padStart(2,'0');
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $app=document.getElementById('app');
+let tick=null;
+async function api(p){const r=await fetch('/api'+p);if(!r.ok){const e=new Error(r.status);e.status=r.status;throw e}return r.json()}
+const fail=e=>`<div class="note">${e&&e.status==404?t('missing'):t('offline')}</div>`;
+
+// ---------- prayer helpers ----------
+const PK=['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+const opts=()=>({method:S.method,asr:S.asr});
+function dayTimes(off){const d=new Date();d.setDate(d.getDate()+off);const tz=S.tz;return PrayerTimes.compute(d.getFullYear(),d.getMonth()+1,d.getDate(),S.lat,S.lng,tz,opts())}
+const hm=h=>PrayerTimes.hhmm(h);
+function hijri(){const d=new Date();d.setDate(d.getDate()+(+S.hijriAdj||0));try{return new Intl.DateTimeFormat((S.lang==='en'?'en':'ta')+'-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}).format(d)}catch(e){return ''}}
+function nowH(){const d=new Date(),utc=d.getTime()/3600000;const local=utc+S.tz;return ((local%24)+24)%24+d.getMilliseconds()/3.6e6}
+
+// ---------- views ----------
+function viewToday(){
+  const r=dayTimes(0),r1=dayTimes(1);
+  const draw=()=>{
+    const n=nowH();let next=null,cur=null;
+    for(const k of PK){if(r[k]>n){next=k;break}cur=k}
+    let diff;if(next)diff=r[next]-n;else{next='fajr';diff=r1.fajr+24-n}
+    const s=Math.max(0,Math.round(diff*3600)),H=Math.floor(s/3600),M=Math.floor(s%3600/60),Sx=s%60;
+    document.getElementById('cd').textContent=`${H}:${pad(M)}:${pad(Sx)}`;
+    document.getElementById('nx').textContent=`${t(next)} ${t('in')}`;
+    document.querySelectorAll('.row[data-k]').forEach(e=>e.classList.toggle('now',e.dataset.k===cur));
+  };
+  $app.innerHTML=`<h1>${t('today')}</h1><p class="sub">${esc(hijri())}</p>
+  <div class="card"><div style="display:flex;justify-content:space-between"><span class="lbl" id="nx"></span><span class="lbl">${esc(S.place)}</span></div><div class="big" id="cd">-</div>
+  ${PK.map(k=>`<div class="row" data-k="${k}"><span>${t(k)}</span><span style="font-variant-numeric:tabular-nums">${hm(r[k])}</span></div>`).join('')}</div>
+  <div class="note">${t('note')}<br>${t('free')}</div>`;
+  draw();tick=setInterval(draw,1000);
+}
+function viewServices(){
+  const tiles=[['#/quran','t1','📖',t('quran')],['#/qibla','t2','🧭',t('qibla')],['#/hadith','t3','📜',t('hadith')],['#/dua','t4','🤲',t('dua')],['#/courses','t6','🎓',t('courses')]];
+  $app.innerHTML=`<h1>${t('services')}</h1><div class="grid" style="margin-top:16px">${tiles.map(x=>`<a class="tile ${x[1]}" href="${x[0]}"><i>${x[2]}</i>${x[3]}</a>`).join('')}</div>`;
+}
+function viewSettings(){
+  const cityOpts=CITIES.map((c,i)=>`<option value="${i}" ${c[0]===S.place?'selected':''}>${esc(c[0])}</option>`).join('');
+  const mOpts=Object.entries(PrayerTimes.METHODS).map(([k,v])=>`<option value="${k}" ${S.method===k?'selected':''}>${esc(v.name)}</option>`).join('');
+  $app.innerHTML=`<h1>${t('settings')}</h1>
+  <div class="card"><label class="set" style="margin-top:0">${t('language')}</label><select id="lang"><option value="ta" ${S.lang==='ta'?'selected':''}>தமிழ்</option><option value="en" ${S.lang==='en'?'selected':''}>English</option></select>
+  <label class="set">${t('location')}</label><select id="city">${cityOpts}</select><div style="margin-top:8px"><button class="s" id="geo">${t('useloc')}</button></div>
+  <label class="set">${t('madhhab')}</label><select id="asr"><option value="shafi" ${S.asr==='shafi'?'selected':''}>${t('shafi')}</option><option value="hanafi" ${S.asr==='hanafi'?'selected':''}>${t('hanafi')}</option></select>
+  <label class="set">${t('method')}</label><select id="method">${mOpts}</select>
+  <label class="set">${t('adj')}</label><select id="adj">${[-2,-1,0,1,2].map(n=>`<option ${+S.hijriAdj===n?'selected':''}>${n}</option>`).join('')}</select>
+  <label class="set"><input type="checkbox" id="en" ${S.english?'checked':''}> ${t('english')}</label></div>
+  <div class="note">ISNAD · ${t('free')}</div>`;
+  const on=(id,f)=>document.getElementById(id).addEventListener('change',e=>{f(e.target);save();render()});
+  on('lang',e=>S.lang=e.value);on('asr',e=>S.asr=e.value);on('method',e=>S.method=e.value);on('adj',e=>S.hijriAdj=+e.value);on('en',e=>S.english=e.checked);
+  on('city',e=>{const c=CITIES[+e.value];S.place=c[0];S.lat=c[1];S.lng=c[2];S.tz=c[3]});
+  document.getElementById('geo').onclick=()=>navigator.geolocation&&navigator.geolocation.getCurrentPosition(p=>{S.lat=p.coords.latitude;S.lng=p.coords.longitude;S.tz=-new Date().getTimezoneOffset()/60;S.place=`${S.lat.toFixed(2)}, ${S.lng.toFixed(2)}`;save();render()},()=>alert('Location unavailable'));
+}
+function viewQibla(){
+  const b=PrayerTimes.qibla(S.lat,S.lng);
+  $app.innerHTML=`<a class="back" href="#/services">${t('back')}</a><h1>${t('qibla')}</h1><p class="sub">${esc(S.place)}</p>
+  <div class="card" style="text-align:center"><div class="lbl">${t('bearing')}</div><div class="big">${b.toFixed(1)}°</div><div class="needle" id="nd"></div></div>`;
+  const nd=document.getElementById('nd');nd.style.transform=`rotate(${b}deg)`;
+  const h=e=>{const hd=e.webkitCompassHeading!=null?e.webkitCompassHeading:(e.absolute&&e.alpha!=null?360-e.alpha:null);if(hd!=null)nd.style.transform=`rotate(${b-hd}deg)`};
+  window.addEventListener('deviceorientationabsolute',h);window.addEventListener('deviceorientation',h);
+  cleanup=()=>{window.removeEventListener('deviceorientationabsolute',h);window.removeEventListener('deviceorientation',h)};
+}
+async function viewQuranList(){
+  $app.innerHTML=`<a class="back" href="#/services">${t('back')}</a><h1>${t('quran')}</h1><input type="search" id="q" placeholder="${t('search')}"><div id="l" style="margin-top:8px"></div>`;
+  try{const d=await api('/quran');const show=f=>document.getElementById('l').innerHTML=d.surahs.filter(s=>!f||(s.surah+' '+s.name+' '+s.meaning).toLowerCase().includes(f)).map(s=>`<a class="li" href="#/quran/${s.surah}"><span>${s.surah}. ${esc(s.name)}<br><small>${esc(s.meaning)}</small></span><small>${s.ayahs} ${t('ayahs')}</small></a>`).join('');
+    show('');document.getElementById('q').oninput=e=>show(e.target.value.trim().toLowerCase())}catch(e){document.getElementById('l').innerHTML=fail(e)}
+}
+async function viewSurah(n){
+  $app.innerHTML=`<a class="back" href="#/quran">${t('back')}</a><h1>…</h1><div id="b"></div>`;
+  try{
+    const [a,ta,en]=await Promise.all([api(`/quran/${n}/arabic`),api(`/quran/${n}`),S.english?api(`/quran/${n}/english`):null]);
+    const tm=new Map();(ta.verses||[]).forEach(v=>{const e=v.ayah_end||v.ayah;for(let i=v.ayah;i<=e;i++)tm.set(i,{v,first:i===v.ayah})});
+    const em=en?new Map(en.translations.pickthall.verses.map(v=>[v.ayah,v.text])):new Map();
+    $app.innerHTML=`<a class="back" href="#/quran">${t('back')}</a><h1>${esc(ta.name||'')}</h1><p class="sub ar" style="font-size:22px;text-align:left;direction:rtl">${esc(a.name_arabic)}</p>
+    ${a.verses.map(v=>{const x=tm.get(v.ayah);const rng=x&&x.first&&x.v.ayah_end?`${x.v.ayah}–${x.v.ayah_end}`:v.ayah;
+      return `<div class="ay"><span class="num">${n}:${v.ayah}</span><div class="ar">${esc(v.uthmani)}</div>${x&&x.first?`<div class="ta"><small class="lbl">${rng}</small> ${esc(x.v.tamil)}</div>`:''}${em.has(v.ayah)?`<div class="en">${esc(em.get(v.ayah))}</div>`:''}</div>`}).join('')}
+    <div style="display:flex;justify-content:space-between;margin:16px 0">${n>1?`<a class="back" href="#/quran/${n-1}">‹ ${n-1}</a>`:'<span></span>'}${n<114?`<a class="back" href="#/quran/${n+1}">${n+1} ›</a>`:''}</div>`;
+    window.scrollTo(0,0);
+  }catch(e){document.getElementById('b').innerHTML=fail(e)}
+}
+async function viewHadithBooks(){
+  $app.innerHTML=`<a class="back" href="#/services">${t('back')}</a><h1>${t('hadith')}</h1><div id="l"></div>`;
+  try{const d=await api('/hadith');document.getElementById('l').innerHTML=d.books.map(b=>`<a class="li" href="#/hadith/${b.id}/1"><span>${esc(b.book)}</span><small>${b.available}</small></a>`).join('')}catch(e){document.getElementById('l').innerHTML=fail(e)}
+}
+async function viewHadith(book,n){
+  $app.innerHTML=`<a class="back" href="#/hadith">${t('back')}</a><h1>${esc(book)} ${n}</h1>
+  <div style="display:flex;gap:8px"><input type="number" min="1" id="hn" placeholder="${t('hnum')}"><button class="p" id="go">${t('go')}</button></div><div id="b"></div>
+  <div style="display:flex;justify-content:space-between;margin:16px 0"><a class="back" href="#/hadith/${book}/${Math.max(1,n-1)}">‹ ${Math.max(1,n-1)}</a><a class="back" href="#/hadith/${book}/${n+1}">${n+1} ›</a></div>`;
+  document.getElementById('go').onclick=()=>{const v=+document.getElementById('hn').value;if(v>0)location.hash=`#/hadith/${book}/${v}`};
+  try{const h=await api(`/hadith/${book}/${n}`);
+    document.getElementById('b').innerHTML=`<div class="card">${h.chapter_title||h.topic_title?`<div class="lbl">${esc(h.chapter_title||h.topic_title)}</div>`:''}${h.narrator?`<div class="lbl">${esc(h.narrator)}</div>`:''}${h.arabic?`<div class="ar">${esc(h.arabic)}</div>`:''}<div class="ta" style="white-space:pre-line">${esc(h.tamil||h.text||'')}</div></div>`;
+  }catch(e){document.getElementById('b').innerHTML=fail(e)}
+}
+async function viewDuaList(){
+  $app.innerHTML=`<a class="back" href="#/services">${t('back')}</a><h1>${t('dua')}</h1><div id="l"></div>`;
+  try{const d=await api('/dua');document.getElementById('l').innerHTML=d.collections.map(c=>`<a class="li" href="#/dua/${c.id}"><span>${esc(c.title)}</span><small>${c.count}</small></a>`).join('')}catch(e){document.getElementById('l').innerHTML=fail(e)}
+}
+async function viewDua(id){
+  $app.innerHTML=`<a class="back" href="#/dua">${t('back')}</a><h1>…</h1><div id="b"></div>`;
+  try{const d=await api(`/dua/${id}`);
+    $app.innerHTML=`<a class="back" href="#/dua">${t('back')}</a><h1 style="font-size:26px">${esc(d.title)}</h1>${d.items.map(i=>`<div class="card">${i.title?`<b>${esc(i.title)}</b>`:''}${i.arabic?`<div class="ar">${esc(i.arabic)}</div>`:''}<div class="ta" style="white-space:pre-line">${esc(i.tamil||i.text||'')}</div></div>`).join('')}`;
+  }catch(e){document.getElementById('b').innerHTML=fail(e)}
+}
+async function viewCourses(){
+  $app.innerHTML=`<a class="back" href="#/services">${t('back')}</a><h1>${t('courses')}</h1><div id="l"></div>`;
+  try{const d=await api('/articles');document.getElementById('l').innerHTML=d.articles.map(a=>`<a class="li" href="#/courses/${a.id}"><span>${esc(a.title)}</span></a>`).join('')}catch(e){document.getElementById('l').innerHTML=fail(e)}
+}
+async function viewCourse(id){
+  $app.innerHTML=`<a class="back" href="#/courses">${t('back')}</a><h1>…</h1><div id="b"></div>`;
+  try{const d=await api(`/articles/${id}`);const secs=(d.sections||[]).slice(0,400);
+    const body=s=>s.blocks?s.blocks.filter(b=>b.type!=='image').map(b=>`<p>${esc(b.text||'')}</p>`).join(''):`<p style="white-space:pre-line">${esc(s.text_pdf||s.text||'')}</p>`;
+    $app.innerHTML=`<a class="back" href="#/courses">${t('back')}</a><h1 style="font-size:26px">${esc(d.title)}</h1>${d.quality_note?`<div class="note">${esc(d.quality_note)}</div>`:''}${secs.map(s=>`<div class="card"><b>${esc(s.heading||s.title||'')}</b>${s.image?`<img src="${s.image}" style="width:100%;border-radius:12px;margin-top:8px" loading="lazy">`:''}${body(s)}</div>`).join('')}`;
+  }catch(e){document.getElementById('b').innerHTML=fail(e)}
+}
+
+// ---------- router ----------
+let cleanup=null;
+function render(){
+  if(tick){clearInterval(tick);tick=null}if(cleanup){cleanup();cleanup=null}
+  const p=(location.hash||'#/today').slice(2).split('/'),r=p[0];
+  document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
+  const tab={today:0,services:1,settings:2}[r]??1;[0,1,2].forEach(i=>document.getElementById('n'+i).classList.toggle('on',i===tab));
+  if(r==='today')viewToday();else if(r==='settings')viewSettings();else if(r==='qibla')viewQibla();
+  else if(r==='quran')p[1]?viewSurah(+p[1]):viewQuranList();
+  else if(r==='hadith')p[1]?viewHadith(p[1],+p[2]||1):viewHadithBooks();
+  else if(r==='dua')p[1]?viewDua(p[1]):viewDuaList();
+  else if(r==='courses')p[1]?viewCourse(p[1]):viewCourses();
+  else viewServices();
+  window.scrollTo(0,0);
+}
+addEventListener('hashchange',render);render();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('/app/sw.js').catch(()=>{});
+</script></body></html>

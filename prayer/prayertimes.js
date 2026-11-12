@@ -36,7 +36,7 @@
 
   function compute(year, month, day, lat, lng, tz, opts) {
     opts = opts || {};
-    const m = METHODS[opts.method || 'mwl'] || METHODS.mwl;
+    const m = METHODS[opts.method || 'karachi'] || METHODS.karachi;
     const fajrA = opts.fajrAngle != null ? opts.fajrAngle : m.fajr;
     const ishaA = opts.ishaAngle != null ? opts.ishaAngle : m.isha;
     const ishaMin = opts.ishaAngle != null ? null : m.isha_minutes;
@@ -92,7 +92,7 @@
     const f = (h) => hhmm(h);
     return {
       date: `${year}-${String(month).padStart(2, '0')}-${String(dayN).padStart(2, '0')}`,
-      settings: { method: (opts && opts.method) || 'mwl', asr: (opts && opts.asr) === 'hanafi' ? 'hanafi' : 'shafi', tz },
+      settings: { method: (opts && opts.method) || 'karachi', asr: (opts && opts.asr) === 'hanafi' ? 'hanafi' : 'shafi', tz },
       prayers: {
         fajr:    { start: f(r.fajr),    end: f(r.sunrise) },
         sunrise: { start: f(r.sunrise) },
