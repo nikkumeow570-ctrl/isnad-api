@@ -44,6 +44,10 @@ npm test
 - **Tools:** `tools/import_learning_json.py`, `tools/tholugai_extract.py`, `tools/import_misc_json.py`, `tools/import_dua_json.py`, `tools/import_json_books.py`, `tools/muslim_extract.py`, `tools/bamini_decode.py` (legacy Tamil font decoder), `tools/bukhari_extract.py`, `tools/pj_quran_extract.py`, `tools/build_quran_json.py`.
 - **Copyright:** the translations belong to their publishers (TNTJ and the Bukhari translators). Check licensing before redistributing or deploying publicly.
 
+## Android app (APK)
+The Android app is in `mobile/` (prayer times, full-screen Adhan alarm, Quran, Hadith, Duas, Courses; Tamil and English; offline; no ads or tracking). Its Quran, hadith and course data is packed from this repo's own JSON when it is built, so the app always matches the API.
+To get the APK: GitHub > Actions > **Release APK** > Run workflow (set a version such as 1.0.0). When it finishes, open **Releases** on the repo page and download `ISNAD-...apk`. Add the secrets `KEYSTORE_B64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD` for a signed release (see `mobile/PRODUCTION.md`); without them you get a debug APK that installs fine on a phone.
+
 ## Prayer times and Qibla
 `GET /api/prayer?lat=13.08&lng=80.27&tz=5.5&date=2026-11-12&asr=shafi&method=mwl` returns the five prayers with start and end times, midnight and the Qibla bearing. `asr=hanafi` uses the 2x shadow. The windows follow the Tholugai guide: Fajr to sunrise, Dhuhr until the shadow equals the object (Asr start), Asr to sunset, Maghrib until the red twilight ends (Isha start), Isha until the middle of the night. The Fajr and Isha angles are chosen by `method` (or `fajr=` and `isha=` in degrees); the default `tntj` method (Fajr 18°, Isha 18°, Dhuhr +1 minute, Asr shadow ×1) matches the times shown in a TNTJ/JAQH prayer app for Coimbatore. The same code, `prayer/prayertimes.js`, runs offline in a browser or app with no server.
 

@@ -1,0 +1,8 @@
+{
+  "appId": "app.thowheed.namaz",
+  "appName": "ISNAD",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#065f46"
+  }
+}

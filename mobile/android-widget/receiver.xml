@@ -1,0 +1,11 @@
+        <!-- WIDGET_START -->
+        <receiver android:name="app.thowheed.namaz.PrayerWidget" android:exported="true" android:label="ISNAD">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/prayer_widget_info" />
+        </receiver>
+        <!-- WIDGET_END -->

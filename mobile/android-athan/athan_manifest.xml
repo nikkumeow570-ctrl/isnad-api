@@ -1,0 +1,11 @@
+        <!-- ATHAN_START -->
+        <activity android:name=".AthanActivity" android:exported="false" android:launchMode="singleInstance" android:excludeFromRecents="true" android:showWhenLocked="true" android:turnScreenOn="true" android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <service android:name=".AthanService" android:exported="false" android:foregroundServiceType="mediaPlayback" />
+        <receiver android:name=".AthanReceiver" android:exported="false" />
+        <receiver android:name=".AthanBoot" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+        <!-- ATHAN_END -->

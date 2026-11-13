@@ -1,0 +1,197 @@
+name: Release APK
+
+# Builds the ISNAD Android app from the mobile/ folder and publishes it as a GitHub Release.
+# Run it: Actions > Release APK > Run workflow (or push a tag such as v1.0.0).
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version, e.g. 1.0.0"
+        default: "1.0.0"
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pack the Quran, hadith and course data from this repo into the app
+        run: python3 tools/pack_data.py ..
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Copy web files into www/
+        run: |
+          mkdir -p www
+          cp index.html app.js content.js i18n.js cities.js prayer.js manifest.json www/
+          cp -r icons fonts adhan data www/
+
+      - name: Create Android project
+        run: npx cap add android
+
+      - name: Add permissions (notifications, exact alarms, boot, location)
+        run: |
+          sed -i 's#</manifest>#    <uses-permission android:name="android.permission.VIBRATE" />\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />\n    <uses-permission android:name="android.permission.WAKE_LOCK" />\n</manifest>#' android/app/src/main/AndroidManifest.xml
+          grep -n "uses-permission" android/app/src/main/AndroidManifest.xml
+
+      - name: Add Adhan sounds for notifications (every adhan/*.mp3, names made Android-safe)
+        run: |
+          RAW=android/app/src/main/res/raw
+          mkdir -p $RAW
+          for f in adhan/*.mp3; do
+            [ -f "$f" ] || continue
+            n=$(basename "$f" | tr 'A-Z-' 'a-z_')
+            cp "$f" "$RAW/$n"
+          done
+          ls -la $RAW || true
+
+      - name: Set app icon
+        run: |
+          RES=android/app/src/main/res
+          rm -rf $RES/mipmap-anydpi-v26
+          # icons are pre-generated in android-icons/ (no ImageMagick needed on the runner)
+          cp -r android-icons/. $RES/
+          ls $RES/mipmap-xxxhdpi
+
+      - name: Add home-screen widget
+        run: |
+          J=android/app/src/main/java/app/thowheed/namaz
+          mkdir -p $J android/app/src/main/res/layout android/app/src/main/res/xml android/app/src/main/res/drawable
+          cp android-widget/PrayerWidget.java $J/
+          cp android-widget/widget_prayer.xml android/app/src/main/res/layout/
+          cp android-widget/prayer_widget_info.xml android/app/src/main/res/xml/
+          cp android-widget/widget_bg.xml android-widget/widget_hl.xml android-widget/widget_progress.xml android-widget/widget_preview.png android/app/src/main/res/drawable/
+          python3 - <<'PY'
+          p='android/app/src/main/AndroidManifest.xml'
+          s=open(p).read()
+          r=open('android-widget/receiver.xml').read()
+          s=s.replace('</application>', r+'    </application>',1)
+          open(p,'w').write(s)
+          PY
+          grep -n "WIDGET" android/app/src/main/AndroidManifest.xml
+
+      - name: Add full-screen Adhan alarm (native, with its own Stop screen)
+        run: |
+          J=android/app/src/main/java/app/thowheed/namaz
+          mkdir -p $J
+          cp $J/MainActivity.java android/MainActivity.java.orig
+          cp android-athan/AthanPlugin.java android-athan/AthanReceiver.java android-athan/AthanBoot.java android-athan/AthanService.java android-athan/AthanActivity.java android-athan/MainActivity.java $J/
+          python3 - <<'PY'
+          p='android/app/src/main/AndroidManifest.xml'
+          s=open(p).read()
+          r=open('android-athan/athan_manifest.xml').read()
+          s=s.replace('</application>', r+'    </application>',1)
+          open(p,'w').write(s)
+          PY
+          grep -n "ATHAN" android/app/src/main/AndroidManifest.xml
+
+      - name: Sync web assets and plugins
+        run: npx cap sync android
+
+      - name: Version number and release signing (only if the secrets exist)
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          G=android/app/build.gradle
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/; s/versionName \"1.0\"/versionName \"1.0.${{ github.run_number }}\"/" $G
+          grep -n "versionCode\|versionName" $G
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > android/app/release.jks
+            python3 - <<'PY'
+          import os,re
+          p='android/app/build.gradle'; s=open(p).read()
+          sc="""    signingConfigs {
+              release {
+                  storeFile file('release.jks')
+                  storePassword System.getenv('KEYSTORE_PASSWORD')
+                  keyAlias System.getenv('KEY_ALIAS')
+                  keyPassword System.getenv('KEY_PASSWORD')
+              }
+          }
+          """
+          s=s.replace('    buildTypes {',sc+'    buildTypes {',1)
+          s=re.sub(r'(buildTypes \{\s*release \{)',r'\1\n            signingConfig signingConfigs.release',s,1)
+          open(p,'w').write(s)
+          PY
+            echo "SIGNED=1" >> $GITHUB_ENV
+          fi
+
+      - name: Build (signed release AAB + APK if keystore secrets exist, otherwise debug APK)
+        working-directory: mobile/android
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          build() { if [ "$SIGNED" = "1" ]; then ./gradlew bundleRelease assembleRelease --no-daemon; else ./gradlew assembleDebug --no-daemon; fi; }
+          drop_athan() {
+            J=app/src/main/java/app/thowheed/namaz
+            rm -f $J/AthanPlugin.java $J/AthanReceiver.java $J/AthanBoot.java $J/AthanService.java $J/AthanActivity.java
+            cp MainActivity.java.orig $J/MainActivity.java
+            python3 -c "import re;p='app/src/main/AndroidManifest.xml';s=open(p).read();s=re.sub(r'<!-- ATHAN_START -->.*?<!-- ATHAN_END -->','',s,flags=re.S);open(p,'w').write(s)"
+          }
+          drop_widget() {
+            rm -f app/src/main/java/app/thowheed/namaz/PrayerWidget.java
+            rm -f app/src/main/res/layout/widget_prayer.xml app/src/main/res/xml/prayer_widget_info.xml app/src/main/res/drawable/widget_bg.xml app/src/main/res/drawable/widget_hl.xml app/src/main/res/drawable/widget_progress.xml app/src/main/res/drawable/widget_preview.png
+            python3 -c "import re;p='app/src/main/AndroidManifest.xml';s=open(p).read();s=re.sub(r'<!-- WIDGET_START -->.*?<!-- WIDGET_END -->','',s,flags=re.S);open(p,'w').write(s)"
+          }
+          if ! build; then
+            echo "::warning::Build with the full-screen Adhan screen failed - retrying without it (normal Adhan notifications are used)"
+            drop_athan
+            if ! build; then
+              echo "::warning::Build with the widget failed - retrying without the widget"
+              drop_widget
+              build
+            fi
+          fi
+
+      - name: Upload APK (debug build)
+        if: env.SIGNED != '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: thowheed-namaz-apk
+          path: mobile/android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload signed release (AAB for Play Store, APK for direct install)
+        if: env.SIGNED == '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: thowheed-namaz-release
+          path: |
+            mobile/android/app/build/outputs/bundle/release/app-release.aab
+            mobile/android/app/build/outputs/apk/release/app-release.apk
+
+      - name: Publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then TAG="${{ github.ref_name }}"; else TAG="v${{ inputs.version }}.${{ github.run_number }}"; fi
+          mkdir -p ../release
+          if [ "$SIGNED" = "1" ]; then
+            cp android/app/build/outputs/apk/release/app-release.apk "../release/ISNAD-$TAG.apk"
+            cp android/app/build/outputs/bundle/release/app-release.aab "../release/ISNAD-$TAG.aab"
+          else
+            cp android/app/build/outputs/apk/debug/app-debug.apk "../release/ISNAD-$TAG-debug.apk"
+          fi
+          gh release create "$TAG" ../release/* --title "ISNAD $TAG" --notes "ISNAD Android app. Install the .apk on your phone (allow installs from this source). Prayer times, Adhan alarm, Quran, Hadith and Courses work offline; no ads, no tracking." --repo "${{ github.repository }}"

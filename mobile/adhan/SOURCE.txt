@@ -1,0 +1,5 @@
+Adhan audio - source and licence note
+Recordings come from https://github.com/rehanhaider/adhan (media/Adhan-Makkah1, Adhan-Madinah, Adhan-Makkah2, Adhan-fajr), a fork of https://github.com/achaudhry/adhan.
+That repository's code is MIT licensed, but it does not say who recorded the audio or under what licence, so the rights are NOT verified.
+Each file is the first 75 seconds (mono, 56 kbps, fade-out) so it plays fully as an Android notification sound.
+Replace with recordings you have the right to use before publishing the app. To add a voice: put the mp3 here and add it to voices.json.
