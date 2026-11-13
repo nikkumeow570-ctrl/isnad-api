@@ -1,5 +1,5 @@
 /* ISNAD - service worker */
-const CACHE = 'namaz-v33';
+const CACHE = 'namaz-v34';
 const SHELL = [
   './', 'index.html', 'app.js', 'content.js', 'prayer.js', 'i18n.js', 'cities.js', 'manifest.json',
   'icons/icon-192.png', 'icons/icon-512.png', 'fonts/amiri-regular.woff2'

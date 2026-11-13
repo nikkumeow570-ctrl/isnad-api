@@ -42,3 +42,6 @@ No network calls: all data is bundled in the app and read locally. Location stay
 
 ## Hadith numbers
 Bukhari numbers are the same everywhere. Muslim: the app text cites the international (Abdul Baqi) number, and where we found the matching hadith in this repo's API data it adds `(API n)`, the number in the Tamil edition used by `/api/hadith/muslim/n`. The two numberings differ, so use the API number to open the hadith here. Abu Dawud, Tirmidhi, Nasai and Ibn Majah are not in the API, so those references cannot be checked here.
+
+## Strict API-only content
+The app shows only what is in this repo's API data: Quran, Sahih Bukhari, Sahih Muslim (and the Tamil articles/courses). Duas, adhkar and guide statements that rest only on Abu Dawud, Tirmidhi, Nasai or Ibn Majah were removed (Sana, Rabbighfir, Qunoot, after-prayer 6-9, some morning/evening adhkar, Monday/Thursday and white-days fasting banners, and a few guide notes). Every Bukhari number and every Muslim `(API n)` in the text is a link that opens that hadith from the packed data.

@@ -115,7 +115,16 @@ function contentAct(act, a) {
   if (act === 'qback') { Q.s = null; return go(); }
   if (act === 'qen') { S.qen = a.checked; save(); render(); return true; }
   if (act === 'hbook') { H.b = a.dataset.id; H.n = 1; return go(); }
-  if (act === 'hback') { H.b = null; return go(); }
+  if (act === 'hadref') {
+    H.from = { tab, praySub, moreSub, duaOpen, akSet };
+    H.b = a.dataset.b; H.n = +a.dataset.n; tab = 'more'; moreSub = 'hadith';
+    return go();
+  }
+  if (act === 'hback') {
+    H.b = null;
+    if (H.from) { ({ tab, praySub, moreSub, duaOpen, akSet } = H.from); H.from = null; }
+    return go();
+  }
   if (act === 'hgo') { H.n = Math.max(1, +a.dataset.n || 1); return go(); }
   if (act === 'hjump') { const v = +(document.getElementById('hn') || {}).value; if (v > 0) { H.n = v; return go(); } return true; }
   if (act === 'cour') { C.id = a.dataset.id; return go(); }
@@ -128,3 +137,34 @@ document.addEventListener('input', (e) => {
     document.querySelectorAll('#qlist .lrow').forEach((r) => { r.style.display = !f || r.dataset.name.includes(f) ? '' : 'none'; });
   }
 });
+
+/* Every Bukhari / Muslim reference in the text becomes a link that opens that hadith from the packed API data.
+   Muslim is linked only where the Tamil-edition (API) number is given: "Muslim 598 (API 1049)". */
+function linkRefs(root) {
+  const re = /(Bukhari|புகாரி|Muslim|முஸ்லிம்)((?: \d+)?(?:, \d+)*)(?: \(API (\d+)\))?/g;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), todo = [];
+  while (w.nextNode()) {
+    const t = w.currentNode;
+    if (!/(Bukhari|புகாரி|Muslim|முஸ்லிம்)/.test(t.nodeValue) || t.parentElement.closest('a,button,textarea,script,style,input,.ar,.arq')) continue;
+    todo.push(t);
+  }
+  todo.forEach((t) => {
+    const s = t.nodeValue; let last = 0, m, hit = false; const f = document.createDocumentFragment();
+    const add = (x) => { if (x) f.appendChild(document.createTextNode(x)); };
+    const link = (label, b, n) => { const a = document.createElement('a'); a.className = 'aref'; a.dataset.act = 'hadref'; a.dataset.b = b; a.dataset.n = n; a.textContent = label; f.appendChild(a); hit = true; };
+    re.lastIndex = 0;
+    while ((m = re.exec(s))) {
+      add(s.slice(last, m.index)); last = re.lastIndex;
+      const bk = /Bukhari|புகாரி/.test(m[1]);
+      if (bk && m[2].trim()) {
+        add(m[1] + ' ');
+        m[2].trim().split(', ').forEach((n, i) => { if (i) add(', '); link(n, 'bukhari', n); });
+      } else if (!bk && m[3]) {
+        add(m[1] + (m[2] ? m[2] : '') + ' ');
+        link('(API ' + m[3] + ')', 'muslim', m[3]);
+      } else add(m[0]);
+    }
+    if (!hit) return;
+    add(s.slice(last)); t.parentNode.replaceChild(f, t);
+  });
+}
