@@ -39,3 +39,6 @@ No network calls: all data is bundled in the app and read locally. Location stay
 - Aa button cycles three text sizes (normal, large, extra large).
 - There is no built-in location: the first screen asks for GPS or a city.
 - Adhan: choose a voice or your own file in Settings > Adhan.
+
+## Hadith numbers
+Bukhari numbers are the same everywhere. Muslim: the app text cites the international (Abdul Baqi) number, and where we found the matching hadith in this repo's API data it adds `(API n)`, the number in the Tamil edition used by `/api/hadith/muslim/n`. The two numberings differ, so use the API number to open the hadith here. Abu Dawud, Tirmidhi, Nasai and Ibn Majah are not in the API, so those references cannot be checked here.
