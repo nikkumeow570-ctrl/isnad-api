@@ -976,7 +976,7 @@ function viewSpecial() {
   return `<div class="card"><h2>சிறப்புத் தொழுகைகள் - ஜனாஸா, இஸ்திகாரா, தராவீஹ்</h2>
     <div class="grid g3">
       <div class="card dark" style="margin:0"><h3>ஜனாஸா - 4 தக்பீர்கள்</h3><ol>
-        <li>1ஆம் தக்பீர்: ஃபாத்திஹா</li><li>2ஆம்: ஸலவாத் இப்ராஹீமிய்யா</li><li>3ஆம்: இறந்தவருக்கான துஆ - அல்லாஹும்மஃக்ஃபிர் லஹு வர்ஹம்ஹு...</li><li>4ஆம்: ஸலாம். ருகூஉ, ஸஜ்தா இல்லை</li></ol>
+        <li>தக்பீர்: ஃபாத்திஹா</li><li>ஸலவாத் இப்ராஹீமிய்யா</li><li>இறந்தவருக்கான துஆ - அல்லாஹும்மஃக்ஃபிர் லஹு வர்ஹம்ஹு...</li><li>ஸலாம். ருகூஉ, ஸஜ்தா இல்லை</li></ol>
         <div style="font-size:11px;opacity:.7;margin-top:6px">புகாரி 1335</div></div>
       <div class="card soft" style="margin:0"><h3>இஸ்திகாரா - 2 ரக்அத்</h3>
         <div style="font-size:12px;margin-top:6px">ஒரு முடிவெடுக்க: 2 ரக்அத் நஃபில் தொழுது பின் துஆ ஓதவும் (துஆக்கள் பிரிவில் காண்க). கனவு தேவையில்லை - உள்ளத்தில் நிம்மதியும் வழி திறப்பதும் கவனிக்கவும். புகாரி 1166</div></div>
@@ -1318,14 +1318,38 @@ function viewMore() {
 }
 const VIEWS = { times: viewTimes, pray: viewPray, duas: viewDuas, more: viewMore, set: viewSettings };
 
+/* Long guide pages: each section becomes a tap-to-open accordion (the first one is open) so pages are short and tidy. */
+const ACC = new Set();
+document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.classList && d.classList.contains('acc')) { const k = (d.querySelector('summary') || {}).textContent; if (d.open) ACC.add(k); else ACC.delete(k); } }, true);
+function tidy() {
+  const guide = (tab === 'more' && ['jumma', 'eid', 'special', 'aqeedah'].includes(moreSub)) || (tab === 'pray' && praySub && ['steps', 'witr', 'travel', 'mistakes', 'adhanw', 'iqamah', 'wudu'].includes(praySub));
+  const duaRoot = tab === 'duas' && !duaOpen && !akSet;
+  if (!guide && !duaRoot) return;
+  const m = $('main');
+  const cards = [...m.querySelectorAll(duaRoot ? ':scope > .card' : '.card .card, .grid > .card, .grid .card')].filter((c) => c.querySelector(':scope > h3, :scope > h2'));
+  let first = true;
+  cards.forEach((c) => {
+    if (!c.isConnected) return;
+    const h = c.querySelector(':scope > h3, :scope > h2');
+    const key = h.textContent;
+    const d = document.createElement('details'); d.className = 'acc';
+    if ((first && !duaRoot) || ACC.has(key)) d.open = true; first = false;
+    const sm = document.createElement('summary'); sm.textContent = key; h.remove();
+    const b = document.createElement('div'); b.className = 'accb';
+    while (c.firstChild) b.appendChild(c.firstChild);
+    d.appendChild(sm); d.appendChild(b); c.replaceWith(d);
+  });
+  m.querySelectorAll(':scope > .card').forEach((c) => { if (c.querySelector('details.acc')) c.classList.add('plain'); });
+}
 function render() {
   const y = window.scrollY;
   try { const nb = document.querySelector('header .next'); if (nb) nb.style.display = tab === 'times' ? 'none' : ''; } catch (e) {}
   try { const hd = document.querySelector('header'); if (hd) document.documentElement.style.setProperty('--hh', hd.offsetHeight + 'px'); } catch (e) {}
   const rootTitle = (tab === 'times' || (tab === 'more' && !moreSub) || (tab === 'set' && !setSub)) ? `<div class="ptitle">${TAB_LABEL()[tab]}</div>` : '';
-  $('main').innerHTML = rootTitle + VIEWS[tab]() + `<footer><div class="card" style="display:inline-block;padding:12px 16px;margin:0">அனைத்து முஸ்லிம் சமூகத்துக்காக<br>ஸஹீஹான ஹதீஸ்களின் அடிப்படையில் உருவாக்கப்பட்டது • ஆஃப்லைன் • v29.0</div></footer>`;
+  $('main').innerHTML = (rootTitle + VIEWS[tab]()).replace(/\u06DD/g, ' ﴾﴿ ') + `<footer><div class="card" style="display:inline-block;padding:12px 16px;margin:0">அனைத்து முஸ்லிம் சமூகத்துக்காக<br>ஸஹீஹான ஹதீஸ்களின் அடிப்படையில் உருவாக்கப்பட்டது • ஆஃப்லைன் • v29.0</div></footer>`;
   const navTab = (tab === 'pray' || tab === 'duas') ? 'more' : tab;
   $('nav').innerHTML = TABS.map((t) => `<button class="${navTab === t.id ? 'on' : ''}" data-tab="${t.id}"><span class="ic">${t.icon}</span><span class="lb">${TAB_LABEL()[t.id]}</span></button>`).join('');
+  tidy();
   applyLang();
   window.scrollTo(0, y);
 }

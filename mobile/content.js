@@ -16,17 +16,17 @@ const Q = { s: null }, H = { b: null, n: 1 }, C = { id: null };
 /* ---------- Services (home of everything except prayer times) ---------- */
 function viewServices() {
   const T = [
-    ['pray', 'g1', '🕌', tx('Prayer guide', 'தொழுகை வழிகாட்டி')],
-    ['quran', 'g2', '📖', tx('Quran', 'குர்ஆன்')],
-    ['hadith', 'g3', '📜', tx('Hadith', 'ஹதீஸ்')],
-    ['duas', 'g4', '🤲', tx('Duas & Adhkar', 'துஆக்கள் & அதுகார்')],
-    ['qibla', 'g5', '🧭', tx('Qibla', 'கிப்லா')],
-    ['courses', 'g6', '🎓', tx('Courses', 'பாடங்கள்')],
-    ['track', 'g7', '📊', tx('Prayer log', 'தொழுகைப் பதிவு')],
-    ['jumma', 'g8', '🕋', tx('Jumma', 'ஜும்ஆ')],
-    ['eid', 'g1', '🌙', tx('Eid', 'பெருநாள்')],
-    ['special', 'g2', '⚰️', tx('Janazah & Taraweeh', 'ஜனாஸா & தராவீஹ்')],
-    ['aqeedah', 'g3', '☝️', tx('Aqeedah', 'அகீதா')]
+    ['pray', 'tc1', '🕌', tx('Prayer guide', 'தொழுகை வழிகாட்டி')],
+    ['quran', 'tc2', '📖', tx('Quran', 'குர்ஆன்')],
+    ['hadith', 'tc3', '📜', tx('Hadith', 'ஹதீஸ்')],
+    ['duas', 'tc4', '🤲', tx('Duas & Adhkar', 'துஆக்கள் & அதுகார்')],
+    ['qibla', 'tc5', '🧭', tx('Qibla', 'கிப்லா')],
+    ['courses', 'tc6', '🎓', tx('Courses', 'பாடங்கள்')],
+    ['track', 'tc7', '📊', tx('Prayer log', 'தொழுகைப் பதிவு')],
+    ['jumma', 'tc8', '🕋', tx('Jumma', 'ஜும்ஆ')],
+    ['eid', 'tc1', '🌙', tx('Eid', 'பெருநாள்')],
+    ['special', 'tc2', '⚰️', tx('Janazah & Taraweeh', 'ஜனாஸா & தராவீஹ்')],
+    ['aqeedah', 'tc3', '☝️', tx('Aqeedah', 'அகீதா')]
   ];
   return `<div class="tiles">${T.map((x) => `<button class="tile ${x[1]}" data-act="svc" data-v="${x[0]}"><span class="ti">${x[2]}</span><span class="tn">${x[3]}</span></button>`).join('')}</div>`;
 }
@@ -44,7 +44,7 @@ function viewSurah(n) {
   const nav = `<div class="pager">${n > 1 ? `<button class="sec" data-act="qopen" data-n="${n - 1}">‹ ${n - 1}</button>` : '<span></span>'}<button class="sec" data-act="qback">${tx('Surah list', 'சூரா பட்டியல்')}</button>${n < 114 ? `<button class="sec" data-act="qopen" data-n="${n + 1}">${n + 1} ›</button>` : '<span></span>'}</div>`;
   if (!d) return backBar('qback') + cwait(p);
   const en = !!S.qen;
-  return `<div class="card hero small"><div class="hn">${n}. ${cesc(d.name)}</div><div class="arh">${cesc(d.ar)}</div>
+  return backBar('qback') + `<div class="card hero small"><div class="hn">${n}. ${cesc(d.name)}</div><div class="arh">${cesc(d.ar)}</div>
     <label class="mute"><input type="checkbox" data-act="qen" ${en ? 'checked' : ''}> ${tx('Show English', 'ஆங்கிலமும் காட்டு')}</label></div>
   ${d.v.map((v) => `<div class="ay"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${v[2] ? `<div class="tq">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}</div>`).join('')}${nav}`;
 }

@@ -2,7 +2,7 @@
 (function (root) {
   const METHODS = {
     // Default: Fajr 18, Isha 18, Asar 1x shadow (set in the app), Dhuhr = solar noon + 1 min, Maghrib at sunset.
-    Fajr18: { name: 'Fajr 18°, Isha 18°, Dhuhr +1 min', fajr: 18, isha: 18, dhuhr: 1 },
+    Fajr18: { name: 'TNTJ / JAQH', fajr: 18, isha: 18, dhuhr: 1 },
     MWL: { name: 'Muslim World League', fajr: 18, isha: 17 },
     Karachi: { name: 'Karachi (Univ. of Islamic Sciences)', fajr: 18, isha: 18 },
     ISNA: { name: 'ISNA (North America)', fajr: 15, isha: 15 },
