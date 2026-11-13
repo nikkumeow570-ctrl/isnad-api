@@ -1,7 +1,7 @@
 # Production / Play Store checklist
 
 ## A. Done in code
-- Release signing + versioning in the GitHub workflow (signed AAB + APK when the secrets exist; debug APK otherwise)
+- Release signing + versioning in the GitHub workflow (Release APK) (signed AAB + APK when the secrets exist; debug APK otherwise)
 - No third-party network calls (GPS town name is now offline); privacy policy page; About/credits screen
 - Offline-first, notifications as native alarms, Tamil/English, dark mode, text sizes, store listing text and graphics
 
@@ -12,8 +12,8 @@
    base64 -w0 release.jks   -> GitHub repo Settings > Secrets > Actions:
    KEYSTORE_B64 (that text), KEYSTORE_PASSWORD, KEY_ALIAS (thowheed), KEY_PASSWORD
 3. Put your email in privacy-policy.html (FILL_IN_YOUR_EMAIL), host it (GitHub Pages) and paste the URL in Play Console.
-4. (Removed in v25) The Quran section was taken out, so no TNTJ/Tanzil permission is needed any more.
-5. Adhan audio you have the right to use (current pack is unverified). Replace adhan/adhan.mp3 and adhan-fajr.mp3.
+4. The app now includes the Quran (Arabic + Tamil/English translations), hadith and TNTJ course text. Get written permission from the translation/course publishers (TNTJ and others) before a Play Store release.
+5. Adhan audio you have the right to use (current pack is unverified, see adhan/SOURCE.txt). Replace every file in adhan/.
 6. Fill Data safety (no data collected), content rating, target audience, permission declarations (exact alarm, location). See store-listing.md.
 7. New personal accounts: run a closed test with the required number of testers for the required days before production (check the current numbers in Play Console).
 8. Real-phone test of: reminders firing at the minute with app closed, Adhan sound, compass, Android 13/14/15 permission prompts.
