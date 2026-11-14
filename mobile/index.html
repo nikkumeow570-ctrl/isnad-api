@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; media-src 'self' blob: https://everyayah.com; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ISNAD</title>
 <meta name="description" content="Namaz, Jumma, Eid guide with prayer times and reminders - Sahih Hadith">
@@ -186,9 +187,19 @@ details.ad summary{cursor:pointer;font-weight:700;font-size:13px;color:var(--gt)
 .credit{font-size:11px;color:var(--mute);margin-top:12px;line-height:1.6}
 .credit a{color:var(--gt)}
 a.aref{color:var(--g,#0b6b4d);font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:2px 3px}
-#vfab{position:fixed;right:14px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:45;width:48px;height:48px;border-radius:50%;border:0;background:var(--g,#0b6b4d);color:#fff;font-size:20px;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer}
+#vfab{position:fixed;right:10px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:45;width:44px;height:44px;opacity:.92;border-radius:50%;border:0;background:var(--g,#0b6b4d);color:#fff;font-size:20px;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer}
 .vplay{margin-left:8px;border:1px solid var(--line);background:var(--soft);color:var(--g,#0b6b4d);border-radius:99px;width:34px;height:28px;font-size:13px;cursor:pointer;vertical-align:middle}
 .ay.playing{background:rgba(11,107,77,.08);border-radius:12px}
+
+/* accessibility: visible focus, 44px targets, reduced motion */
+:focus-visible{outline:3px solid #f59e0b;outline-offset:2px;border-radius:8px}
+button,.lrow,.seg button,summary,a.aref,.sec,.vplay{min-height:44px}
+.seg button{min-width:44px}.vplay{min-width:44px}
+a.aref{display:inline-block;min-height:0;padding:6px 4px}
+button:active,.lrow:active{transform:scale(.98);transition:transform .08s}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.tbl td:first-child{white-space:nowrap;padding-right:4px}.tbl td.t{white-space:nowrap}.tbl td.r{padding-left:2px;padding-right:2px;width:44px}.tbl .trk{min-width:36px;min-height:36px;width:36px;height:36px;padding:0}
+.tbl input[type=checkbox]{width:22px;height:22px}
 </style>
 <style id="v30">
 /* v30 design: calm, big titles, flat cards, one accent, 3 tabs. */
@@ -288,6 +299,7 @@ ul{padding-left:20px}
 <script src="cities.js"></script>
 <script src="content.js"></script>
 <script src="voice.js"></script>
+<script src="a11y.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

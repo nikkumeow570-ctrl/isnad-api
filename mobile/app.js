@@ -1113,7 +1113,7 @@ function pageIqamah() {
   return `<div class="card"><h3>🗣️ ${tx('The Iqamah (start of the congregation)', 'இகாமத் (ஜமாஅத் தொடக்கம்)')}</h3>
     <p class="mute">${tx('Said just before the congregational prayer begins, after the wudu is done. Most phrases once; "Qad qaamatis-salaah" twice.', 'உளூ முடிந்து ஜமாஅத் தொடங்கும் முன் கூறப்படுகிறது. பெரும்பாலான வாசகங்கள் ஒருமுறை; "கத் காமதிஸ் ஸலாஹ்" இருமுறை.')}</p>
     <div class="list wl">${IQAMAH_LINES.map((l, i) => `<div class="lrow wr"><span class="li">${i + 1}</span><span class="lt"><span class="ar" lang="ar" dir="rtl">${l.ar}</span><small>${l.tr}</small><small lang="ta">${l.ta}</small></span><span class="cnt">×${l.n}</span></div>`).join('')}</div>
-    <p style="font-size:13px">${tx('Bilal was ordered to say the Adhan in pairs and the Iqamah once, except "Qad qaamatis-salaah" (Bukhari 605, Muslim 378 (API 620)). Another report (Abu Mahdhura, Muslim API 623) has the Adhan with repeated Shahadah; see the hadith.', 'பிலால் (ரலி) அவர்களுக்கு அதானை இரட்டையாகவும் இகாமத்தை ஒற்றையாகவும் (கத் காமதிஸ் ஸலாஹ் தவிர) கூறக் கட்டளையிடப்பட்டது (புகாரி 605, முஸ்லிம் 378 (API 619)). அபூ மஹ்தூரா (ரலி) வழியாக இகாமத் இரட்டையாக வந்த அறிவிப்பும் உள்ளது (அபூதாவூத்); இரண்டும் ஹதீஸ் நூல்களில் உள்ளன.')}</p></div>`;
+    <p style="font-size:13px">${tx('Bilal was ordered to say the Adhan in pairs and the Iqamah once, except "Qad qaamatis-salaah" (Bukhari 605, Muslim 378 (API 620)). Another report (Abu Mahdhura, Muslim API 623) has the Adhan with repeated Shahadah; see the hadith.', 'பிலால் (ரலி) அவர்களுக்கு அதானை இரட்டையாகவும் இகாமத்தை ஒற்றையாகவும் (கத் காமதிஸ் ஸலாஹ் தவிர) கூறக் கட்டளையிடப்பட்டது (புகாரி 605, முஸ்லிம் 378 (API 619)). அபூ மஹ்தூரா (ரலி) வழியாக பாங்கு வாசகங்கள் வேறு முறையிலும் வந்துள்ளன - முஸ்லிம் (API 623).')}</p></div>`;
 }
 function viewPray() {
   const back = () => backBar('prayback');
@@ -1209,6 +1209,7 @@ function setPage(sub) {
     <p class="mute">${tx('Language', 'மொழி')}</p><div class="seg"><button class="${S.lang !== 'en' ? 'on' : ''}" data-act="setlang" data-v="ta">தமிழ்</button><button class="${S.lang === 'en' ? 'on' : ''}" data-act="setlang" data-v="en">English</button></div>
     <p class="mute">${tx('Text size', 'எழுத்து அளவு')}</p><div class="seg"><button class="${!S.fs ? 'on' : ''}" data-act="setfs" data-v="0">${tx('Normal', 'சாதாரணம்')}</button><button class="${S.fs == 1 ? 'on' : ''}" data-act="setfs" data-v="1">${tx('Large', 'பெரியது')}</button><button class="${S.fs == 2 ? 'on' : ''}" data-act="setfs" data-v="2">${tx('Extra large', 'மிகப் பெரியது')}</button></div>
     <p class="mute">${tx('Hijri date (moon sighting): shift by', 'ஹிஜ்ரி தேதி (பிறை பார்த்தல்): மாற்றம்')}</p><div class="seg">${[-1, 0, 1].map((n) => `<button class="${(S.hadj || 0) === n ? 'on' : ''}" data-act="hadj" data-v="${n}">${n > 0 ? '+' + n : n} ${tx('day', 'நாள்')}</button>`).join('')}</div>
+    <p class="mute">${tx('Text size', 'எழுத்து அளவு')}</p><div class="seg">${[[0, 'A', 'Normal', 'இயல்பு'], [1.15, 'A+', 'Large', 'பெரியது'], [1.25, 'A++', 'Extra large', 'மிகப் பெரியது']].map((o) => `<button class="${(S.fs || 0) === o[0] ? 'on' : ''}" data-act="setfs" data-v="${o[0]}" aria-label="${tx(o[2], o[3])}">${o[1]}</button>`).join('')}</div>
     <p class="mute">${tx('Theme', 'தோற்றம்')}</p><div class="seg"><button class="${S.dark === null ? 'on' : ''}" data-act="settheme" data-v="auto">${tx('Auto', 'தானியங்கி')}</button><button class="${S.dark === false ? 'on' : ''}" data-act="settheme" data-v="light">${tx('Light', 'வெளிச்சம்')}</button><button class="${S.dark === true ? 'on' : ''}" data-act="settheme" data-v="dark">${tx('Dark', 'இருள்')}</button></div></div>`;
   return '';
 }
@@ -1332,6 +1333,7 @@ function render() {
   applyLang();
   try { linkRefs($('main')); } catch (e) {}
   try { if (typeof voiceDecorate === 'function') voiceDecorate(); } catch (e) {}
+  try { a11yApply(); } catch (e) {}
   window.scrollTo(0, y);
 }
 
@@ -1354,6 +1356,7 @@ document.addEventListener('click', (e) => {
   else if (act === 'gosettings') { tab = 'set'; setSub = null; render(); window.scrollTo(0, 0); }
   else if (act === 'setlang') { S.lang = a.dataset.v === 'en' ? 'en' : 'ta'; save(); render(); setNet(); tick(); updateWidget(); }
   else if (act === 'setfs') { S.fs = +a.dataset.v; applyFs(); save(); render(); }
+  else if (act === 'setfs') { S.fs = +a.dataset.v || 0; save(); render(); }
   else if (act === 'settheme') { S.dark = a.dataset.v === 'auto' ? null : a.dataset.v === 'dark'; applyTheme(); save(); render(); }
   else if (act === 'adhandiag') adhanDiag();
   else if (act === 'alarmscreen') { S.alarmScreen = a.checked; save(); scheduleNative(); }

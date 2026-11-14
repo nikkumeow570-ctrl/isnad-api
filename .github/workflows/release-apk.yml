@@ -41,7 +41,7 @@ jobs:
       - name: Copy web files into www/
         run: |
           mkdir -p www
-          cp index.html app.js content.js voice.js i18n.js cities.js prayer.js manifest.json www/
+          cp index.html app.js content.js voice.js a11y.js i18n.js cities.js prayer.js manifest.json www/
           cp -r icons fonts adhan data www/
 
       - name: Create Android project
@@ -51,6 +51,13 @@ jobs:
         run: |
           sed -i 's#</manifest>#    <uses-permission android:name="android.permission.VIBRATE" />\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />\n    <uses-permission android:name="android.permission.WAKE_LOCK" />\n</manifest>#' android/app/src/main/AndroidManifest.xml
           grep -n "uses-permission" android/app/src/main/AndroidManifest.xml
+
+      - name: Harden manifest (no cloud backup, no cleartext HTTP)
+        run: |
+          M=android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:allowBackup="true"/android:allowBackup="false"/' $M
+          grep -q 'usesCleartextTraffic' $M || sed -i 's/<application/<application android:usesCleartextTraffic="false"/' $M
+          grep -n "allowBackup\|usesCleartextTraffic" $M
 
       - name: Add Adhan sounds for notifications (every adhan/*.mp3, names made Android-safe)
         run: |
