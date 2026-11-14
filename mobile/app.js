@@ -664,7 +664,7 @@ function duaCard(d) {
     ${d.ta ? `<div class="tr" lang="ta"><b>தமிழ்</b>${d.ta}</div>` : ''}
     <div class="acts">
       <button class="ab ${copiedId === d.id ? 'on' : ''}" data-act="copy" data-id="${d.id}">${copiedId === d.id ? '✓ நகலெடுக்கப்பட்டது' : '📋 நகலெடு'}</button>
-      <button class="ab ${playingId === d.id ? 'play' : ''}" data-act="speak" data-id="${d.id}">${playingId === d.id ? '⏸ நிறுத்து' : '🔊 மெதுவாகக் கேட்க'}</button>
+      <button class="ab ${playingId === d.id ? 'play' : ''}" data-act="speak" data-id="${d.id}">${playingId === d.id ? tx('⏸ Stop', '⏸ நிறுத்து') : tx('🔊 Listen slowly', '🔊 மெதுவாகக் கேட்க')}</button>
     </div></div>`;
 }
 
@@ -943,11 +943,10 @@ function viewDuas() {
     duaOpen = null;
   }
   const f = ['after', 'all', 'daily', 'azkar', 'witr'].map((c) => `<button class="${duaFilter === c ? 'on' : ''}" data-act="filter" data-key="${c}">${DUA_LABEL[c]}</button>`).join('');
-  const note = duaFilter === 'after' ? `<div class="card" style="margin:0 0 10px"><h3>ஸலாமுக்குப் பின்</h3>
-    <ul><li>இவற்றை ஒவ்வொருவரும் தனித்தனியாக அமைதியாக ஓதவும். கடமையான தொழுகைக்குப் பின் கூட்டாகக் கை உயர்த்தி துஆ செய்ய நபி ﷺ அவர்கள் தலைமை தாங்கவில்லை.</li>
-    <li lang="ta">தொழுகைக்குப் பின் இந்த துஆக்களையும் திக்ருகளையும் ஒவ்வொருவரும் தனித்தனியாக ஓதவேண்டும். இமாம் தலைமையில் கூட்டாகக் கை உயர்த்தி துஆ செய்வது நபிவழியில் இல்லை.</li></ul></div>` : '';
+  const note = duaFilter === 'after' ? `<div class="card" style="margin:0 0 10px"><h3>${tx('After the salam', 'ஸலாமுக்குப் பின்')}</h3>
+    <ul><li>${tx('Recite these quietly, each person on his own. The Prophet ﷺ did not lead a collective raised-hands dua after the obligatory prayer.', 'இவற்றை ஒவ்வொருவரும் தனித்தனியாக அமைதியாக ஓதவும். கடமையான தொழுகைக்குப் பின் கூட்டாகக் கை உயர்த்தி துஆ செய்ய நபி ﷺ அவர்கள் தலைமை தாங்கவில்லை.')}</li></ul></div>` : '';
   const rows = DUAS.filter((d) => duaFilter === 'all' || d.cat === duaFilter).map((d) => lrow('duaopen', d.id, '🤲', d.title, (DUA_LABEL[d.cat] || d.cat) + ' • ' + d.ref)).join('');
-  return backBar('tosvc') + `<div class="card"><h2 style="font-size:18px">துஆக்கள் - நகலெடு • கேள் • ஆஃப்லைன்</h2><div class="filters">${f}</div>
+  return backBar('tosvc') + `<div class="card"><h2 style="font-size:18px">${tx('Duas - copy, listen (read aloud), offline', 'துஆக்கள் - நகலெடு • கேள் • ஆஃப்லைன்')}</h2><div class="filters">${f}</div>
     <p class="mute">${tx('Tap a dua to open it: Arabic, pronunciation, meaning, copy and listen.', 'ஒரு துஆவைத் தொட்டுத் திறக்கவும்: அரபி, உச்சரிப்பு, பொருள், நகலெடு, கேள்.')}</p></div>
     <div class="card list">${lrow('duaopen', '#adhkar', '🌅', tx('Morning, evening & night adhkar', 'காலை, மாலை, இரவு அதுகார்'), tx('Counts each line - ' + AK_LABEL[akDueSet()][0] + ' is due now', 'ஒவ்வொரு வரியையும் எண்ணலாம் - இப்போது: ' + AK_LABEL[akDueSet()][1]))}
     ${lrow('duaopen', '#tasbih', '📿', tx('Tasbih counter', 'தஸ்பீஹ் எண்ணி'), tx('33 / 34 / 100, with vibration', '33 / 34 / 100, அதிர்வுடன்'))}</div>
