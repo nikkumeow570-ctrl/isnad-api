@@ -736,6 +736,23 @@ function viewSetup() {
   <p class="mute" style="text-align:center">${tx('First you will see the calculated times for your place. Matching your mosque is optional (More > Settings).', 'முதலில் உங்கள் இடத்துக்கான கணக்கிட்ட நேரங்கள் காட்டப்படும். பள்ளிவாசல் நேரத்தை பின்னர் அமைக்கலாம் (மேலும் > அமைப்புகள்) - அது விருப்பம் மட்டுமே.')}</p>
   <p style="text-align:center"><button class="lnk" data-act="obback">‹ ${tx('Back', 'பின்')}</button></p>${obDots(2)}`;
 }
+function homeTiles(now) {
+  akCheckDay();
+  const cur = akDueSet(now), list = ADHKAR[cur] || [];
+  const done = list.filter((d) => (AK.c[cur + ':' + d.id] || 0) >= d.n).length;
+  const pct = list.length ? Math.round(done * 100 / list.length) : 0;
+  const tg = TS.t, rem = tg ? (TS.n % tg) : TS.n;
+  const ic = cur === 'm' ? '🌅' : cur === 'e' ? '🌇' : '🌙';
+  return `<div class="htiles">
+    <button class="ht2 hak" data-act="homeak" aria-label="${tx('Open adhkar', 'அதுகார் திற')}"><span class="hi">${ic}</span><b>${tx(AK_LABEL[cur][0] + ' adhkar', AK_LABEL[cur][1] + ' அதுகார்')}</b>
+      <span class="hbar"><i style="width:${pct}%"></i></span><small>${done}/${list.length} ${tx('done', 'முடிந்தது')}</small></button>
+    <div class="ht2 hts"><span class="hi">📿</span><b>${tx('Tasbih', 'தஸ்பீஹ்')}</b>
+      <button class="hcnt" data-act="tsb" aria-label="${tx('count', 'எண்ணு')}">${TS.n}</button>
+      <small>${tg ? tx('target ', 'இலக்கு ') + tg + ' · ' + rem + '/' + tg : tx('free count', 'வரம்பின்றி')}</small>
+      <span class="hrow"><button data-act="tsbt" data-v="${tg === 33 ? 34 : tg === 34 ? 100 : tg === 100 ? 0 : 33}" aria-label="${tx('change target', 'இலக்கை மாற்று')}">🎯</button><button data-act="tsbreset" aria-label="${tx('Reset', 'மீட்டமை')}">↺</button></span></div>
+    <button class="ht2 hdu" data-act="homedua"><span class="hi">🤲</span><b>${tx('Duas', 'துஆக்கள்')}</b><small>${tx('Open the duas', 'துஆக்களைத் திற')}</small></button>
+  </div>`;
+}
 function viewTimes() {
   if (!hasLoc()) return viewSetup();
   const now = new Date(), t = timesFor(now), nx = nextPrayer(now);
@@ -760,8 +777,8 @@ function viewTimes() {
   <div class="card"><table class="tbl"><tbody>${rows}</tbody></table>
     <p class="mute">${tx('🔔 reminder • ✓ I prayed', '🔔 நினைவூட்டல் • ✓ தொழுதேன்')}</p>${trSummary(now)}
     ${TIME_KEYS.some((k) => /^\d{2}:\d{2}$/.test(S.fixed[k]) || S.adj[k]) ? `<p class="mute">🕌 ${tx('Mosque times are in use.', 'பள்ளிவாசல் நேரம் பயன்பாட்டில் உள்ளது.')} <button class="sec" data-act="resetadj" style="padding:4px 10px">${tx('Use calculated times', 'கணக்கிட்ட நேரங்கள்')}</button></p>` : ''}</div>
-  <details class="more-times"><summary>${tx('More times', 'மேலும் நேரங்கள்')}</summary>${extraTimes(t, now)}</details>
-  `;
+  ${homeTiles(now)}
+  ${extraTimes(t, now)}`;
 }
 
 function viewDaily() {
@@ -1055,7 +1072,7 @@ ADHKAR.e = ADHKAR.m.map((d) => {
 });
 const AK_LABEL = { m: ['Morning', 'காலை'], e: ['Evening', 'மாலை'], s: ['Night', 'இரவு'] };
 let AK = load('thw_adhkar', { d: '', c: {} }), TS = load('thw_tasbih', { n: 0, t: 33 });
-let akSet = null;
+let akSet = null, homeBack = false;
 function akSave() { try { localStorage.setItem('thw_adhkar', JSON.stringify(AK)); } catch (e) {} }
 function tsSave() { try { localStorage.setItem('thw_tasbih', JSON.stringify(TS)); } catch (e) {} }
 function akCheckDay() { const d = dayKey(new Date()); if (AK.d !== d) { AK = { d, c: {} }; akSave(); } }
@@ -1405,7 +1422,9 @@ document.addEventListener('click', (e) => {
   else if (act === 'tsbreset') { TS.n = 0; tsSave(); render(); }
   else if (act === 'hadj') { S.hadj = +a.dataset.v; save(); render(); }
   else if (act === 'duaopen') { duaOpen = a.dataset.v; render(); window.scrollTo(0, 0); }
-  else if (act === 'duaback') { duaOpen = null; render(); window.scrollTo(0, 0); }
+  else if (act === 'homeak') { tab = 'duas'; duaOpen = '#adhkar'; akSet = null; homeBack = true; render(); window.scrollTo(0, 0); }
+  else if (act === 'homedua') { tab = 'duas'; duaOpen = null; homeBack = true; render(); window.scrollTo(0, 0); }
+  else if (act === 'duaback') { if (homeBack) { homeBack = false; tab = 'times'; } duaOpen = null; render(); window.scrollTo(0, 0); }
   else if (act === 'compass') compassToggle();
   else if (act.startsWith('q')) qClick(act, a);
   else if (act === 'adhanplay' || act === 'adhanfajr') {
