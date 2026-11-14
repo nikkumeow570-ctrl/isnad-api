@@ -749,8 +749,7 @@ function homeTiles(now) {
     <div class="ht2 hts"><span class="hi">📿</span><b>${tx('Tasbih', 'தஸ்பீஹ்')}</b>
       <button class="hcnt" data-act="tsb" aria-label="${tx('count', 'எண்ணு')}">${TS.n}</button>
       <small>${tg ? tx('target ', 'இலக்கு ') + tg + ' · ' + rem + '/' + tg : tx('free count', 'வரம்பின்றி')}</small>
-      <span class="hrow"><button data-act="tsbt" data-v="${tg === 33 ? 34 : tg === 34 ? 100 : tg === 100 ? 0 : 33}" aria-label="${tx('change target', 'இலக்கை மாற்று')}">🎯</button><button data-act="tsbreset" aria-label="${tx('Reset', 'மீட்டமை')}">↺</button></span></div>
-    <button class="ht2 hdu" data-act="homedua"><span class="hi">🤲</span><b>${tx('Duas', 'துஆக்கள்')}</b><small>${tx('Open the duas', 'துஆக்களைத் திற')}</small></button>
+      <span class="hrow"><button data-act="tsbreset" aria-label="${tx('Reset', 'மீட்டமை')}">↺</button></span></div>
   </div>`;
 }
 function viewTimes() {
@@ -764,18 +763,18 @@ function viewTimes() {
   const curKey = currentActiveKey(t, now);
   const rows = TIME_KEYS.map((k) => `<tr class="${nx && nx.key === k && dayKey(nx.at) === dayKey(now) ? 'next' : ''} ${curKey === k ? 'active' : ''} ${t[k] && t[k] <= now && curKey !== k ? 'past' : ''}">
       <td>${KEY_LABEL[k]}${curKey === k ? ' <span class="nowc">● இப்போது</span>' : ''}${/^\d{2}:\d{2}$/.test(S.fixed[k]) ? ' <span class="chip">' + tx('jamaat', 'ஜமாஅத்') + '</span>' : ''}</td><td class="t">${fmt(t[k])}</td>
-      <td class="r"><input type="checkbox" data-remind="${k}" ${S.remind[k] ? 'checked' : ''} aria-label="${KEY_LABEL[k]} நினைவூட்டு"></td>
+      <td class="r"><label class="bell"><input type="checkbox" data-remind="${k}" ${S.remind[k] ? 'checked' : ''} aria-label="${KEY_LABEL[k]} நினைவூட்டு"><span aria-hidden="true"></span></label></td>
       <td class="r">${FARD.includes(k) ? `<button class="trk ${(TR[dayKey(now)] || {})[k] ? 'on' : ''}" data-act="trk" data-k="${k}" data-d="${dayKey(now)}" aria-label="${KEY_LABEL[k]}">✓</button>` : ''}</td></tr>`).join('');
   const notifLine = ns === 'granted' ? '✅ அறிவிப்புகள் அனுமதிக்கப்பட்டுள்ளன'
     : ns === 'denied' ? '⛔ அறிவிப்புகள் தடுக்கப்பட்டுள்ளன - தளம்/ஆப் செட்டிங்ஸில் அனுமதிக்கவும்'
     : ns === 'unsupported' ? 'இங்கு அறிவிப்புகள் ஆதரிக்கப்படவில்லை' : '🔔 அறிவிப்புகள் இன்னும் இயக்கப்படவில்லை';
   const dateLine = now.toLocaleDateString(S.lang === 'en' ? 'en-IN' : 'ta-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   const hero = nx ? `<div class="card hero"><div class="mute">${dateLine} • 📍 ${S.place}</div><div class="hijri">${hijriString(now) ? '≈ ' + hijriString(now) : ''}</div>
-    <button class="gear" data-act="gosettings" aria-label="Settings">⚙️</button><div class="hn">${tx('Next', 'அடுத்தது')}: <b id="heroName">${KEY_LABEL[nx.key]}</b></div>
+<div class="hn">${tx('Next', 'அடுத்தது')}: <b id="heroName">${KEY_LABEL[nx.key]}</b></div>
     <div class="ht" id="heroTime">${fmt(nx.at)}</div><div class="hc" id="heroCount">${tx('in ', 'இன்னும் ')}${countdown(nx.at - now)}</div></div>` : '';
   return `${hero}${dayNote(now)}
   <div class="card"><table class="tbl"><tbody>${rows}</tbody></table>
-    <p class="mute">${tx('🔔 reminder • ✓ I prayed', '🔔 நினைவூட்டல் • ✓ தொழுதேன்')}</p>${trSummary(now)}
+    ${trSummary(now)}
     ${TIME_KEYS.some((k) => /^\d{2}:\d{2}$/.test(S.fixed[k]) || S.adj[k]) ? `<p class="mute">🕌 ${tx('Mosque times are in use.', 'பள்ளிவாசல் நேரம் பயன்பாட்டில் உள்ளது.')} <button class="sec" data-act="resetadj" style="padding:4px 10px">${tx('Use calculated times', 'கணக்கிட்ட நேரங்கள்')}</button></p>` : ''}</div>
   ${homeTiles(now)}
   ${extraTimes(t, now)}`;
@@ -1354,6 +1353,7 @@ function tidy() {
 }
 function render() {
   if (typeof voiceStop === 'function' && VO.on) voiceStop();
+  try { document.body.dataset.pg = tab; } catch (e) {}
   try { document.body.classList.toggle('onb', tab === 'times' && !hasLoc()); } catch (e) {}
   const y = window.scrollY;
   try { const nb = document.querySelector('header .next'); if (nb) nb.style.display = tab === 'times' ? 'none' : ''; } catch (e) {}

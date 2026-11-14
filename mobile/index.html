@@ -298,6 +298,17 @@ body.onb{padding-bottom:24px}
 .hcnt:active{transform:scale(.94)}
 .hrow{display:flex;gap:10px}.hrow button{min-width:44px;min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:18px}
 </style>
+<style>
+body[data-pg=times] #vfab{display:none!important}
+.bell{position:relative;display:inline-flex;min-width:36px;min-height:36px;align-items:center;justify-content:center}
+.bell input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0}
+.bell span::before{content:"🔕";opacity:.4;font-size:16px}.bell input:checked+span::before{content:"🔔";opacity:1}
+.bell input:focus-visible+span{outline:2px solid var(--g);border-radius:8px}
+.hero .hijri{opacity:.8;font-size:13px}
+.card .tbl{margin-top:0}
+.htiles{grid-template-columns:1fr 1fr}
+</style>
+<style>.hak{justify-content:center}.hak b{font-size:16px}</style>
 </head>
 <body>
 <header>
