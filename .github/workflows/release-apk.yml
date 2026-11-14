@@ -41,7 +41,7 @@ jobs:
       - name: Copy web files into www/
         run: |
           mkdir -p www
-          cp index.html app.js content.js i18n.js cities.js prayer.js manifest.json www/
+          cp index.html app.js content.js voice.js i18n.js cities.js prayer.js manifest.json www/
           cp -r icons fonts adhan data www/
 
       - name: Create Android project

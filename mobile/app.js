@@ -1147,7 +1147,7 @@ function viewAbout() {
       <li>${tx('Font: Amiri (SIL Open Font License)', 'எழுத்துரு: Amiri (SIL Open Font License)')}</li>
       <li>${tx('Hadith references: only Sahih Bukhari and Sahih Muslim, as in our API', 'ஹதீஸ் ஆதாரங்கள்: நமது API-யில் உள்ள ஸஹீஹ் புகாரி, ஸஹீஹ் முஸ்லிம் மட்டும்')}</li></ul>
     <h3>${tx('Privacy', 'தனியுரிமை')}</h3>
-    <p style="font-size:13px">${tx('This app collects no personal data and has no account or ads. Your location and settings stay on your phone. Location is used only when you tap "Use my location".', 'இந்த ஆப் எந்தத் தனிப்பட்ட தகவலையும் சேகரிக்காது; கணக்கு, விளம்பரம் எதுவும் இல்லை. உங்கள் இருப்பிடமும் அமைப்புகளும் உங்கள் போனிலேயே இருக்கும். "என் இருப்பிடத்தைப் பயன்படுத்து" தொடும்போது மட்டுமே இருப்பிடம் பயன்படுத்தப்படும்.')}</p>
+    <p style="font-size:13px">${tx('This app collects no personal data and has no account or ads. Your location and settings stay on your phone. Location is used only when you tap "Use my location". The only internet use is Quran recitation audio, streamed from everyayah.com when you press a play button; read-aloud uses your phone\'s own voice and stays on the phone.', 'இந்த ஆப் எந்தத் தனிப்பட்ட தகவலையும் சேகரிக்காது; கணக்கு, விளம்பரம் எதுவும் இல்லை. உங்கள் இருப்பிடமும் அமைப்புகளும் உங்கள் போனிலேயே இருக்கும். "என் இருப்பிடத்தைப் பயன்படுத்து" தொடும்போது மட்டுமே இருப்பிடம் பயன்படுத்தப்படும். இணையம் பயன்படுவது குர்ஆன் ஓதல் ஒலிக்கு மட்டுமே - ப்ளே பொத்தானை அழுத்தும்போது everyayah.com இலிருந்து ஒலிக்கும்; குரல் வாசிப்பு உங்கள் போனின் சொந்த குரலைப் பயன்படுத்துகிறது.')}</p>
     <h3>${tx('Please note', 'குறிப்பு')}</h3>
     <p style="font-size:13px">${tx('Prayer times are calculated and can differ by a minute or two from your mosque. Use the mosque-time settings to match it. This app is a study aid; for rulings consult a qualified scholar.', 'தொழுகை நேரங்கள் கணக்கிடப்பட்டவை; உங்கள் பள்ளிவாசல் நேரத்திலிருந்து ஓரிரு நிமிடம் வேறுபடலாம். பள்ளி நேரத்துக்கு ஏற்ப அமைப்புகளில் மாற்றலாம். இது கற்றலுக்கான உதவி; மார்க்கத் தீர்ப்புகளுக்கு தகுதியான அறிஞரை அணுகவும்.')}</p></div>`;
 }
@@ -1320,6 +1320,7 @@ function tidy() {
   m.querySelectorAll(':scope > .card').forEach((c) => { if (c.querySelector('details.acc')) c.classList.add('plain'); });
 }
 function render() {
+  if (typeof voiceStop === 'function' && VO.on) voiceStop();
   const y = window.scrollY;
   try { const nb = document.querySelector('header .next'); if (nb) nb.style.display = tab === 'times' ? 'none' : ''; } catch (e) {}
   try { const hd = document.querySelector('header'); if (hd) document.documentElement.style.setProperty('--hh', hd.offsetHeight + 'px'); } catch (e) {}
@@ -1330,6 +1331,7 @@ function render() {
   tidy();
   applyLang();
   try { linkRefs($('main')); } catch (e) {}
+  try { if (typeof voiceDecorate === 'function') voiceDecorate(); } catch (e) {}
   window.scrollTo(0, y);
 }
 
@@ -1341,6 +1343,7 @@ document.addEventListener('click', (e) => {
   if (!a) return;
   const act = a.dataset.act;
   if (typeof contentAct === 'function' && contentAct(act, a)) return;
+  if (typeof voiceAct === 'function' && voiceAct(act, a)) return;
   if (act === 'copy') { const d = DUAS.find((x) => x.id === a.dataset.id); copyText([d.title, d.arabic, d.tp ? tx('Pronunciation: ', 'உச்சரிப்பு: ') + d.tp : d.tr, d.ta ? tx('Meaning: ', 'பொருள்: ') + d.ta : d.en, `[${d.ref}]`].filter(Boolean).join('\n\n'), d.id); }
   else if (act === 'speak') speak(a.dataset.id);
   else if (act === 'pray') { selPrayer = a.dataset.key; render(); }

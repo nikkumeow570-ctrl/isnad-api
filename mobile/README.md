@@ -32,7 +32,7 @@ Every `adhan/*.mp3` is bundled. `adhan.mp3` and `adhan-fajr.mp3` are the default
 
 
 ## Privacy
-No network calls: all data is bundled in the app and read locally. Location stays on the device; the town name is the nearest listed city. See privacy-policy.html.
+All data is bundled in the app and read locally. The only network use is Quran recitation audio, streamed from everyayah.com when you press a play button. Location stays on the device; the town name is the nearest listed city. See privacy-policy.html.
 
 ## Language, text size, location
 - EN / த button in the header switches the whole app between Tamil and English (strings in i18n.js).
@@ -48,3 +48,7 @@ The app shows only what is in this repo's API data: Quran, Sahih Bukhari, Sahih 
 
 ## Branding
 The ISNAD Studios logo files are in `../branding/` (profile, YouTube banner, app icon source, video watermark). The app icons (`icons/`, `android-icons/`) are generated from `branding/app-icon-source.png`.
+
+## Voice
+- Speaker button (bottom right, every screen): reads the visible text aloud with the phone's text-to-speech. Arabic blocks are skipped. For Tamil, install the Tamil voice in phone Settings > Text-to-speech (Speech Services by Google).
+- Quran: a play button on each ayah streams that ayah and continues through the surah (reciter: Mishary Alafasy, `voice.js` > `VO.reciter`). Needs internet; nothing is bundled.
