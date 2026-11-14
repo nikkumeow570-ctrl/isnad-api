@@ -1,7 +1,7 @@
 /* ISNAD - service worker */
-const CACHE = 'namaz-v38';
+const CACHE = 'namaz-v39';
 const SHELL = [
-  './', 'index.html', 'app.js', 'content.js', 'voice.js', 'a11y.js', 'prayer.js', 'i18n.js', 'cities.js', 'manifest.json',
+  './', 'index.html', 'app.js', 'content.js', 'voice.js', 'a11y.js', 'i18n2.js', 'prayer.js', 'i18n.js', 'cities.js', 'manifest.json',
   'icons/icon-192.png', 'icons/icon-512.png', 'fonts/amiri-regular.woff2'
 ];
 // Optional Adhan recordings - only cached if you added them.

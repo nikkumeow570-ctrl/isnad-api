@@ -1,3 +1,6 @@
+const HB_EN = { bukhari: 'Sahih al-Bukhari', muslim: 'Sahih Muslim', lulu: "Al-Lu'lu' wal-Marjan (hadith agreed upon by both)", abudawud: 'Sunan Abi Dawud (selection)', riyadussalihin: 'Riyad as-Salihin (selection)', shamail: "Shama'il at-Tirmidhi" };
+const hbTitle = (b) => (S.lang === 'en' && HB_EN[b.id]) || b.title;
+const SURAH_EN = [["Al-Fatihah", "The Opening"], ["Al-Baqarah", "The Cow"], ["Ali 'Imran", "The Family of Imran"], ["An-Nisa", "The Women"], ["Al-Ma'idah", "The Table Spread"], ["Al-An'am", "The Cattle"], ["Al-A'raf", "The Heights"], ["Al-Anfal", "The Spoils of War"], ["At-Tawbah", "The Repentance"], ["Yunus", "Jonah"], ["Hud", "Hud"], ["Yusuf", "Joseph"], ["Ar-Ra'd", "The Thunder"], ["Ibrahim", "Abraham"], ["Al-Hijr", "The Rocky Tract"], ["An-Nahl", "The Bee"], ["Al-Isra", "The Night Journey"], ["Al-Kahf", "The Cave"], ["Maryam", "Mary"], ["Ta-Ha", "Ta-Ha"], ["Al-Anbiya", "The Prophets"], ["Al-Hajj", "The Pilgrimage"], ["Al-Mu'minun", "The Believers"], ["An-Nur", "The Light"], ["Al-Furqan", "The Criterion"], ["Ash-Shu'ara", "The Poets"], ["An-Naml", "The Ant"], ["Al-Qasas", "The Stories"], ["Al-'Ankabut", "The Spider"], ["Ar-Rum", "The Romans"], ["Luqman", "Luqman"], ["As-Sajdah", "The Prostration"], ["Al-Ahzab", "The Combined Forces"], ["Saba", "Sheba"], ["Fatir", "The Originator"], ["Ya-Sin", "Ya-Sin"], ["As-Saffat", "Those Ranged in Ranks"], ["Sad", "Sad"], ["Az-Zumar", "The Groups"], ["Ghafir", "The Forgiver"], ["Fussilat", "Explained in Detail"], ["Ash-Shura", "The Consultation"], ["Az-Zukhruf", "The Gold Adornments"], ["Ad-Dukhan", "The Smoke"], ["Al-Jathiyah", "The Kneeling"], ["Al-Ahqaf", "The Wind-Curved Sandhills"], ["Muhammad", "Muhammad"], ["Al-Fath", "The Victory"], ["Al-Hujurat", "The Rooms"], ["Qaf", "Qaf"], ["Adh-Dhariyat", "The Winnowing Winds"], ["At-Tur", "The Mount"], ["An-Najm", "The Star"], ["Al-Qamar", "The Moon"], ["Ar-Rahman", "The Most Merciful"], ["Al-Waqi'ah", "The Inevitable"], ["Al-Hadid", "The Iron"], ["Al-Mujadilah", "The Pleading Woman"], ["Al-Hashr", "The Exile"], ["Al-Mumtahanah", "The Examined One"], ["As-Saff", "The Ranks"], ["Al-Jumu'ah", "The Congregation, Friday"], ["Al-Munafiqun", "The Hypocrites"], ["At-Taghabun", "The Mutual Disillusion"], ["At-Talaq", "The Divorce"], ["At-Tahrim", "The Prohibition"], ["Al-Mulk", "The Sovereignty"], ["Al-Qalam", "The Pen"], ["Al-Haqqah", "The Reality"], ["Al-Ma'arij", "The Ascending Stairways"], ["Nuh", "Noah"], ["Al-Jinn", "The Jinn"], ["Al-Muzzammil", "The Enshrouded One"], ["Al-Muddaththir", "The Cloaked One"], ["Al-Qiyamah", "The Resurrection"], ["Al-Insan", "The Human"], ["Al-Mursalat", "The Emissaries"], ["An-Naba", "The Tidings"], ["An-Nazi'at", "Those Who Drag Forth"], ["'Abasa", "He Frowned"], ["At-Takwir", "The Overthrowing"], ["Al-Infitar", "The Cleaving"], ["Al-Mutaffifin", "The Defrauding"], ["Al-Inshiqaq", "The Sundering"], ["Al-Buruj", "The Mansions of the Stars"], ["At-Tariq", "The Nightcomer"], ["Al-A'la", "The Most High"], ["Al-Ghashiyah", "The Overwhelming"], ["Al-Fajr", "The Dawn"], ["Al-Balad", "The City"], ["Ash-Shams", "The Sun"], ["Al-Layl", "The Night"], ["Ad-Duha", "The Morning Hours"], ["Ash-Sharh", "The Relief"], ["At-Tin", "The Fig"], ["Al-'Alaq", "The Clot"], ["Al-Qadr", "The Power"], ["Al-Bayyinah", "The Clear Proof"], ["Az-Zalzalah", "The Earthquake"], ["Al-'Adiyat", "The Courser"], ["Al-Qari'ah", "The Calamity"], ["At-Takathur", "The Rivalry in World Increase"], ["Al-'Asr", "The Declining Day"], ["Al-Humazah", "The Traducer"], ["Al-Fil", "The Elephant"], ["Quraysh", "Quraysh"], ["Al-Ma'un", "The Small Kindnesses"], ["Al-Kawthar", "The Abundance"], ["Al-Kafirun", "The Disbelievers"], ["An-Nasr", "The Divine Support"], ["Al-Masad", "The Palm Fiber"], ["Al-Ikhlas", "The Sincerity"], ["Al-Falaq", "The Daybreak"], ["An-Nas", "Mankind"]];
 /* ISNAD content: Quran, Hadith, Courses, Qibla. Data is packed in data/ (see tools/pack_data.py) and works offline. */
 const CJ = {}, CERR = {};
 const cesc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -37,23 +40,24 @@ function viewQuran() {
   const ix = cget('data/quran/index.json');
   if (!ix) return backBar('moreback') + cwait('data/quran/index.json');
   return backBar('moreback') + `<label class="field"><input type="search" id="qsearch" placeholder="${tx('Search surah…', 'சூரா தேடு…')}" autocomplete="off"></label>
-  <div class="card list" id="qlist">${ix.map((s) => `<button class="lrow" data-act="qopen" data-n="${s[0]}" data-name="${cesc((s[0] + ' ' + s[1] + ' ' + s[2]).toLowerCase())}"><span class="li num">${s[0]}</span><span class="lt"><b>${cesc(s[1])}</b><small>${cesc(s[2])} · ${s[3]} ${tx('verses', 'வசனங்கள்')}</small></span><span class="lc">›</span></button>`).join('')}</div>`;
+  <div class="card list" id="qlist">${ix.map((s) => `<button class="lrow" data-act="qopen" data-n="${s[0]}" data-name="${cesc((s[0] + ' ' + s[1] + ' ' + s[2] + ' ' + SURAH_EN[s[0] - 1].join(' ')).toLowerCase())}"><span class="li num">${s[0]}</span><span class="lt"><b>${cesc(S.lang === 'en' ? SURAH_EN[s[0] - 1][0] : s[1])}</b><small>${cesc(S.lang === 'en' ? SURAH_EN[s[0] - 1][1] : s[2])} · ${s[3]} ${tx('verses', 'வசனங்கள்')}</small></span><span class="lc">›</span></button>`).join('')}</div>`;
 }
 function viewSurah(n) {
   const p = `data/quran/${n}.json`, d = cget(p);
   const nav = `<div class="pager">${n > 1 ? `<button class="sec" data-act="qopen" data-n="${n - 1}">‹ ${n - 1}</button>` : '<span></span>'}<button class="sec" data-act="qback">${tx('Surah list', 'சூரா பட்டியல்')}</button>${n < 114 ? `<button class="sec" data-act="qopen" data-n="${n + 1}">${n + 1} ›</button>` : '<span></span>'}</div>`;
   if (!d) return backBar('qback') + cwait(p);
-  const en = !!S.qen;
-  return backBar('qback') + `<div class="card hero small"><div class="hn">${n}. ${cesc(d.name)}</div><div class="arh">${cesc(d.ar)}</div>
-    <label class="mute"><input type="checkbox" data-act="qen" ${en ? 'checked' : ''}> ${tx('Show English', 'ஆங்கிலமும் காட்டு')}</label></div>
-  ${d.v.map((v) => `<div class="ay"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${v[2] ? `<div class="tq">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}</div>`).join('')}${nav}`;
+  const en = S.lang === 'en' ? !S.qno : !!S.qen, ta = S.lang === 'en' ? !!S.qta : true;
+  return backBar('qback') + `<div class="card hero small"><div class="hn">${n}. ${cesc(S.lang === 'en' ? SURAH_EN[n - 1][0] + ' - ' + SURAH_EN[n - 1][1] : d.name)}</div><div class="arh">${cesc(d.ar)}</div>
+    <label class="mute"><input type="checkbox" data-act="${S.lang === 'en' ? 'qta' : 'qen'}" ${(S.lang === 'en' ? ta : en) ? 'checked' : ''}> ${tx('Also show Tamil translation', 'ஆங்கிலமும் காட்டு')}</label></div>
+  ${d.v.map((v) => `<div class="ay"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${ta && v[2] ? `<div class="tq" lang="ta">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}</div>`).join('')}${nav}`;
 }
 
 /* ---------- Hadith ---------- */
 function viewHadith() {
   const bx = cget('data/hadith/index.json');
   if (!bx) return backBar('moreback') + cwait('data/hadith/index.json');
-  if (!H.b) return backBar('moreback') + `<div class="card list">${bx.map((b) => `<button class="lrow" data-act="hbook" data-id="${b.id}"><span class="li">📜</span><span class="lt"><b>${cesc(b.title)}</b><small>${b.have} ${tx('hadith', 'ஹதீஸ்கள்')}${b.have < b.total ? ' / ' + b.total : ''}</small></span><span class="lc">›</span></button>`).join('')}</div>
+  if (!H.b) return backBar('moreback') + `<div class="card list">${bx.map((b) => `<button class="lrow" data-act="hbook" data-id="${b.id}"><span class="li">📜</span><span class="lt"><b>${cesc(hbTitle(b))}</b><small>${b.have} ${tx('hadith', 'ஹதீஸ்கள்')}${b.have < b.total ? ' / ' + b.total : ''}</small></span><span class="lc">›</span></button>`).join('')}</div>
+    ${S.lang === 'en' ? '<div class="card amber"><b>Hadith text is in Tamil.</b><br>The hadith in this app come from the Tamil editions (TNTJ). An English translation is not in our data yet. Use the hadith number to look it up in any English edition of Bukhari or Muslim.</div>' : ''}
     <p class="mute" style="padding:0 6px">${tx('Numbers that are missing in a book are not in this edition.', 'ஒரு நூலில் இல்லாத எண்கள் இந்தப் பதிப்பில் இல்லை.')}</p>`;
   const b = bx.find((x) => x.id === H.b) || { title: H.b };
   const n = H.n, k = Math.floor((n - 1) / 100), cp = `data/hadith/${H.b}/${k}.json`, ch = cget(`data/hadith/${H.b}/ch.json`);
@@ -66,7 +70,7 @@ function viewHadith() {
       : `<div class="card soft"><p>${tx('This number is not in this edition.', 'இந்த எண் இந்தப் பதிப்பில் இல்லை.')}</p></div>`;
   }
   const chs = ch ? `<details class="card soft"><summary>${tx('Chapters', 'அத்தியாயங்கள்')}</summary><div class="list">${ch.map((c) => `<button class="lrow" data-act="hgo" data-n="${c[2]}"><span class="li num">${c[0]}</span><span class="lt"><b>${cesc(c[1])}</b><small>${c[2]}–${c[3]}</small></span></button>`).join('')}</div></details>` : '';
-  return backBar('hback') + `<div class="card hero small"><div class="hn">${cesc(b.title)}</div><div class="ht">${n}</div></div>
+  return backBar('hback') + `<div class="card hero small"><div class="hn">${cesc(hbTitle(b))}</div><div class="ht">${n}</div></div>
   <div class="hnav"><button class="sec" data-act="hgo" data-n="${Math.max(1, n - 1)}">‹</button><input type="number" id="hn" min="1" inputmode="numeric" placeholder="${tx('Number', 'எண்')}"><button class="pri" data-act="hjump">${tx('Go', 'செல்')}</button><button class="sec" data-act="hgo" data-n="${n + 1}">›</button></div>
   ${body}${chs}`;
 }
@@ -114,6 +118,7 @@ function contentAct(act, a) {
   if (act === 'qopen') { Q.s = +a.dataset.n; return go(); }
   if (act === 'qback') { Q.s = null; return go(); }
   if (act === 'qen') { S.qen = a.checked; save(); render(); return true; }
+  if (act === 'qta') { S.qta = a.checked; save(); render(); return true; }
   if (act === 'hbook') { H.b = a.dataset.id; H.n = 1; return go(); }
   if (act === 'hadref') {
     H.from = { tab, praySub, moreSub, duaOpen, akSet };

@@ -1331,7 +1331,9 @@ function render() {
   $('nav').innerHTML = TABS.map((t) => `<button class="${navTab === t.id ? 'on' : ''}" data-tab="${t.id}"><span class="ic">${t.icon}</span><span class="lb">${TAB_LABEL()[t.id]}</span></button>`).join('');
   tidy();
   applyLang();
+  try { applyTaFix(); } catch (e) {}
   try { linkRefs($('main')); } catch (e) {}
+  try { applyTaFix(); } catch (e) {}
   try { if (typeof voiceDecorate === 'function') voiceDecorate(); } catch (e) {}
   try { a11yApply(); } catch (e) {}
   window.scrollTo(0, y);

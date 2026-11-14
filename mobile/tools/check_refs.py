@@ -9,7 +9,7 @@ for m in re.finditer(r'(?:Bukhari|புகாரி) (\d+(?:, \d+)*)', src):
         if not os.path.exists(os.path.join(root, 'hadith', 'bukhari', n + '.json')): bad.append('bukhari ' + n)
 for n in set(re.findall(r'\(API (\d+)\)', src)):
     if not os.path.exists(os.path.join(root, 'hadith', 'muslim', n + '.json')): bad.append('muslim API ' + n)
-banned = re.findall(r'(Abu Dawud|Tirmidhi|Nasai|Ibn Majah|அபூதாவூத்|திர்மிதீ|நஸாயீ|இப்னுமாஜா)', src)
+banned = re.findall(r'(?:Abu Dawud|Tirmidhi|Nasai|Ibn Majah|அபூதாவூத்|திர்மிதீ|நஸாயீ|இப்னுமாஜா) \d', src)
 if banned: bad.append('non-API book cited: ' + ', '.join(sorted(set(banned))))
 if bad: print('FAIL', bad); sys.exit(1)
 print('refs ok')
