@@ -1138,13 +1138,14 @@ function viewPray() {
     ${lrow('praygo', 'mistakes', '⚠️', tx('Common mistakes', 'பொதுவான தவறுகள்'), '')}</div>`;
 }
 function viewAbout() {
-  return `<div class="card"><h2>ISNAD</h2>
-    <p class="mute">${tx('Prayer times, prayer guide and duas - all offline.', 'தொழுகை நேரங்கள், தொழுகை வழிகாட்டி, துஆக்கள் - அனைத்தும் இணையம் இல்லாமல்.')} v29.0</p>
+  return `<div class="card" style="text-align:center"><img src="icons/icon-192.png" alt="ISNAD" width="96" height="96" style="border-radius:22px;box-shadow:0 4px 14px rgba(0,0,0,.25)"><h2 style="margin:10px 0 2px">ISNAD</h2><div class="mute" style="font-size:12px">ISNAD Studios · இஸ்னாத் ஸ்டுடியோஸ்</div></div>
+  <div class="card"><h2>${tx('About', 'பற்றி')}</h2>
+    <p class="mute">${tx('Prayer times, prayer guide and duas - all offline.', 'தொழுகை நேரங்கள், தொழுகை வழிகாட்டி, துஆக்கள் - அனைத்தும் இணையம் இல்லாமல்.')} v1.0</p>
     <h3>${tx('Credits', 'நன்றி / ஆதாரங்கள்')}</h3>
     <ul style="font-size:13px">
       <li>${tx('Prayer-time method: Jean Meeus, Astronomical Algorithms', 'தொழுகை நேரக் கணக்கீடு: Jean Meeus, Astronomical Algorithms')}</li>
       <li>${tx('Font: Amiri (SIL Open Font License)', 'எழுத்துரு: Amiri (SIL Open Font License)')}</li>
-      <li>${tx('Hadith references: only Sahih Bukhari and Sahih Muslim, as in our API', 'ஹதீஸ் ஆதாரங்கள்: ஸஹீஹ் புகாரி, ஸஹீஹ் முஸ்லிம், சுனன் அபூதாவூத், திர்மிதீ, நஸாயீ')}</li></ul>
+      <li>${tx('Hadith references: only Sahih Bukhari and Sahih Muslim, as in our API', 'ஹதீஸ் ஆதாரங்கள்: நமது API-யில் உள்ள ஸஹீஹ் புகாரி, ஸஹீஹ் முஸ்லிம் மட்டும்')}</li></ul>
     <h3>${tx('Privacy', 'தனியுரிமை')}</h3>
     <p style="font-size:13px">${tx('This app collects no personal data and has no account or ads. Your location and settings stay on your phone. Location is used only when you tap "Use my location".', 'இந்த ஆப் எந்தத் தனிப்பட்ட தகவலையும் சேகரிக்காது; கணக்கு, விளம்பரம் எதுவும் இல்லை. உங்கள் இருப்பிடமும் அமைப்புகளும் உங்கள் போனிலேயே இருக்கும். "என் இருப்பிடத்தைப் பயன்படுத்து" தொடும்போது மட்டுமே இருப்பிடம் பயன்படுத்தப்படும்.')}</p>
     <h3>${tx('Please note', 'குறிப்பு')}</h3>
@@ -1323,7 +1324,7 @@ function render() {
   try { const nb = document.querySelector('header .next'); if (nb) nb.style.display = tab === 'times' ? 'none' : ''; } catch (e) {}
   try { const hd = document.querySelector('header'); if (hd) document.documentElement.style.setProperty('--hh', hd.offsetHeight + 'px'); } catch (e) {}
   const rootTitle = (tab === 'times' || (tab === 'more' && !moreSub) || (tab === 'set' && !setSub)) ? `<div class="ptitle">${TAB_LABEL()[tab]}</div>` : '';
-  $('main').innerHTML = (rootTitle + VIEWS[tab]()).replace(/\u06DD/g, ' ﴾﴿ ') + `<footer><div class="card" style="display:inline-block;padding:12px 16px;margin:0">அனைத்து முஸ்லிம் சமூகத்துக்காக<br>ஸஹீஹான ஹதீஸ்களின் அடிப்படையில் உருவாக்கப்பட்டது • ஆஃப்லைன் • v29.0</div></footer>`;
+  $('main').innerHTML = (rootTitle + VIEWS[tab]()).replace(/\u06DD/g, ' ﴾﴿ ') + `<footer><div class="card" style="display:inline-block;padding:12px 16px;margin:0">அனைத்து முஸ்லிம் சமூகத்துக்காக<br>ஸஹீஹான ஹதீஸ்களின் அடிப்படையில் உருவாக்கப்பட்டது • ஆஃப்லைன் • v1.0</div></footer>`;
   const navTab = (tab === 'pray' || tab === 'duas') ? 'more' : tab;
   $('nav').innerHTML = TABS.map((t) => `<button class="${navTab === t.id ? 'on' : ''}" data-tab="${t.id}"><span class="ic">${t.icon}</span><span class="lb">${TAB_LABEL()[t.id]}</span></button>`).join('');
   tidy();

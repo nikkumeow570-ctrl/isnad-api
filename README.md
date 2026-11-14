@@ -1,3 +1,5 @@
+<p align="center"><img src="branding/youtube-banner-16x9.jpg" alt="ISNAD Studios" width="720"></p>
+
 # ISNAD API
 
 Read-only JSON API for Tamil Quran (TNTJ) and Hadith (Bukhari), served from the JSON files in this repo.

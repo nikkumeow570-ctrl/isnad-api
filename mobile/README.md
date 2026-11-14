@@ -45,3 +45,6 @@ Bukhari numbers are the same everywhere. Muslim: the app text cites the internat
 
 ## Strict API-only content
 The app shows only what is in this repo's API data: Quran, Sahih Bukhari, Sahih Muslim (and the Tamil articles/courses). Duas, adhkar and guide statements that rest only on Abu Dawud, Tirmidhi, Nasai or Ibn Majah were removed (Sana, Rabbighfir, Qunoot, after-prayer 6-9, some morning/evening adhkar, Monday/Thursday and white-days fasting banners, and a few guide notes). Every Bukhari number and every Muslim `(API n)` in the text is a link that opens that hadith from the packed data.
+
+## Branding
+The ISNAD Studios logo files are in `../branding/` (profile, YouTube banner, app icon source, video watermark). The app icons (`icons/`, `android-icons/`) are generated from `branding/app-icon-source.png`.
