@@ -1,0 +1,17 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Syntax check (all JS)
+        run: for f in server.js test.js mobile/*.js prayer/*.js; do node --check "$f" || exit 1; done
+      - name: API tests
+        run: node test.js
+      - name: App hadith references exist in the API data and only Bukhari/Muslim are cited
+        run: python3 mobile/tools/check_refs.py
+      - name: JSON files parse
+        run: python3 -c "import glob,json; [json.load(open(f,encoding='utf8')) for f in glob.glob('**/*.json',recursive=True) if 'node_modules' not in f]; print('json ok')"
