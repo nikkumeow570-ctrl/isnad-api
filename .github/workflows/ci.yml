@@ -15,3 +15,16 @@ jobs:
         run: python3 mobile/tools/check_refs.py
       - name: JSON files parse
         run: python3 -c "import glob,json; [json.load(open(f,encoding='utf8')) for f in glob.glob('**/*.json',recursive=True) if 'node_modules' not in f]; print('json ok')"
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Pack offline data
+        run: cd mobile && python3 -I tools/pack_data.py ..
+      - name: Install Playwright
+        run: npm i --no-save playwright && npx playwright install --with-deps chromium
+      - name: Serve app and run smoke test
+        run: |
+          cd mobile && (python3 -m http.server 4103 >/dev/null 2>&1 &) && sleep 2 && cd .. && NODE_PATH=$PWD/node_modules node mobile/tools/smoke.js

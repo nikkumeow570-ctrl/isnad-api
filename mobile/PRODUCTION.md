@@ -34,3 +34,4 @@
 - Location: used on the phone only, only when the user taps "Use my location"; never sent anywhere.
 - Permissions used: notifications, exact alarms, full-screen intent (Adhan alarm screen), boot completed (reschedule alarms), vibrate, foreground service for media playback (Adhan), wake lock. Declare the full-screen intent and exact alarm use in Play Console.
 - Still to do before publishing: fill the contact email in `privacy-policy.html`, replace the Adhan recordings with ones you may distribute, keep the TNTJ permission letter on file, sign the release (keystore secrets).
+- Smoke test (`mobile/tools/smoke.js`, run in CI): opens the app in English and Tamil, clicks every control, and fails on JS errors, sideways scrolling, 404s or screens stuck on loading.
