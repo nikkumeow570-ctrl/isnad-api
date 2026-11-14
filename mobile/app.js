@@ -167,7 +167,7 @@ const TAB_LABEL = () => ({ times: tx('Today', 'இன்று'), more: tx('Serv
 /* ---------------- STATE ---------------- */
 const $ = (id) => document.getElementById(id);
 const DEFAULTS = {
-  city: '', lat: null, lng: null, place: '', fs: 0, lang: 'en', voice: '', // no built-in location: the person picks a city or uses GPS
+  city: '', lat: null, lng: null, place: '', fs: 0, lang: 'en', ob: 0, voice: '', // no built-in location: the person picks a city or uses GPS
   method: 'Fajr18', asr: 1, lead: 10, fastRem: false, friRem: false, suhoorRem: true, country: '', adhan: true, alarmScreen: true, dark: null,
   remind: { Fajr: true, Sunrise: false, Dhuhr: true, Asr: true, Maghrib: true, Isha: true },
   // Match the local mosque: fixed 'HH:MM' overrides the calculated time; otherwise calculated + adj minutes.
@@ -706,11 +706,26 @@ async function compassToggle() {
   setTimeout(() => { if (compass.on && compass.h == null) toast('திசைகாட்டி சிக்னல் இல்லை - போனை எண்-8 வடிவில் அசைக்கவும்'); }, 3000);
 }
 
+function obDots(n) { return '<div class="obd" aria-hidden="true">' + [0, 1, 2].map((k) => `<i class="${k === n ? 'on' : ''}"></i>`).join('') + '</div>'; }
 function viewSetup() {
-  return `<div class="card hero"><div class="hn">🕌 ISNAD</div>
-    <p style="margin:10px 0 4px;font-size:16px">${tx('Welcome! Tap the button to see the prayer times for where you are.', 'வரவேற்கிறோம்! நீங்கள் இருக்கும் இடத்துக்கான தொழுகை நேரங்களைக் காண கீழே தொடவும்.')}</p>
-    <div class="row" style="justify-content:center"><button class="pri" data-act="gps">📍 ${tx('Use my location (GPS)', 'என் இருப்பிடத்தைப் பயன்படுத்து (GPS)')}</button></div></div>
-  <div class="card"><h3>🔎 ${tx('Or search a city or country', 'அல்லது ஊர் / நாட்டைத் தேடுங்கள்')}</h3>
+  const st = +S.ob || 0;
+  if (st === 0) return `<section class="ob ob0"><img class="oblogo" src="icons/icon-192.png" alt="ISNAD" width="96" height="96">
+    <h1 class="obt">ISNAD</h1><p class="obs">السلام عليكم</p>
+    <p class="obp">Authentic Islam, with its chain of narration.<br>உண்மையான இஸ்லாம் - அதன் அறிவிப்புத் தொடருடன்.</p>
+    <p class="obq">Choose your language · மொழியைத் தேர்ந்தெடுங்கள்</p>
+    <div class="obl"><button class="pri" data-act="oblang" data-v="ta" lang="ta">தமிழ்<small>Tamil</small></button>
+    <button class="pri" data-act="oblang" data-v="en" lang="en">English<small>ஆங்கிலம்</small></button></div>
+    <p class="obf">✓ Free · ✓ No ads · ✓ Works offline<br><small>You can change this anytime in Settings.</small></p>${obDots(0)}</section>`;
+  if (st === 1) return `<section class="ob ob1"><h2 class="obt2">${tx('Everything in one place', 'எல்லாம் ஒரே இடத்தில்')}</h2>
+    <div class="obc"><span>🕌</span><div><b>${tx('Prayer times & Adhan', 'தொழுகை நேரம் & அதான்')}</b><br>${tx('Accurate times for where you are, with reminders.', 'நீங்கள் இருக்கும் இடத்துக்கான துல்லிய நேரம், நினைவூட்டலுடன்.')}</div></div>
+    <div class="obc"><span>📖</span><div><b>${tx('Quran, Hadith & Duas', 'குர்ஆன், ஹதீஸ் & துஆ')}</b><br>${tx('Every reference traced to its source. Read aloud too.', 'ஒவ்வொரு ஆதாரமும் மூலத்துடன். வாசித்துக் காட்டும் வசதியும் உண்டு.')}</div></div>
+    <div class="obc"><span>🤍</span><div><b>${tx('Free. No ads. Offline.', 'இலவசம். விளம்பரம் இல்லை. இணையம் தேவையில்லை.')}</b><br>${tx('Your data stays on your phone.', 'உங்கள் தகவல் உங்கள் போனிலேயே இருக்கும்.')}</div></div>
+    <div class="row" style="justify-content:center"><button class="pri" data-act="obnext">${tx('Continue', 'தொடர்க')}</button></div>
+    <p style="text-align:center"><button class="lnk" data-act="obback">‹ ${tx('Back', 'பின்')}</button></p>${obDots(1)}</section>`;
+  const top = `<section class="ob ob2"><h2 class="obt2">${tx('Where are you?', 'நீங்கள் எங்கே இருக்கிறீர்கள்?')}</h2>
+    <p class="obp">${tx('We need your place only to calculate prayer times.', 'தொழுகை நேரம் கணக்கிட மட்டுமே உங்கள் இடம் தேவை.')}</p>
+    <div class="row" style="justify-content:center"><button class="pri" data-act="gps">📍 ${tx('Use my location (GPS)', 'என் இருப்பிடத்தைப் பயன்படுத்து (GPS)')}</button></div></section>`;
+  return top + `<div class="card"><h3>🔎 ${tx('Or search a city or country', 'அல்லது ஊர் / நாட்டைத் தேடுங்கள்')}</h3>
     <label class="field"><input type="search" id="citySearch" autocomplete="off" placeholder="Dubai, Colombo, London, கோவை..."></label>
     <div class="list" id="cityRes">${cityRows('')}</div></div>
   <div class="card"><details class="ad"><summary>🧭 ${tx('Enter coordinates yourself', 'ஆயத்தொலைவுகளை நீங்களே உள்ளிடுக')}</summary>
@@ -718,7 +733,8 @@ function viewSetup() {
     <label class="field">${tx('Latitude (e.g. 25.2048)', 'அட்சரேகை (எ.கா. 25.2048)')}<input type="text" inputmode="decimal" id="cLat"></label>
     <label class="field">${tx('Longitude (e.g. 55.2708)', 'தீர்க்கரேகை (எ.கா. 55.2708)')}<input type="text" inputmode="decimal" id="cLng"></label>
     <div class="row"><button class="sec" data-act="setcoords">${tx('Save', 'சேமி')}</button></div></details></div>
-  <p class="mute" style="text-align:center">${tx('First you will see the calculated times for your place. Matching your mosque is optional (More > Settings).', 'முதலில் உங்கள் இடத்துக்கான கணக்கிட்ட நேரங்கள் காட்டப்படும். பள்ளிவாசல் நேரத்தை பின்னர் அமைக்கலாம் (மேலும் > அமைப்புகள்) - அது விருப்பம் மட்டுமே.')}</p>`;
+  <p class="mute" style="text-align:center">${tx('First you will see the calculated times for your place. Matching your mosque is optional (More > Settings).', 'முதலில் உங்கள் இடத்துக்கான கணக்கிட்ட நேரங்கள் காட்டப்படும். பள்ளிவாசல் நேரத்தை பின்னர் அமைக்கலாம் (மேலும் > அமைப்புகள்) - அது விருப்பம் மட்டுமே.')}</p>
+  <p style="text-align:center"><button class="lnk" data-act="obback">‹ ${tx('Back', 'பின்')}</button></p>${obDots(2)}`;
 }
 function viewTimes() {
   if (!hasLoc()) return viewSetup();
@@ -1321,6 +1337,7 @@ function tidy() {
 }
 function render() {
   if (typeof voiceStop === 'function' && VO.on) voiceStop();
+  try { document.body.classList.toggle('onb', tab === 'times' && !hasLoc()); } catch (e) {}
   const y = window.scrollY;
   try { const nb = document.querySelector('header .next'); if (nb) nb.style.display = tab === 'times' ? 'none' : ''; } catch (e) {}
   try { const hd = document.querySelector('header'); if (hd) document.documentElement.style.setProperty('--hh', hd.offsetHeight + 'px'); } catch (e) {}
@@ -1355,6 +1372,9 @@ document.addEventListener('click', (e) => {
   else if (act === 'set') { setSub = a.dataset.v; render(); window.scrollTo(0, 0); }
   else if (act === 'setback') { setSub = null; render(); window.scrollTo(0, 0); }
   else if (act === 'gosettings') { tab = 'set'; setSub = null; render(); window.scrollTo(0, 0); }
+  else if (act === 'oblang') { S.lang = a.dataset.v === 'en' ? 'en' : 'ta'; S.ob = 1; save(); render(); setNet(); tick(); updateWidget(); window.scrollTo(0, 0); }
+  else if (act === 'obnext') { S.ob = 2; save(); render(); window.scrollTo(0, 0); }
+  else if (act === 'obback') { S.ob = Math.max(0, (+S.ob || 0) - 1); save(); render(); window.scrollTo(0, 0); }
   else if (act === 'setlang') { S.lang = a.dataset.v === 'en' ? 'en' : 'ta'; save(); render(); setNet(); tick(); updateWidget(); }
   else if (act === 'setfs') { S.fs = +a.dataset.v; applyFs(); save(); render(); }
   else if (act === 'setfs') { S.fs = +a.dataset.v || 0; save(); render(); }
@@ -1502,6 +1522,7 @@ applyTheme(); applyFs();
   if (b) b.addEventListener('click', () => { S.dark = !isDark(); applyTheme(); save(); });
   try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (S.dark === null) applyTheme(); }); } catch (e) {}
 })();
+try { const SB = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.StatusBar; if (SB) { SB.setOverlaysWebView({ overlay: false }); SB.setStyle({ style: 'LIGHT' }); SB.setBackgroundColor({ color: '#f4f1ea' }); } } catch (e) {}
 render();
 tick();
 setInterval(tick, 1000);

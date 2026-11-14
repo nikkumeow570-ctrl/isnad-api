@@ -264,6 +264,29 @@ ul{padding-left:20px}
 .card.plain>h2{font-size:26px;color:var(--ink);margin:4px 2px 8px}
 .card.plain>p{margin:0 2px 12px}li{margin:6px 0}
 </style>
+<style>
+body{padding-top:env(safe-area-inset-top,0px)}
+body.onb header,body.onb nav,body.onb #vfab,body.onb .ptitle,body.onb footer{display:none!important}
+body.onb{padding-bottom:24px}
+.ob{text-align:center;padding:28px 6px 8px;animation:obin .5s ease both}
+@keyframes obin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.oblogo{border-radius:24px;box-shadow:0 8px 28px rgba(15,92,74,.28);margin-top:18px}
+.obt{font-size:38px;letter-spacing:6px;margin:12px 0 0;color:var(--gt)}
+.obs{font-size:24px;margin:2px 0 8px;color:var(--gt)}
+.obt2{font-size:24px;margin:30px 0 14px;color:var(--gt)}
+.obp{color:var(--ink2);margin:6px 12px 14px}
+.obq{font-weight:700;margin:22px 0 10px}
+.obl{display:grid;gap:12px;margin:0 8px}
+.obl button{font-size:22px;padding:16px;min-height:64px;border-radius:18px;display:flex;flex-direction:column;align-items:center;line-height:1.2}
+.obl small{font-size:12px;font-weight:400;opacity:.85}
+.obf{color:var(--mute);margin:22px 0 6px}
+.obc{display:flex;gap:14px;align-items:center;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin:10px 4px;animation:obin .5s ease both}
+.obc span{font-size:30px}
+.obd{display:flex;gap:8px;justify-content:center;margin:20px 0}
+.obd i{width:8px;height:8px;border-radius:8px;background:var(--line)}.obd i.on{width:24px;background:var(--g)}
+.lnk{background:none;border:0;color:var(--gt);font-size:15px;min-height:44px}
+@media (prefers-reduced-motion:reduce){.ob,.obc{animation:none}}
+</style>
 </head>
 <body>
 <header>
