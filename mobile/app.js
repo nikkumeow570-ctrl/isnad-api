@@ -677,24 +677,18 @@ async function copyText(text, id) {
 }
 function speak(id) {
   const d = DUAS.find((x) => x.id === id);
-  if (!d || !('speechSynthesis' in window)) { toast('இந்த பிரவுசரில் குரல் வசதி இல்லை'); return; }
-  const ss = window.speechSynthesis;
-  if (playingId === id) { ss.cancel(); playingId = null; render(); return; }
-  ss.cancel();
-  const voices = ss.getVoices();
-  const ar = voices.find((v) => v.lang.toLowerCase().startsWith('ar'));
-  const en = voices.find((v) => v.lang === 'en-IN') || voices.find((v) => v.lang.toLowerCase().startsWith('en'));
-  const u = new SpeechSynthesisUtterance(ar ? d.arabic : d.tr);
-  if (ar) { u.voice = ar; u.lang = ar.lang; u.rate = 0.7; }
-  else {
-    if (en) { u.voice = en; u.lang = en.lang; } else u.lang = 'en-IN';
-    u.rate = 0.75;
-    toast('இந்த போனில் அரபி குரல் இல்லை - ஆங்கில உச்சரிப்பு வாசிக்கப்படும். Settings > Text-to-speech-இல் Arabic-ஐ நிறுவவும்.');
-  }
-  u.onend = u.onerror = () => { if (playingId === id) { playingId = null; render(); } };
-  playingId = id; render(); ss.speak(u);
+  if (!d || typeof ttsOk !== 'function' || !ttsOk()) { toast(tx('Voice is not available on this phone', 'இந்த போனில் குரல் வசதி இல்லை')); return; }
+  if (playingId === id) { ttsStop(); playingId = null; render(); return; }
+  ttsStop();
+  const done = () => { if (playingId === id) { playingId = null; render(); } };
+  playingId = id; render();
+  ttsSay(d.arabic, 'ar', 0.7).then((r) => {
+    if (r === 'ok' || r === 'stopped' || playingId !== id) { done(); return; }
+    toast(tx('No Arabic voice on this phone, reading the pronunciation in English. Install Arabic in Settings > Text-to-speech.', 'இந்த போனில் அரபி குரல் இல்லை - ஆங்கில உச்சரிப்பு வாசிக்கப்படும். Settings > Text-to-speech-இல் Arabic-ஐ நிறுவவும்.'));
+    return ttsSay(d.tr, 'en-IN', 0.75).then(done);
+  });
 }
-if ('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged = () => {};
+if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = () => {};
 
 /* ---------------- VIEWS ---------------- */
 function duaCard(d) {

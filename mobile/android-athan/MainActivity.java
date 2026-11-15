@@ -13,6 +13,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(AthanPlugin.class);
+        registerPlugin(SpeakPlugin.class);
         super.onCreate(savedInstanceState);
         // Keep the app's bottom tab bar above the phone's navigation bar (3-button or gesture) and clear of side cut-outs.
         try {

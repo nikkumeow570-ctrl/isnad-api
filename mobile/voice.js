@@ -2,6 +2,20 @@
    (2) Quran recitation streamed ayah by ayah from everyayah.com (only when you press play; nothing is bundled). */
 const VO = { on: false, q: [], i: 0, audio: null, play: null, rate: 0.9, reciter: 'Alafasy_128kbps' };
 try { const r = parseFloat(localStorage.getItem('isnad_voice_rate')); if (r) VO.rate = r; } catch (e) {}
+/* Native Android text-to-speech (plugin "Speak") is preferred; the browser's speechSynthesis is the fallback. */
+const NTTS = (typeof window !== 'undefined' && window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.Speak) || null;
+const ttsOk = () => !!NTTS || (typeof speechSynthesis !== 'undefined');
+const ttsStop = () => { try { if (NTTS) NTTS.stop(); else if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel(); } catch (e) {} };
+/* resolves 'ok' when finished, 'nolang' when that language voice is missing, 'stopped' when cancelled, or 'error' */
+function ttsSay(text, lang, rate) {
+  if (NTTS) return NTTS.speak({ text, lang, rate }).then(() => 'ok', (e) => (e && e.message) || 'error');
+  return new Promise((res) => {
+    const s = speechSynthesis, u = new SpeechSynthesisUtterance(text), base = lang.slice(0, 2);
+    const v = s.getVoices().find((x) => x.lang.replace('_', '-').toLowerCase().startsWith(base));
+    if (v) { u.voice = v; u.lang = v.lang; } else if (base === 'ar') { res('nolang'); return; } else u.lang = lang;
+    u.rate = rate; u.onend = () => res('ok'); u.onerror = () => res('error'); s.speak(u);
+  });
+}
 const TTS = () => (typeof speechSynthesis !== 'undefined' ? speechSynthesis : null);
 const isAr = (t) => ((t.match(/[؀-ۿ]/g) || []).length > t.length * 0.3);
 const isTa = (t) => /[஀-௿]/.test(t);
@@ -32,25 +46,24 @@ function voiceBlocks(root) {
   return out;
 }
 function voiceStop() {
-  VO.on = false; VO.q = []; const s = TTS(); if (s) s.cancel();
+  VO.on = false; VO.q = []; ttsStop();
   if (VO.audio) { VO.audio.pause(); VO.audio = null; } VO.play = null; voiceUi();
 }
 function voiceNext() {
   if (!VO.on || VO.i >= VO.q.length) { VO.on = false; voiceUi(); return; }
-  const s = TTS(), txt = VO.q[VO.i++], u = new SpeechSynthesisUtterance(txt);
-  const lang = isTa(txt) ? 'ta' : 'en', v = voicePick(lang);
-  if (v) { u.voice = v; u.lang = v.lang; } else u.lang = lang === 'ta' ? 'ta-IN' : 'en-US';
-  u.rate = VO.rate; u.onend = voiceNext; u.onerror = voiceNext;
-  s.speak(u);
+  const txt = VO.q[VO.i++];
+  ttsSay(txt, isTa(txt) ? 'ta-IN' : 'en-IN', VO.rate).then((r) => {
+    if (!VO.on) return;
+    if (r === 'nolang' && !VO.warned) { VO.warned = true; toast(tx('No Tamil voice installed. Phone Settings > Text-to-speech > Google > install Tamil.', 'தமிழ் குரல் நிறுவப்படவில்லை. போன் அமைப்புகள் > Text-to-speech > Google இல் தமிழை நிறுவவும்.')); VO.on = false; voiceUi(); return; }
+    voiceNext();
+  });
 }
 function voiceRead() {
-  const s = TTS();
-  if (!s) { toast(tx('This phone has no text-to-speech', 'இந்த போனில் குரல் வாசிப்பு இல்லை')); return; }
+  if (!ttsOk()) { toast(tx('This phone has no text-to-speech', 'இந்த போனில் குரல் வாசிப்பு இல்லை')); return; }
   if (VO.on) { voiceStop(); return; }
-  VO.q = voiceBlocks($('main')); VO.i = 0;
+  VO.q = voiceBlocks($('main')); VO.i = 0; VO.warned = false;
   if (!VO.q.length) { toast(tx('Nothing to read here', 'இங்கே வாசிக்க ஏதுமில்லை')); return; }
-  if (VO.q.some(isTa) && !voicePick('ta')) toast(tx('No Tamil voice found. Install "Speech Services by Google" and the Tamil voice in phone Settings > Text-to-speech.', 'தமிழ் குரல் இல்லை. போன் அமைப்புகள் > Text-to-speech இல் Google Speech Services மற்றும் தமிழ் குரலை நிறுவவும்.'));
-  VO.on = true; s.cancel(); voiceNext(); voiceUi();
+  VO.on = true; ttsStop(); voiceNext(); voiceUi();
 }
 /* Quran audio: surah n, from ayah a to the last ayah of the surah (or just one ayah when once=true) */
 const p3 = (x) => String(x).padStart(3, '0');

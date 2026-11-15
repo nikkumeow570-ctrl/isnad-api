@@ -94,6 +94,8 @@ jobs:
           s=open(p).read()
           r=open('android-widget/receiver.xml').read()
           s=s.replace('</application>', r+'    </application>',1)
+          if 'TTS_SERVICE' not in s:
+              s=s.replace('<application','<queries><intent><action android:name="android.intent.action.TTS_SERVICE"/></intent></queries>\n    <application',1)
           open(p,'w').write(s)
           PY
           grep -n "WIDGET" android/app/src/main/AndroidManifest.xml
@@ -103,7 +105,7 @@ jobs:
           J=android/app/src/main/java/app/thowheed/namaz
           mkdir -p $J
           cp $J/MainActivity.java android/MainActivity.java.orig
-          cp android-athan/AthanPlugin.java android-athan/AthanReceiver.java android-athan/AthanBoot.java android-athan/AthanService.java android-athan/AthanActivity.java android-athan/MainActivity.java $J/
+          cp android-athan/AthanPlugin.java android-athan/AthanReceiver.java android-athan/AthanBoot.java android-athan/AthanService.java android-athan/AthanActivity.java android-athan/SpeakPlugin.java android-athan/MainActivity.java $J/
           python3 - <<'PY'
           p='android/app/src/main/AndroidManifest.xml'
           s=open(p).read()
@@ -157,7 +159,7 @@ jobs:
           build() { if [ "$SIGNED" = "1" ]; then ./gradlew bundleRelease assembleRelease --no-daemon; else ./gradlew assembleDebug --no-daemon; fi; }
           drop_athan() {
             J=app/src/main/java/app/thowheed/namaz
-            rm -f $J/AthanPlugin.java $J/AthanReceiver.java $J/AthanBoot.java $J/AthanService.java $J/AthanActivity.java
+            rm -f $J/AthanPlugin.java $J/AthanReceiver.java $J/AthanBoot.java $J/AthanService.java $J/AthanActivity.java $J/SpeakPlugin.java
             cp MainActivity.java.orig $J/MainActivity.java
             python3 -c "import re;p='app/src/main/AndroidManifest.xml';s=open(p).read();s=re.sub(r'<!-- ATHAN_START -->.*?<!-- ATHAN_END -->','',s,flags=re.S);open(p,'w').write(s)"
           }
