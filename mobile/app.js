@@ -356,7 +356,7 @@ async function updateHadithWidget() {
   try {
     await loadDaily();
     const days = [];
-    for (let d = 0; d < 8; d++) {
+    for (let d = 0; d < 14; d++) {
       const dt = new Date(Date.now() + d * 86400000), x = dailyFor(dt); if (!x) continue;
       days.push({ m: new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime(), h: x.h, e: x.e, ref: dailyRef(x) });
     }
@@ -369,7 +369,7 @@ async function updateWidget() {
   if (!NATIVE || !PREF || !hasLoc()) return;
   try {
     const days = [];
-    for (let d = 0; d < 8; d++) {
+    for (let d = 0; d < 14; d++) {
       const dt = new Date(Date.now() + d * 86400000), t = timesFor(dt), o = {};
       TIME_KEYS.forEach((k) => { if (t[k]) o[k] = t[k].getTime(); });
       o.m = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime();
@@ -390,7 +390,7 @@ async function scheduleNative() {
     const pend = await LN.getPending();
     if (pend && pend.notifications && pend.notifications.length) await LN.cancel({ notifications: pend.notifications });
     const items = [], alarms = [], now = Date.now(), useAth = !!ATH && S.alarmScreen !== false;
-    for (let d = 0; d < 7; d++) {
+    for (let d = 0; d < 14; d++) {
       const t = timesFor(new Date(now + d * 86400000));
       TIME_KEYS.forEach((k, i) => {
         if (!S.remind[k] || !t[k]) return;
@@ -419,7 +419,7 @@ async function scheduleNative() {
         }
       });
     }
-    for (let d = 0; d < 7; d++) {
+    for (let d = 0; d < 14; d++) {
       const dt = new Date(now + d * 86400000), t = timesFor(dt), hp = hijriParts(noonOf(dt));
       if (S.suhoorRem && hp && hp.m === 9 && t.Fajr && t.Fajr.getTime() - 40 * 60000 > now + 1000) {
         items.push({ id: 7000 + d, title: tx('Suhoor time', 'ஸஹர் நேரம்'), body: tx('Fajr at ', 'ஃபஜ்ர் ') + fmt(t.Fajr), schedule: { at: new Date(t.Fajr.getTime() - 40 * 60000), allowWhileIdle: true }, channelId: 'prayer' });
@@ -434,7 +434,7 @@ async function scheduleNative() {
     }
     if (S.dhRem !== false) {
       await loadDaily();
-      for (let d = 0; d < 7; d++) {
+      for (let d = 0; d < 14; d++) {
         const dt = new Date(now + d * 86400000), at = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 6, 0, 0), x = dailyFor(dt);
         if (x && at.getTime() > now + 1000) items.push({ id: 7300 + d, title: '📖 ' + tx('Daily Hadith', 'இன்றைய ஹதீஸ்'), body: x.h.length > 150 ? x.h.slice(0, 147) + '...' : x.h, largeBody: x.h + '\n\n' + tx('Explanation', 'தெளிவுரை') + ': ' + x.e + '\n' + dailyRef(x), summaryText: 'ISNAD', schedule: { at, allowWhileIdle: true }, channelId: 'prayer' });
       }
@@ -1421,7 +1421,7 @@ function render() {
 /* ---------------- EVENTS ---------------- */
 document.addEventListener('click', (e) => {
   const tb = e.target.closest('[data-tab]');
-  if (tb) { if (tb.dataset.tab === 'more') { moreSub = null; setSub = null; Q.s = null; H.b = null; C.id = null; } if (tb.dataset.tab === 'set') setSub = null; if (tb.dataset.tab === 'pray') praySub = null; if (tb.dataset.tab === 'duas') { duaOpen = null; akSet = null; } tab = tb.dataset.tab; render(); window.scrollTo(0, 0); return; }
+  if (tb) { homeBack = false; if (tb.dataset.tab === 'more') { moreSub = null; setSub = null; Q.s = null; H.b = null; C.id = null; } if (tb.dataset.tab === 'set') setSub = null; if (tb.dataset.tab === 'pray') praySub = null; if (tb.dataset.tab === 'duas') { duaOpen = null; akSet = null; } tab = tb.dataset.tab; render(); window.scrollTo(0, 0); return; }
   const a = e.target.closest('[data-act]');
   if (!a) return;
   const act = a.dataset.act;
@@ -1451,7 +1451,7 @@ document.addEventListener('click', (e) => {
   else if (act === 'gps') useGPS();
   else if (act === 'pickcity') { const c = CITYDB[+a.dataset.i]; if (c) { S.city = c[0]; S.country = c[1] || ''; S.lat = c[2]; S.lng = c[3]; S.place = c[1] ? c[0] + ', ' + c[1] : c[0]; save(); render(); window.scrollTo(0, 0); toast(tx('Location set ✓', 'இருப்பிடம் அமைக்கப்பட்டது ✓')); } }
   else if (act === 'setcoords') {
-    const la = parseFloat(($('cLat') || {}).value), ln = parseFloat(($('cLng') || {}).value), nm = (($('cName') || {}).value || '').trim();
+    const la = parseFloat(($('cLat') || {}).value), ln = parseFloat(($('cLng') || {}).value), nm = (($('cName') || {}).value || '').replace(/[<>"'&`]/g, '').trim().slice(0, 60);
     if (!(la >= -90 && la <= 90) || !(ln >= -180 && ln <= 180)) { toast(tx('Enter valid latitude (-90 to 90) and longitude (-180 to 180)', 'சரியான அட்சரேகை (-90 முதல் 90) மற்றும் தீர்க்கரேகை (-180 முதல் 180) உள்ளிடவும்')); return; }
     S.lat = +la.toFixed(4); S.lng = +ln.toFixed(4); S.city = 'manual'; S.country = ''; S.place = nm || (S.lat + ', ' + S.lng); save(); render(); window.scrollTo(0, 0); toast(tx('Location set ✓', 'இருப்பிடம் அமைக்கப்பட்டது ✓'));
   }
