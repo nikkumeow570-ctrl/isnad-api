@@ -50,3 +50,25 @@ for a in ai['articles']:
     d = rd(f"articles/{a['id']}.json"); d.pop('pages', None); wr(f"articles/{a['id']}.json", d)
 shutil.copytree(os.path.join(src, 'articles/images'), os.path.join(out, 'articles/images'))
 print('done')
+
+# ---- Daily hadith (Riyad as-Salihin): first hadith + the start of its explanation (Thelivurai) - all text is from the API
+import re
+def _cut(s, n):
+    s = re.sub(r'\s*\n\s*', ' ', s).strip()
+    if len(s) <= n: return s
+    c = s[:n]; k = max(c.rfind('. '), c.rfind('! '), c.rfind('? '), c.rfind('\u201d '), c.rfind('" '))
+    return (c[:k + 1] if k > n * 0.5 else c.rsplit(' ', 1)[0] + '...').strip()
+daily = []
+for f in glob.glob(os.path.join(src, 'hadith/riyadussalihin/*.json')):
+    nm = os.path.basename(f)[:-5]
+    if not nm.isdigit(): continue
+    h = json.load(open(f, encoding='utf8')); t = h.get('tamil', '')
+    if '\u0ba4\u0bc6\u0bb3\u0bbf\u0bb5\u0bc1\u0bb0\u0bc8' not in t: continue
+    body, ex = t.split('\u0ba4\u0bc6\u0bb3\u0bbf\u0bb5\u0bc1\u0bb0\u0bc8', 1)
+    body = re.sub(r'^\s*\u0bb9\u0ba4\u0bc0\u0bb8\u0bcd\s*\d+\s*\n', '', body.strip())
+    first = re.split(r'\n\u0bb9\u0ba4\u0bc0\u0bb8\u0bcd\s*\d+\s*\n', body)[0]
+    if len(first) < 40 or len(ex.strip()) < 80: continue
+    daily.append({'n': int(nm), 'h': _cut(first, 380), 'e': _cut(ex, 420)})
+daily.sort(key=lambda x: x['n'])
+wr('daily.json', daily)
+print('daily hadith entries', len(daily))

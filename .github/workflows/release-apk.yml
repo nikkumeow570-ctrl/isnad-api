@@ -82,7 +82,9 @@ jobs:
         run: |
           J=android/app/src/main/java/app/thowheed/namaz
           mkdir -p $J android/app/src/main/res/layout android/app/src/main/res/xml android/app/src/main/res/drawable
-          cp android-widget/PrayerWidget.java $J/
+          cp android-widget/PrayerWidget.java android-widget/HadithWidget.java $J/
+          cp android-widget/widget_hadith.xml android/app/src/main/res/layout/
+          cp android-widget/hadith_widget_info.xml android/app/src/main/res/xml/
           cp android-widget/widget_prayer.xml android/app/src/main/res/layout/
           cp android-widget/prayer_widget_info.xml android/app/src/main/res/xml/
           cp android-widget/widget_bg.xml android-widget/widget_hl.xml android-widget/widget_progress.xml android-widget/widget_preview.png android/app/src/main/res/drawable/
@@ -159,7 +161,7 @@ jobs:
             python3 -c "import re;p='app/src/main/AndroidManifest.xml';s=open(p).read();s=re.sub(r'<!-- ATHAN_START -->.*?<!-- ATHAN_END -->','',s,flags=re.S);open(p,'w').write(s)"
           }
           drop_widget() {
-            rm -f app/src/main/java/app/thowheed/namaz/PrayerWidget.java
+            rm -f app/src/main/java/app/thowheed/namaz/PrayerWidget.java app/src/main/java/app/thowheed/namaz/HadithWidget.java app/src/main/res/layout/widget_hadith.xml app/src/main/res/xml/hadith_widget_info.xml
             rm -f app/src/main/res/layout/widget_prayer.xml app/src/main/res/xml/prayer_widget_info.xml app/src/main/res/drawable/widget_bg.xml app/src/main/res/drawable/widget_hl.xml app/src/main/res/drawable/widget_progress.xml app/src/main/res/drawable/widget_preview.png
             python3 -c "import re;p='app/src/main/AndroidManifest.xml';s=open(p).read();s=re.sub(r'<!-- WIDGET_START -->.*?<!-- WIDGET_END -->','',s,flags=re.S);open(p,'w').write(s)"
           }

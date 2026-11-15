@@ -168,7 +168,7 @@ const TAB_LABEL = () => ({ times: tx('Today', 'இன்று'), more: tx('Serv
 const $ = (id) => document.getElementById(id);
 const DEFAULTS = {
   city: '', lat: null, lng: null, place: '', fs: 0, lang: 'en', ob: 0, voice: '', // no built-in location: the person picks a city or uses GPS
-  method: 'Fajr18', asr: 1, lead: 10, fastRem: false, friRem: false, suhoorRem: true, country: '', adhan: true, alarmScreen: true, dark: null,
+  method: 'Fajr18', asr: 1, lead: 10, fastRem: false, friRem: false, dhRem: true, suhoorRem: true, country: '', adhan: true, alarmScreen: true, dark: null,
   remind: { Fajr: true, Sunrise: false, Dhuhr: true, Asr: true, Maghrib: true, Isha: true },
   // Match the local mosque: fixed 'HH:MM' overrides the calculated time; otherwise calculated + adj minutes.
   adj: { Fajr: 0, Sunrise: 0, Dhuhr: 0, Asr: 0, Maghrib: 0, Isha: 0 },
@@ -338,7 +338,33 @@ function notifState() {
 }
 
 /* Home-screen widget reads this JSON (stored by @capacitor/preferences) - see android-widget/. */
+/* ---- Daily hadith (Riyad as-Salihin, with its explanation) - text comes from the API data in data/daily.json ---- */
+let DAILY = null;
+async function loadDaily() {
+  if (DAILY) return DAILY;
+  try { const r = await fetch('data/daily.json'); DAILY = await r.json(); } catch (e) { DAILY = []; }
+  return DAILY;
+}
+function dailyFor(date) {
+  const L = DAILY || []; if (!L.length) return null;
+  return L[Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000) % L.length];
+}
+const dailyRef = (x) => tx('Riyad as-Salihin (API ' + x.n + ')', 'ரியாளுஸ் ஸாலிஹீன் (API ' + x.n + ')');
+async function updateHadithWidget() {
+  const PREF = CAP && CAP.Plugins ? CAP.Plugins.Preferences : null;
+  if (!NATIVE || !PREF) return;
+  try {
+    await loadDaily();
+    const days = [];
+    for (let d = 0; d < 8; d++) {
+      const dt = new Date(Date.now() + d * 86400000), x = dailyFor(dt); if (!x) continue;
+      days.push({ m: new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime(), h: x.h, e: x.e, ref: dailyRef(x) });
+    }
+    await PREF.set({ key: 'thw_hadith', value: JSON.stringify({ title: tx('Daily Hadith', 'இன்றைய ஹதீஸ்'), expl: tx('Explanation', 'தெளிவுரை'), days }) });
+  } catch (e) {}
+}
 async function updateWidget() {
+  updateHadithWidget();
   const PREF = CAP && CAP.Plugins ? CAP.Plugins.Preferences : null;
   if (!NATIVE || !PREF || !hasLoc()) return;
   try {
@@ -404,6 +430,13 @@ async function scheduleNative() {
       }
       if (S.friRem && dt.getDay() === 5 && t.Dhuhr && t.Dhuhr.getTime() - 120 * 60000 > now + 1000) {
         items.push({ id: 7200 + d, title: tx('Jumma today', 'இன்று ஜும்ஆ'), body: tx('Bathe, wear clean clothes, go early, and send salawat on the Prophet', 'குளித்து, தூய ஆடை அணிந்து, முன்னதாகச் செல்லுங்கள்; நபி ﷺ மீது ஸலவாத் அதிகம் கூறுங்கள்'), schedule: { at: new Date(t.Dhuhr.getTime() - 120 * 60000), allowWhileIdle: true }, channelId: 'prayer' });
+      }
+    }
+    if (S.dhRem !== false) {
+      await loadDaily();
+      for (let d = 0; d < 7; d++) {
+        const dt = new Date(now + d * 86400000), at = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 6, 0, 0), x = dailyFor(dt);
+        if (x && at.getTime() > now + 1000) items.push({ id: 7300 + d, title: '📖 ' + tx('Daily Hadith', 'இன்றைய ஹதீஸ்'), body: x.h.length > 150 ? x.h.slice(0, 147) + '...' : x.h, largeBody: x.h + '\n\n' + tx('Explanation', 'தெளிவுரை') + ': ' + x.e + '\n' + dailyRef(x), summaryText: 'ISNAD', schedule: { at, allowWhileIdle: true }, channelId: 'prayer' });
       }
     }
     if (ATH) {
@@ -1231,6 +1264,7 @@ function setPage(sub) {
   if (sub === 'adhan') return adhanPage();
   if (sub === 'remind') return `<div class="card"><h3>⏰ ${tx('Remind me', 'நினைவூட்டு')}</h3>
     <label class="field">${tx('When', 'எப்போது')}<select id="leadSel">${[0, 5, 10, 15, 30].map((m) => `<option value="${m}" ${S.lead == m ? 'selected' : ''}>${m ? m + tx(' min before', ' நிமிடத்துக்கு முன்') : tx('At prayer time', 'தொழுகை நேரத்தில்')}</option>`).join('')}</select></label>
+    <label class="chk"><input type="checkbox" data-flag="dhRem" ${S.dhRem !== false ? 'checked' : ''}><span>${tx('Daily Hadith with explanation, every morning at 6:00', 'தினமும் காலை 6:00 மணிக்கு தெளிவுரையுடன் இன்றைய ஹதீஸ்')}</span></label>
     <label class="chk"><input type="checkbox" data-flag="suhoorRem" ${S.suhoorRem ? 'checked' : ''}><span>${tx('Suhoor reminder in Ramadan (40 min before Fajr)', 'ரமளானில் ஸஹர் நினைவூட்டல் (ஃபஜ்ருக்கு 40 நிமிடம் முன்)')}</span></label>
     <label class="chk"><input type="checkbox" data-flag="fastRem" ${S.fastRem ? 'checked' : ''}><span>${tx('Evening reminder before a sunnah fast (Mon/Thu, white days, Arafah, Ashura)', 'சுன்னத் நோன்புக்கு முந்திய மாலை நினைவூட்டல் (திங்கள்/வியாழன், வெள்ளை நாட்கள், அரஃபா, ஆஷூரா)')}</span></label>
     <label class="chk"><input type="checkbox" data-flag="friRem" ${S.friRem ? 'checked' : ''}><span>${tx('Friday (Jumma) reminder', 'வெள்ளிக்கிழமை (ஜும்ஆ) நினைவூட்டல்')}</span></label>
@@ -1369,7 +1403,7 @@ function render() {
   const y = window.scrollY;
   try { const nb = document.querySelector('header .next'); if (nb) nb.style.display = tab === 'times' ? 'none' : ''; } catch (e) {}
   try { const hd = document.querySelector('header'); if (hd) document.documentElement.style.setProperty('--hh', hd.offsetHeight + 'px'); } catch (e) {}
-  const rootTitle = (tab === 'times' || (tab === 'more' && !moreSub) || (tab === 'set' && !setSub)) ? `<div class="ptitle">${TAB_LABEL()[tab]}</div>` : '';
+  const rootTitle = (tab === 'times' || (tab === 'more' && !moreSub) || (tab === 'set' && !setSub)) ? `<div class="ptitle phead"><img src="icons/icon-192.png" alt="" width="40" height="40"><span>${TAB_LABEL()[tab]}</span><em>ISNAD</em></div>` : '';
   $('main').innerHTML = (rootTitle + VIEWS[tab]()).replace(/\u06DD/g, ' ﴾﴿ ') + `<footer><div class="card" style="display:inline-block;padding:12px 16px;margin:0">அனைத்து முஸ்லிம் சமூகத்துக்காக<br>ஸஹீஹான ஹதீஸ்களின் அடிப்படையில் உருவாக்கப்பட்டது • ஆஃப்லைன் • v1.0</div></footer>`;
   const navTab = (tab === 'pray' || tab === 'duas') ? 'more' : tab;
   $('nav').innerHTML = TABS.map((t) => `<button class="${navTab === t.id ? 'on' : ''}" data-tab="${t.id}"><span class="ic">${t.icon}</span><span class="lb">${TAB_LABEL()[t.id]}</span></button>`).join('');
@@ -1480,7 +1514,7 @@ document.addEventListener('change', (e) => {
     if (t.value === 'gps') useGPS();
     else if (!t.value || !CITIES[t.value]) return;
     else { S.city = t.value; S.lat = CITIES[t.value][0]; S.lng = CITIES[t.value][1]; S.place = t.value; save(); render(); }
-  } else if (t.dataset.flag) { S[t.dataset.flag] = t.checked; save(); }
+  } else if (t.dataset.flag) { S[t.dataset.flag] = t.checked; save(); if (t.dataset.flag === 'dhRem') scheduleNative(); }
   else if (t.id === 'methSel') { S.method = t.value; save(); render(); }
   else if (t.id === 'leadSel') { S.lead = +t.value; save(); toast('நினைவூட்டல்: ' + (S.lead ? S.lead + ' நிமிடத்துக்கு முன்' : 'தொழுகை நேரத்தில்')); }
   else if (t.dataset.adhan !== undefined) { S.adhan = t.checked; save(); toast(S.adhan ? 'அதான் இயக்கப்பட்டது' : 'அதான் நிறுத்தப்பட்டது'); }
