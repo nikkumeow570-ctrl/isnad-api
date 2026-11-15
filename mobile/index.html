@@ -358,6 +358,26 @@ body[data-pg=set] #vfab,body[data-pg=more] #vfab{display:none!important}
 .brandfoot{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--mute);font-size:12px;letter-spacing:2px;margin:26px 0 8px}.brandfoot img{border-radius:50%}
 @media (prefers-reduced-motion:reduce){#splash img{animation:none}}
 </style>
+<style>
+html,body{overflow-x:hidden;max-width:100%}
+main{min-width:0;overflow-x:hidden}
+main>*,.card,.tiles>*,.htiles>*{min-width:0;max-width:100%}
+.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+.htiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+.phead{flex-wrap:nowrap;min-width:0}
+.phead span{flex:1 1 auto;min-width:0;font-size:clamp(24px,8vw,34px);line-height:1.15;overflow-wrap:anywhere}
+.phead img{flex:none;width:40px;height:40px}
+.phead em{flex:none;font-size:10px;letter-spacing:3px}
+.tile .tn,.lrow .lt{overflow-wrap:anywhere}
+@media (max-width:340px){.phead em{display:none}}
+</style>
+<style>
+body[data-pg=times] .tbl{width:100%}
+body[data-pg=times] .tbl td:first-child{white-space:normal;overflow-wrap:anywhere}
+body[data-pg=times] .tbl td.t{font-size:clamp(15px,4.6vw,19px)}
+body[data-pg=times] .tbl td.r{width:38px;padding-left:0;padding-right:0}
+@media (max-width:340px){body[data-pg=times] .card{padding:12px}body[data-pg=times] .tbl td{padding:10px 3px}}
+</style>
 </head>
 <body>
 <div id="splash" aria-hidden="true"><img src="icons/icon-192.png" alt="" width="112" height="112"><b>ISNAD</b><small>ISNAD Studios</small></div>
