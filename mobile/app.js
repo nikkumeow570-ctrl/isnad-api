@@ -780,7 +780,7 @@ function viewTimes() {
     : ns === 'denied' ? '⛔ அறிவிப்புகள் தடுக்கப்பட்டுள்ளன - தளம்/ஆப் செட்டிங்ஸில் அனுமதிக்கவும்'
     : ns === 'unsupported' ? 'இங்கு அறிவிப்புகள் ஆதரிக்கப்படவில்லை' : '🔔 அறிவிப்புகள் இன்னும் இயக்கப்படவில்லை';
   const dateLine = now.toLocaleDateString(S.lang === 'en' ? 'en-IN' : 'ta-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  const hero = nx ? `<div class="card hero"><div class="mute">${dateLine} • 📍 ${S.place}</div><div class="hijri">${hijriString(now) ? '≈ ' + hijriString(now) : ''}</div>
+  const hero = nx ? `<div class="card hero"><div class="hbrand"><img src="icons/icon-192.png" alt="" width="28" height="28"><span>ISNAD</span></div><div class="mute">${dateLine} • 📍 ${S.place}</div><div class="hijri">${hijriString(now) ? '≈ ' + hijriString(now) : ''}</div>
 <div class="hn">${tx('Next', 'அடுத்தது')}: <b id="heroName">${KEY_LABEL[nx.key]}</b></div>
     <div class="ht" id="heroTime">${fmt(nx.at)}</div><div class="hc" id="heroCount">${tx('in ', 'இன்னும் ')}${countdown(nx.at - now)}</div></div>` : '';
   return `${hero}${dayNote(now)}

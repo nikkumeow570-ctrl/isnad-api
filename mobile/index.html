@@ -318,6 +318,16 @@ body[data-pg=times] .card{padding:18px}
 .rmn{font-size:40px;font-weight:800;color:var(--gt);min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
 .htiles{gap:16px;margin:0}
 </style>
+<style>
+.hero{overflow:hidden;border:1px solid rgba(212,175,55,.45);box-shadow:0 6px 22px rgba(10,61,49,.25)}
+.hero::before{content:"";position:absolute;right:-46px;bottom:-46px;width:210px;height:210px;background:url(icons/icon-192.png) center/cover;border-radius:50%;opacity:.13;pointer-events:none}
+.hero>*{position:relative}
+.hbrand{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;color:#e6c875;font-weight:700;letter-spacing:5px;font-size:12px}
+.hbrand img{border-radius:50%;box-shadow:0 0 0 1.5px rgba(230,200,117,.8)}
+.hero .hn{color:#e6c875}.hero .hn b{color:#fff}
+.hero .ht{text-shadow:0 2px 12px rgba(0,0,0,.25)}
+.hero::after{content:"";display:block;width:56px;height:2px;margin:12px auto 0;background:linear-gradient(90deg,transparent,#e6c875,transparent)}
+</style>
 </head>
 <body>
 <header>
