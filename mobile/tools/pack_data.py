@@ -57,7 +57,7 @@ def _cut(s, n):
     s = re.sub(r'\s*\n\s*', ' ', s).strip()
     if len(s) <= n: return s
     c = s[:n]; k = max(c.rfind('. '), c.rfind('! '), c.rfind('? '), c.rfind('\u201d '), c.rfind('" '))
-    return (c[:k + 1] if k > n * 0.5 else c.rsplit(' ', 1)[0] + '...').strip()
+    return (c[:k + 1] + ' ...' if k > n * 0.5 else c.rsplit(' ', 1)[0] + ' ...').strip()
 daily = []
 for f in glob.glob(os.path.join(src, 'hadith/riyadussalihin/*.json')):
     nm = os.path.basename(f)[:-5]
@@ -68,7 +68,12 @@ for f in glob.glob(os.path.join(src, 'hadith/riyadussalihin/*.json')):
     body = re.sub(r'^\s*\u0bb9\u0ba4\u0bc0\u0bb8\u0bcd\s*\d+\s*\n', '', body.strip())
     first = re.split(r'\n\u0bb9\u0ba4\u0bc0\u0bb8\u0bcd\s*\d+\s*\n', body)[0]
     if len(first) < 40 or len(ex.strip()) < 80: continue
-    daily.append({'n': int(nm), 'h': _cut(first, 380), 'e': _cut(ex, 420)})
+    # skip chapter lead-in sentences ("we saw the verses earlier... now the hadiths") so the explanation starts at the hadith itself
+    sents = re.split(r'(?<=[.!?])\s+', re.sub(r'\s*\n\s*', ' ', ex.strip()))
+    while len(sents) > 2 and any(w in sents[0] for w in ('\u0bae\u0bc1\u0ba9\u0bcd\u0ba9\u0bb0\u0bcd', '\u0baa\u0bbe\u0bb0\u0bcd\u0baa\u0bcd\u0baa\u0bcb\u0bae\u0bcd', '\u0bae\u0bc1\u0ba9\u0bcd\u0baa\u0bc1')):
+        sents.pop(0)
+    ex = ' '.join(sents)
+    daily.append({'n': int(nm), 'h': _cut(first, 560), 'e': _cut(ex, 420)})
 daily.sort(key=lambda x: x['n'])
 wr('daily.json', daily)
 print('daily hadith entries', len(daily))
