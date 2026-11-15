@@ -74,6 +74,7 @@ function voiceUi() {
   if (!b) {
     b = document.createElement('button'); b.id = 'vfab'; b.className = 'vbtn'; b.dataset.act = 'vread'; document.body.appendChild(b);
   }
+  try { document.body.classList.toggle('fabless', document.querySelectorAll('main .lrow').length >= 3 && !VO.play && !VO.on); } catch (e) {}
   const busy = VO.on || VO.play;
   b.textContent = busy ? '⏹' : '🔊';
   b.setAttribute('aria-label', busy ? 'Stop' : 'Read aloud');
