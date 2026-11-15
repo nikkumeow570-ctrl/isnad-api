@@ -1404,7 +1404,8 @@ function render() {
   try { const nb = document.querySelector('header .next'); if (nb) nb.style.display = tab === 'times' ? 'none' : ''; } catch (e) {}
   try { const hd = document.querySelector('header'); if (hd) document.documentElement.style.setProperty('--hh', hd.offsetHeight + 'px'); } catch (e) {}
   const rootTitle = (tab === 'times' || (tab === 'more' && !moreSub) || (tab === 'set' && !setSub)) ? `<div class="ptitle phead"><img src="icons/icon-192.png" alt="" width="40" height="40"><span>${TAB_LABEL()[tab]}</span><em>ISNAD</em></div>` : '';
-  $('main').innerHTML = (rootTitle + VIEWS[tab]()).replace(/\u06DD/g, ' ﴾﴿ ') + `<footer><div class="card" style="display:inline-block;padding:12px 16px;margin:0">அனைத்து முஸ்லிம் சமூகத்துக்காக<br>ஸஹீஹான ஹதீஸ்களின் அடிப்படையில் உருவாக்கப்பட்டது • ஆஃப்லைன் • v1.0</div></footer>`;
+  const bf = tab === 'more' && (moreSub === 'quran' || moreSub === 'hadith') ? '<div class="brandfoot"><img src="icons/icon-192.png" alt="" width="18" height="18"> ISNAD Studios</div>' : '';
+  $('main').innerHTML = (rootTitle + VIEWS[tab]() + bf).replace(/\u06DD/g, ' ﴾﴿ ') + `<footer><div class="card" style="display:inline-block;padding:12px 16px;margin:0">அனைத்து முஸ்லிம் சமூகத்துக்காக<br>ஸஹீஹான ஹதீஸ்களின் அடிப்படையில் உருவாக்கப்பட்டது • ஆஃப்லைன் • v1.0</div></footer>`;
   const navTab = (tab === 'pray' || tab === 'duas') ? 'more' : tab;
   $('nav').innerHTML = TABS.map((t) => `<button class="${navTab === t.id ? 'on' : ''}" data-tab="${t.id}"><span class="ic">${t.icon}</span><span class="lb">${TAB_LABEL()[t.id]}</span></button>`).join('');
   tidy();
@@ -1593,3 +1594,10 @@ setInterval(tick, 1000);
 loadAdhan().then(() => { if (tab === 'times') render(); });
 initNative().then(() => { if (tab === 'times') render(); });
 if (S.city === 'gps') reverseGeocode();
+
+/* Logo splash on cold start (skipped for automated tests). */
+(function () {
+  const sp = document.getElementById('splash'); if (!sp) return;
+  if (navigator.webdriver) { sp.remove(); return; }
+  setTimeout(() => { sp.classList.add('out'); setTimeout(() => sp.remove(), 600); }, 1300);
+})();

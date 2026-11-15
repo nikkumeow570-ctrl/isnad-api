@@ -349,8 +349,18 @@ body[data-pg=more] .tile .tn{font-size:15px}
 body[data-pg=more] .tiles{gap:14px}
 body[data-pg=set] #vfab,body[data-pg=more] #vfab{display:none!important}
 </style>
+<style>
+#splash{position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#0b5b3a,#043326);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#e6c875;transition:opacity .45s ease}
+#splash img{border-radius:28px;box-shadow:0 10px 34px rgba(0,0,0,.35);animation:spl 1s ease both}
+#splash b{font-size:30px;letter-spacing:8px}#splash small{letter-spacing:3px;opacity:.8}
+#splash.out{opacity:0;pointer-events:none}
+@keyframes spl{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.brandfoot{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--mute);font-size:12px;letter-spacing:2px;margin:26px 0 8px}.brandfoot img{border-radius:50%}
+@media (prefers-reduced-motion:reduce){#splash img{animation:none}}
+</style>
 </head>
 <body>
+<div id="splash" aria-hidden="true"><img src="icons/icon-192.png" alt="" width="112" height="112"><b>ISNAD</b><small>ISNAD Studios</small></div>
 <header>
   <div class="wrap">
     <div class="hrow">
