@@ -37,6 +37,8 @@ function viewServices() {
 /* ---------- Quran ---------- */
 const JUZ = [[1,1],[2,142],[2,253],[3,93],[4,24],[4,148],[5,82],[6,111],[7,88],[8,41],[9,93],[11,6],[12,53],[15,1],[17,1],[18,75],[21,1],[23,1],[25,21],[27,56],[29,46],[33,31],[36,28],[39,32],[41,47],[46,1],[51,31],[58,1],[67,1],[78,1]];
 const RECITERS = [['Alafasy_128kbps', 'Mishary Alafasy'], ['Husary_128kbps', 'Mahmoud Khalil Al-Husary'], ['Abdul_Basit_Murattal_192kbps', 'Abdul Basit (Murattal)'], ['Abdurrahmaan_As-Sudais_192kbps', 'Abdur-Rahman As-Sudais'], ['Minshawy_Murattal_128kbps', 'Mohamed Siddiq Al-Minshawi']];
+const ICO_STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-3-5.4 3 1.1-6L3.2 9.6l6.1-.8z"/></svg>';
+const ICO_SHARE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.4M8.3 13.2l7.4 4.4"/></svg>';
 const bmKey = (n, a) => n + ':' + a;
 const bmHas = (n, a) => (S.bm || []).includes(bmKey(n, a));
 const surahName = (n, ix) => S.lang === 'en' ? SURAH_EN[n - 1][0] : ((ix && ix[n - 1] && ix[n - 1][1]) || SURAH_EN[n - 1][0]);
@@ -79,7 +81,7 @@ function viewSurah(n) {
   return backBar('qback') + `<div class="card hero small"><div class="hn">${n}. ${cesc(S.lang === 'en' ? SURAH_EN[n - 1][0] + ' - ' + SURAH_EN[n - 1][1] : d.name)}</div><div class="arh">${cesc(d.ar)}</div>
     <div class="qtools"><button class="sec" data-act="qplaysurah" data-n="${n}">▶ ${tx('Play surah', 'சூராவை ஓது')}</button><label class="field qrec"><span class="mute">${tx('Reciter', 'ஓதுபவர்')}</span><select id="qrec">${RECITERS.map((r) => `<option value="${r[0]}" ${(S.rec || 'Alafasy_128kbps') === r[0] ? 'selected' : ''}>${r[1]}</option>`).join('')}</select></label></div>
     <label class="mute"><input type="checkbox" data-act="${S.lang === 'en' ? 'qta' : 'qen'}" ${(S.lang === 'en' ? ta : en) ? 'checked' : ''}> ${tx('Also show Tamil translation', 'ஆங்கிலமும் காட்டு')}</label></div>
-  ${d.v.map((v) => `<div class="ay" data-a="${v[0]}"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${ta && v[2] ? `<div class="tq" lang="ta">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}<div class="aacts"><button class="vbtn" data-act="qbm" data-n="${n}" data-a="${v[0]}" aria-pressed="${bmHas(n, v[0])}" aria-label="${tx('Bookmark', 'குறிப்பான்')}">${bmHas(n, v[0]) ? '★' : '☆'}</button><button class="vbtn" data-act="qshare" data-n="${n}" data-a="${v[0]}" aria-label="${tx('Share', 'பகிர்')}">⤴</button></div></div>`).join('')}${nav}${qFocus(d)}`;
+  ${d.v.map((v) => `<div class="ay" data-a="${v[0]}"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${ta && v[2] ? `<div class="tq" lang="ta">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}<div class="aacts"><button class="vbtn" data-act="qbm" data-n="${n}" data-a="${v[0]}" aria-pressed="${bmHas(n, v[0])}" aria-label="${tx('Bookmark', 'குறிப்பான்')}">${ICO_STAR}</button><button class="vbtn" data-act="qshare" data-n="${n}" data-a="${v[0]}" aria-label="${tx('Share', 'பகிர்')}">${ICO_SHARE}</button></div></div>`).join('')}${nav}${qFocus(d)}`;
 }
 
 /* ---------- Hadith ---------- */
@@ -152,7 +154,7 @@ function contentAct(act, a) {
   if (act === 'qbm') {
     const k = bmKey(+a.dataset.n, +a.dataset.a), L = S.bm || (S.bm = []), i = L.indexOf(k);
     if (i >= 0) L.splice(i, 1); else L.push(k);
-    save(); a.textContent = i >= 0 ? '☆' : '★'; a.setAttribute('aria-pressed', i < 0); toast(i >= 0 ? tx('Bookmark removed', 'குறிப்பான் நீக்கப்பட்டது') : tx('Bookmarked ✓', 'சேமிக்கப்பட்டது ✓')); return true;
+    save(); a.setAttribute('aria-pressed', i < 0); toast(i >= 0 ? tx('Bookmark removed', 'குறிப்பான் நீக்கப்பட்டது') : tx('Bookmarked ✓', 'சேமிக்கப்பட்டது ✓')); return true;
   }
   if (act === 'qshare') { qShare(+a.dataset.n, +a.dataset.a); return true; }
   if (act === 'qplaysurah') { if (typeof quranPlay === 'function') { const all = [...document.querySelectorAll('.ay')].map((e) => +e.dataset.a); quranPlay(+a.dataset.n, 1, Math.max(...all), false); } return true; }

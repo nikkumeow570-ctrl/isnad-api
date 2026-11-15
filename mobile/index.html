@@ -248,7 +248,7 @@ body.dark .card.amber{background:#2a2410;border-color:#4a3d16;color:#f1deaa}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 .filters button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;font-weight:600}
 .filters button.on{background:var(--g);border-color:var(--g);color:#fff}
-.backbar{margin:0 0 6px;position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 70%,transparent);padding:calc(env(safe-area-inset-top,0px) + 4px) 0 8px}
+.backbar{margin:0 0 6px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:linear-gradient(var(--bg) 70%,transparent);padding:4px 0 8px}
 .backbar .sec{border:0;background:none;padding:8px 4px;font-size:17px;color:var(--gt)}
 .page-h{font-size:26px;font-weight:800;line-height:1.25;margin:2px 2px 10px;color:var(--ink)}
 .page-p{color:var(--mute);margin:0 2px 14px;font-size:15px}
@@ -265,7 +265,6 @@ ul{padding-left:20px}
 .card.plain>p{margin:0 2px 12px}li{margin:6px 0}
 </style>
 <style>
-body{padding-top:env(safe-area-inset-top,0px)}
 body.onb header,body.onb nav,body.onb #vfab,body.onb .ptitle,body.onb footer{display:none!important}
 body.onb{padding-bottom:24px}
 .ob{text-align:center;padding:28px 6px 8px;animation:obin .5s ease both}
@@ -384,6 +383,17 @@ body[data-pg=times] .tbl td.r{width:38px;padding-left:0;padding-right:0}
 .juz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
 .qflash{animation:qf 1.8s ease}@keyframes qf{0%,60%{background:rgba(230,200,117,.35)}100%{background:transparent}}
 .qcont{background:var(--soft)}
+</style>
+<style>
+.aacts{gap:10px}
+.aacts .vbtn{width:44px;height:44px;min-width:44px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--g);display:inline-flex;align-items:center;justify-content:center}
+.aacts .vbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.aacts .vbtn[aria-pressed=true] svg{fill:currentColor}
+.qtools{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin:12px 0 8px;text-align:left}
+.qtools>button{align-self:flex-start;border-radius:999px;padding:0 22px;min-height:44px;background:#e6c875;color:#063a29;border:0;font-weight:700}
+.qrec{display:flex;flex-direction:column;gap:4px;margin:0}.qrec .mute{color:rgba(255,255,255,.8);text-align:left}
+.qrec select{width:100%;min-height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff;font:inherit;padding:0 12px}
+.qrec select option{color:#18181b}
 </style>
 </head>
 <body>
