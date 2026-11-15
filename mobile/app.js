@@ -167,7 +167,7 @@ const TAB_LABEL = () => ({ times: tx('Today', 'இன்று'), more: tx('Serv
 /* ---------------- STATE ---------------- */
 const $ = (id) => document.getElementById(id);
 const DEFAULTS = {
-  city: '', lat: null, lng: null, place: '', fs: 0, lang: 'en', ob: 0, voice: '', // no built-in location: the person picks a city or uses GPS
+  city: '', lat: null, lng: null, place: '', fs: 0, lang: 'en', ob: 0, bm: [], last: null, rec: 'Alafasy_128kbps', voice: '', // no built-in location: the person picks a city or uses GPS
   method: 'Fajr18', asr: 1, lead: 10, fastRem: false, friRem: false, dhRem: true, suhoorRem: true, country: '', adhan: true, alarmScreen: true, dark: null,
   remind: { Fajr: true, Sunrise: false, Dhuhr: true, Asr: true, Maghrib: true, Isha: true },
   // Match the local mosque: fixed 'HH:MM' overrides the calculated time; otherwise calculated + adj minutes.

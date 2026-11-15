@@ -59,7 +59,7 @@ function quranPlay(n, a, last, once) {
   VO.play = { n, a, last, once };
   const go = () => {
     const P = VO.play; if (!P) return;
-    const au = VO.audio = new Audio(`https://everyayah.com/data/${VO.reciter}/${p3(P.n)}${p3(P.a)}.mp3`);
+    const au = VO.audio = new Audio(`https://everyayah.com/data/${(typeof S !== 'undefined' && S.rec) || VO.reciter}/${p3(P.n)}${p3(P.a)}.mp3`);
     document.querySelectorAll('.ay.playing').forEach((e) => e.classList.remove('playing'));
     const row = document.querySelector(`.ay[data-a="${P.a}"]`); if (row) { row.classList.add('playing'); row.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
     au.onended = () => { if (!VO.play) return; if (P.once || P.a >= P.last) { voiceStop(); return; } P.a++; go(); };

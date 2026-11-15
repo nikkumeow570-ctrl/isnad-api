@@ -14,7 +14,7 @@ function cget(p) {
   return null;
 }
 const cwait = (p) => CERR[p] ? `<div class="card soft"><p>${tx('Could not load this part.', 'இந்தப் பகுதியை ஏற்ற முடியவில்லை.')}</p></div>` : `<div class="card soft"><p class="mute">${tx('Loading…', 'ஏற்றுகிறது…')}</p></div>`;
-const Q = { s: null }, H = { b: null, n: 1 }, C = { id: null };
+const Q = { s: null, bm: false, focus: null }, H = { b: null, n: 1 }, C = { id: null };
 
 /* ---------- Services (home of everything except prayer times) ---------- */
 function viewServices() {
@@ -35,12 +35,41 @@ function viewServices() {
 }
 
 /* ---------- Quran ---------- */
+const JUZ = [[1,1],[2,142],[2,253],[3,93],[4,24],[4,148],[5,82],[6,111],[7,88],[8,41],[9,93],[11,6],[12,53],[15,1],[17,1],[18,75],[21,1],[23,1],[25,21],[27,56],[29,46],[33,31],[36,28],[39,32],[41,47],[46,1],[51,31],[58,1],[67,1],[78,1]];
+const RECITERS = [['Alafasy_128kbps', 'Mishary Alafasy'], ['Husary_128kbps', 'Mahmoud Khalil Al-Husary'], ['Abdul_Basit_Murattal_192kbps', 'Abdul Basit (Murattal)'], ['Abdurrahmaan_As-Sudais_192kbps', 'Abdur-Rahman As-Sudais'], ['Minshawy_Murattal_128kbps', 'Mohamed Siddiq Al-Minshawi']];
+const bmKey = (n, a) => n + ':' + a;
+const bmHas = (n, a) => (S.bm || []).includes(bmKey(n, a));
+const surahName = (n, ix) => S.lang === 'en' ? SURAH_EN[n - 1][0] : ((ix && ix[n - 1] && ix[n - 1][1]) || SURAH_EN[n - 1][0]);
 function viewQuran() {
   if (Q.s) return viewSurah(Q.s);
   const ix = cget('data/quran/index.json');
   if (!ix) return backBar('moreback') + cwait('data/quran/index.json');
-  return backBar('moreback') + `<label class="field"><input type="search" id="qsearch" placeholder="${tx('Search surah…', 'சூரா தேடு…')}" autocomplete="off"></label>
+  if (Q.bm) return viewBookmarks(ix);
+  const L = S.last && S.last.s ? S.last : null, nb = (S.bm || []).length;
+  const cont = L ? `<button class="lrow qcont" data-act="qgo" data-n="${L.s}" data-a="${L.a}"><span class="li">📖</span><span class="lt"><b>${tx('Continue reading', 'தொடர்ந்து வாசிக்க')}</b><small>${cesc(surahName(L.s, ix))} ${L.s}:${L.a}</small></span><span class="lc">›</span></button>` : '';
+  const bmr = `<button class="lrow" data-act="qbmview"><span class="li">★</span><span class="lt"><b>${tx('Bookmarks', 'குறிப்பான்கள்')}</b><small>${nb} ${tx('saved', 'சேமித்தவை')}</small></span><span class="lc">›</span></button>`;
+  const juz = `<div class="juz" role="group" aria-label="Juz">${JUZ.map((x, k) => `<button class="sec" data-act="qgo" data-n="${x[0]}" data-a="${x[1]}">${tx('Juz', 'ஜுஸ்உ')} ${k + 1}</button>`).join('')}</div>`;
+  return backBar('moreback') + `<div class="card list">${cont}${bmr}</div>
+  <label class="field"><input type="search" id="qvs" placeholder="${tx('Search verses (Arabic, Tamil, English)…', 'வசனங்களைத் தேடு (அரபி, தமிழ், ஆங்கிலம்)…')}" autocomplete="off" enterkeyhint="search"></label>
+  <div id="qres" aria-live="polite"></div>
+  <label class="field"><input type="search" id="qsearch" placeholder="${tx('Search surah…', 'சூரா தேடு…')}" autocomplete="off"></label>
+  <details class="ad"><summary>${tx('Go to Juz', 'ஜுஸ்உவுக்குச் செல்')}</summary>${juz}</details>
   <div class="card list" id="qlist">${ix.map((s) => `<button class="lrow" data-act="qopen" data-n="${s[0]}" data-name="${cesc((s[0] + ' ' + s[1] + ' ' + s[2] + ' ' + SURAH_EN[s[0] - 1].join(' ')).toLowerCase())}"><span class="li num">${s[0]}</span><span class="lt"><b>${cesc(S.lang === 'en' ? SURAH_EN[s[0] - 1][0] : s[1])}</b><small>${cesc(S.lang === 'en' ? SURAH_EN[s[0] - 1][1] : s[2])} · ${s[3]} ${tx('verses', 'வசனங்கள்')}</small></span><span class="lc">›</span></button>`).join('')}</div>`;
+}
+function ayText(d, a) { const v = d && d.v.find((x) => x[0] === a); return v || null; }
+function viewBookmarks(ix) {
+  const list = (S.bm || []).map((k) => k.split(':').map(Number)).sort((x, y) => x[0] - y[0] || x[1] - y[1]);
+  let body = list.length ? '' : `<div class="card soft"><p>${tx('No bookmarks yet. Tap ☆ beside a verse to save it.', 'குறிப்பான்கள் இன்னும் இல்லை. வசனத்தின் அருகிலுள்ள ☆ ஐத் தட்டி சேமிக்கவும்.')}</p></div>`;
+  if (list.length) body = '<div class="card list">' + list.map(([n, a]) => {
+    const d = cget('data/quran/' + n + '.json'), v = ayText(d, a);
+    const sn = v ? (S.lang === 'en' ? (v[4] || v[2] || '') : (v[2] || v[4] || '')) : '';
+    return `<button class="lrow" data-act="qgo" data-n="${n}" data-a="${a}"><span class="li">★</span><span class="lt"><b>${cesc(surahName(n, ix))} ${n}:${a}</b><small>${cesc(sn.slice(0, 110))}</small></span><span class="lc">›</span></button>`;
+  }).join('') + '</div>';
+  return `<div class="backbar"><button class="sec" data-act="qbmback">← ${tx('Back', 'பின்செல்')}</button></div><h3>★ ${tx('Bookmarks', 'குறிப்பான்கள்')}</h3>${body}`;
+}
+function qFocus(d) {
+  if (Q.focus) { const a = Q.focus; Q.focus = null; setTimeout(() => { const r = document.querySelector('.ay[data-a="' + a + '"]'); if (r) { r.scrollIntoView({ block: 'start' }); r.classList.add('qflash'); setTimeout(() => r.classList.remove('qflash'), 1800); } }, 60); }
+  return '';
 }
 function viewSurah(n) {
   const p = `data/quran/${n}.json`, d = cget(p);
@@ -48,8 +77,9 @@ function viewSurah(n) {
   if (!d) return backBar('qback') + cwait(p);
   const en = S.lang === 'en' ? !S.qno : !!S.qen, ta = S.lang === 'en' ? !!S.qta : true;
   return backBar('qback') + `<div class="card hero small"><div class="hn">${n}. ${cesc(S.lang === 'en' ? SURAH_EN[n - 1][0] + ' - ' + SURAH_EN[n - 1][1] : d.name)}</div><div class="arh">${cesc(d.ar)}</div>
+    <div class="qtools"><button class="sec" data-act="qplaysurah" data-n="${n}">▶ ${tx('Play surah', 'சூராவை ஓது')}</button><label class="field qrec"><span class="mute">${tx('Reciter', 'ஓதுபவர்')}</span><select id="qrec">${RECITERS.map((r) => `<option value="${r[0]}" ${(S.rec || 'Alafasy_128kbps') === r[0] ? 'selected' : ''}>${r[1]}</option>`).join('')}</select></label></div>
     <label class="mute"><input type="checkbox" data-act="${S.lang === 'en' ? 'qta' : 'qen'}" ${(S.lang === 'en' ? ta : en) ? 'checked' : ''}> ${tx('Also show Tamil translation', 'ஆங்கிலமும் காட்டு')}</label></div>
-  ${d.v.map((v) => `<div class="ay"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${ta && v[2] ? `<div class="tq" lang="ta">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}</div>`).join('')}${nav}`;
+  ${d.v.map((v) => `<div class="ay" data-a="${v[0]}"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${ta && v[2] ? `<div class="tq" lang="ta">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}<div class="aacts"><button class="vbtn" data-act="qbm" data-n="${n}" data-a="${v[0]}" aria-pressed="${bmHas(n, v[0])}" aria-label="${tx('Bookmark', 'குறிப்பான்')}">${bmHas(n, v[0]) ? '★' : '☆'}</button><button class="vbtn" data-act="qshare" data-n="${n}" data-a="${v[0]}" aria-label="${tx('Share', 'பகிர்')}">⤴</button></div></div>`).join('')}${nav}${qFocus(d)}`;
 }
 
 /* ---------- Hadith ---------- */
@@ -115,7 +145,17 @@ function contentAct(act, a) {
     return go();
   }
   if (act === 'tosvc') { tab = 'more'; moreSub = null; return go(); }
-  if (act === 'qopen') { Q.s = +a.dataset.n; return go(); }
+  if (act === 'qopen') { Q.s = +a.dataset.n; Q.focus = null; return go(); }
+  if (act === 'qgo') { Q.s = +a.dataset.n; Q.focus = +a.dataset.a || null; Q.bm = false; render(); if (!Q.focus) window.scrollTo(0, 0); return true; }
+  if (act === 'qbmview') { Q.bm = true; return go(); }
+  if (act === 'qbmback') { Q.bm = false; return go(); }
+  if (act === 'qbm') {
+    const k = bmKey(+a.dataset.n, +a.dataset.a), L = S.bm || (S.bm = []), i = L.indexOf(k);
+    if (i >= 0) L.splice(i, 1); else L.push(k);
+    save(); a.textContent = i >= 0 ? '☆' : '★'; a.setAttribute('aria-pressed', i < 0); toast(i >= 0 ? tx('Bookmark removed', 'குறிப்பான் நீக்கப்பட்டது') : tx('Bookmarked ✓', 'சேமிக்கப்பட்டது ✓')); return true;
+  }
+  if (act === 'qshare') { qShare(+a.dataset.n, +a.dataset.a); return true; }
+  if (act === 'qplaysurah') { if (typeof quranPlay === 'function') { const all = [...document.querySelectorAll('.ay')].map((e) => +e.dataset.a); quranPlay(+a.dataset.n, 1, Math.max(...all), false); } return true; }
   if (act === 'qback') { Q.s = null; return go(); }
   if (act === 'qen') { S.qen = a.checked; save(); render(); return true; }
   if (act === 'qta') { S.qta = a.checked; save(); render(); return true; }
@@ -136,8 +176,46 @@ function contentAct(act, a) {
   if (act === 'courback') { C.id = null; return go(); }
   return false;
 }
+/* share a verse: Arabic + translation + reference */
+function qShare(n, a) {
+  const d = CJ['data/quran/' + n + '.json'], v = ayText(d, a); if (!v) return;
+  const tr = S.lang === 'en' ? (v[4] || v[2]) : (v[2] || v[4]);
+  const txt = '\uFD3F' + v[1] + '\uFD3E\n' + (tr || '') + '\n- ' + tx('Quran', 'குர்ஆன்') + ' ' + n + ':' + a + ' (' + surahName(n) + ')\nISNAD';
+  try { if (navigator.share) { navigator.share({ text: txt }).catch(() => {}); return; } } catch (e) {}
+  try { navigator.clipboard.writeText(txt).then(() => toast(tx('Copied ✓', 'நகலெடுக்கப்பட்டது ✓'))).catch(() => toast(tx('Could not share', 'பகிர முடியவில்லை'))); } catch (e) { toast(tx('Could not share', 'பகிர முடியவில்லை')); }
+}
+/* verse search over all 114 surahs (packed data, works offline; loaded once on first search) */
+const QS = { all: null, p: null, t: 0 };
+const normAr = (s) => String(s || '').replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g, '').replace(/[\u0671\u0622\u0623\u0625]/g, '\u0627').replace(/\u0649/g, '\u064A').toLowerCase();
+function qLoadAll() {
+  if (QS.p) return QS.p;
+  QS.p = (async () => {
+    const out = new Array(114);
+    let next = 1;
+    const worker = async () => { while (next <= 114) { const n = next++; try { const r = await fetch('data/quran/' + n + '.json'); out[n - 1] = await r.json(); } catch (e) { out[n - 1] = null; } } };
+    await Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]);
+    QS.all = out; return out;
+  })();
+  return QS.p;
+}
+async function qSearch(q) {
+  const box = document.getElementById('qres'); if (!box) return;
+  q = normAr(q.trim());
+  if (q.length < 3) { box.innerHTML = ''; return; }
+  box.innerHTML = '<p class="mute">' + tx('Searching…', 'தேடுகிறது…') + '</p>';
+  const all = await qLoadAll(), mine = ++QS.t, res = [];
+  outer: for (let i = 0; i < 114; i++) { const d = all[i]; if (!d) continue; for (const v of d.v) {
+    if (normAr(v[1]).includes(q) || normAr(v[2]).includes(q) || normAr(v[4]).includes(q)) { res.push([i + 1, v]); if (res.length >= 40) break outer; }
+  } }
+  if (mine !== QS.t || !document.getElementById('qres')) return;
+  const ix = CJ['data/quran/index.json'];
+  const sn = (v) => { const t = S.lang === 'en' ? (v[4] || v[2] || '') : (v[2] || v[4] || ''); return t.length > 130 ? t.slice(0, 127) + '...' : t; };
+  document.getElementById('qres').innerHTML = res.length ? '<div class="card list">' + res.map(([n, v]) => `<button class="lrow" data-act="qgo" data-n="${n}" data-a="${v[0]}"><span class="li num">${n}:${v[0]}</span><span class="lt"><b>${cesc(surahName(n, ix))}</b><small>${cesc(sn(v))}</small></span><span class="lc">›</span></button>`).join('') + '</div>' + (res.length >= 40 ? '<p class="mute">' + tx('Showing the first 40 matches.', 'முதல் 40 முடிவுகள் காட்டப்படுகின்றன.') + '</p>' : '') : '<p class="mute">' + tx('No verses found.', 'வசனங்கள் எதுவும் இல்லை.') + '</p>';
+}
+document.addEventListener('change', (e) => { if (e.target && e.target.id === 'qrec') { S.rec = e.target.value; save(); if (typeof voiceStop === 'function') voiceStop(); } });
 document.addEventListener('input', (e) => {
-  if (e.target && e.target.id === 'qsearch') {
+  if (e.target && e.target.id === 'qvs') { clearTimeout(QS.d); const v = e.target.value; QS.d = setTimeout(() => qSearch(v), 350); }
+  else if (e.target && e.target.id === 'qsearch') {
     const f = e.target.value.trim().toLowerCase();
     document.querySelectorAll('#qlist .lrow').forEach((r) => { r.style.display = !f || r.dataset.name.includes(f) ? '' : 'none'; });
   }
@@ -173,3 +251,14 @@ function linkRefs(root) {
     add(s.slice(last)); t.parentNode.replaceChild(f, t);
   });
 }
+
+/* remember where the person stopped reading (first verse near the top of the screen) */
+let _lrT = 0;
+window.addEventListener('scroll', () => {
+  if (!Q.s) return; clearTimeout(_lrT);
+  _lrT = setTimeout(() => {
+    const rows = document.querySelectorAll('.ay[data-a]'); let best = null;
+    rows.forEach((r) => { const t = r.getBoundingClientRect().top; if (!best && t >= 40) best = r; });
+    if (best) { S.last = { s: Q.s, a: +best.dataset.a }; save(); }
+  }, 500);
+}, { passive: true });

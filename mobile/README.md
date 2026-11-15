@@ -55,3 +55,6 @@ The ISNAD Studios logo files are in `../branding/` (profile, YouTube banner, app
 
 ## Languages
 English and Tamil UI. English mode: all screens in English, Quran shows Arabic + English (Pickthall) with an option to add Tamil, surah names in English, hadith book titles in English. Tamil mode: Tamil text and Tamil transliterations of the duas and adhan; Android menu names stay as they appear on the phone. Hadith text is Tamil only (the API has no English hadith yet). Extra exact-text translations live in `i18n2.js`; the Tamil dua meanings there were written for this app and should be checked by TNTJ scholars.
+
+## Quran reading
+Bookmarks (star), continue reading (remembers your place), verse search (Arabic, Tamil, English; offline), jump to Juz, share a verse, Play surah, and a choice of reciter (audio streams from everyayah.com when you press play).
