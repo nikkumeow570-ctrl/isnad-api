@@ -286,6 +286,17 @@ function fastReason(date) {
   if (w === 1) return { en: 'Monday', ta: 'திங்கள்', ref: 'Muslim 1162 (API 2153)' };
   return null;
 }
+/* Calm countdown in the weeks before Ramadan (Umm al-Qura calculation; the actual start follows local moon sighting). */
+function ramadanSoon(day) {
+  for (let i = 1; i <= 120; i++) {
+    const d = new Date(day.getTime() + i * 86400000), h = hijriParts(noonOf(d));
+    if (h && h.m === 9 && h.d === 1) {
+      const dt = d.toLocaleDateString(S.lang === 'en' ? 'en-GB' : 'ta-IN', { day: 'numeric', month: 'long' });
+      return `<div class="card soft rmd"><span class="rmn">${i}</span><div><b>🌙 ${tx('days to Ramadan', 'நாட்கள் ரமளானுக்கு')}</b><div class="mute">${tx('about ', 'சுமார் ')}${dt} · ${tx('depends on moon sighting', 'பிறை பார்ப்பதைப் பொறுத்தது')}</div></div></div>`;
+    }
+  }
+  return '';
+}
 /* Card for today (or tomorrow after Maghrib): Ramadan times or a sunnah fast. */
 function dayNote(now) {
   const t = timesFor(now);
@@ -300,7 +311,7 @@ function dayNote(now) {
       <div class="mute" style="font-size:12px">${tx('Eat suhoor - there is blessing in it (Bukhari 1923).', 'ஸஹர் உண்ணுங்கள்; அதில் பரக்கத் உள்ளது (புகாரி 1923).')}</div></div>`;
   }
   const fr = fastReason(day);
-  if (!fr) return '';
+  if (!fr) return ramadanSoon(day);
   return `<div class="card soft"><b>🌿 ${label}: ${tx('a sunnah fasting day', 'சுன்னத் நோன்பு நாள்')}</b> <span class="mute">- ${tx(fr.en, fr.ta)} (${fr.ref})</span></div>`;
 }
 function currentActiveKey(t, now) {
