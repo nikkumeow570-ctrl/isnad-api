@@ -1,5 +1,3 @@
-Adhan files (bundled in the app, play offline)
-- voices.json lists the selectable voices + the Fajr file.
-- adhan.mp3 (Makkah 1), adhan-madinah.mp3, adhan-makkah2.mp3, adhan-fajr.mp3
-To add a voice: put the mp3 here, add it to voices.json and sw.js, push.
-Licence of the audio must be verified before Play Store release (see SOURCE.txt).
+Adhan audio (bundled in the app, plays offline)
+- adhan-ta.mp3: Tamil translation of the adhan, created by ISNAD Studios (the app owner). No third-party audio is bundled.
+- voices.json lists the selectable voices. To add a voice (for example an English version): put the mp3 here, add it to voices.json and sw.js, push.

@@ -1,11 +1,11 @@
 /* ISNAD - service worker */
-const CACHE = 'namaz-v48';
+const CACHE = 'namaz-v49';
 const SHELL = [
   './', 'index.html', 'app.js', 'content.js', 'voice.js', 'a11y.js', 'i18n2.js', 'prayer.js', 'i18n.js', 'cities.js', 'manifest.json',
   'icons/icon-192.png', 'icons/icon-512.png', 'fonts/amiri-regular.woff2'
 ];
 // Optional Adhan recordings - only cached if you added them.
-const ADHAN = ['adhan/voices.json', 'adhan/adhan.mp3', 'adhan/adhan-madinah.mp3', 'adhan/adhan-makkah2.mp3', 'adhan/adhan-fajr.mp3'];
+const ADHAN = ['adhan/voices.json', 'adhan/adhan-ta.mp3'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(

@@ -13,7 +13,7 @@
    KEYSTORE_B64 (that text), KEYSTORE_PASSWORD, KEY_ALIAS (thowheed), KEY_PASSWORD
 3. Put your email in privacy-policy.html (FILL_IN_YOUR_EMAIL), host it (GitHub Pages) and paste the URL in Play Console.
 4. The app now includes the Quran (Arabic + Tamil/English translations), hadith and TNTJ course text. Get written permission from the translation/course publishers (TNTJ and others) before a Play Store release.
-5. Adhan audio you have the right to use (current pack is unverified, see adhan/SOURCE.txt). Replace every file in adhan/.
+5. Adhan audio: only `adhan-ta.mp3` (own recording) is bundled. Keep a record of how it was made (tool terms or voice artist consent). Add an English version later.
 6. Fill Data safety (no data collected), content rating, target audience, permission declarations (exact alarm, location). See store-listing.md.
 7. New personal accounts: run a closed test with the required number of testers for the required days before production (check the current numbers in Play Console).
 8. Real-phone test of: reminders firing at the minute with app closed, Adhan sound, compass, Android 13/14/15 permission prompts.

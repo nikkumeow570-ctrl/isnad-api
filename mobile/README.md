@@ -5,7 +5,7 @@ Static PWA (works in any browser) and an Android APK (Capacitor) with native pra
 ## Files
 - `index.html`, `app.js`, `prayer.js` - the app (prayer times are calculated offline)
 - `fonts/` - Amiri Arabic font (SIL OFL)
-- `adhan/` - Adhan recordings (rights unverified, see `adhan/SOURCE.txt`; replace with ones you may distribute)
+- `adhan/` - the Tamil adhan translation recorded by ISNAD Studios (`adhan-ta.mp3`); no third-party audio. See `adhan/SOURCE.txt`
 - `sw.js`, `manifest.json`, `icons/` - PWA install + offline
 - `capacitor.config.json`, `package.json`, `android-*` - APK build; the workflow is `.github/workflows/release-apk.yml` at the repo root
 
