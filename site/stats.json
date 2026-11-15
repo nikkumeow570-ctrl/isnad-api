@@ -1,0 +1,57 @@
+{
+ "generated": "2026-11-15",
+ "total": {
+  "files": 16345,
+  "words": 2500381,
+  "bytes": 53623488
+ },
+ "hadithFiles": 15886,
+ "sources": {
+  "bukhari": {
+   "files": 7494,
+   "words": 640797,
+   "bytes": 17012772
+  },
+  "muslim": {
+   "files": 5855,
+   "words": 584735,
+   "bytes": 14774754
+  },
+  "lulu": {
+   "files": 1822,
+   "words": 157449,
+   "bytes": 4130596
+  },
+  "abudawud": {
+   "files": 369,
+   "words": 29260,
+   "bytes": 734660
+  },
+  "riyad": {
+   "files": 58,
+   "words": 56652,
+   "bytes": 1425639
+  },
+  "shamail": {
+   "files": 389,
+   "words": 210229,
+   "bytes": 2933966
+  },
+  "quran": {
+   "files": 343,
+   "words": 580397,
+   "bytes": 7565549,
+   "ayahs": 5801
+  },
+  "articles": {
+   "files": 9,
+   "words": 224848,
+   "bytes": 4683528
+  },
+  "dua": {
+   "files": 6,
+   "words": 16014,
+   "bytes": 362024
+  }
+ }
+}
