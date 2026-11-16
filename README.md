@@ -1,4 +1,4 @@
-<p align="center"><img src="branding/youtube-banner-16x9.jpg" alt="ISNAD Studios" width="720"></p>
+<p align="center"><img src="branding/youtube-banner-16x9.jpg" alt="ISNAD Project" width="720"></p>
 
 # ISNAD API
 

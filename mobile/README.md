@@ -5,7 +5,7 @@ Static PWA (works in any browser) and an Android APK (Capacitor) with native pra
 ## Files
 - `index.html`, `app.js`, `prayer.js` - the app (prayer times are calculated offline)
 - `fonts/` - Amiri Arabic font (SIL OFL)
-- `adhan/` - the Tamil adhan translation recorded by ISNAD Studios (`adhan-ta.mp3`); no third-party audio. See `adhan/SOURCE.txt`
+- `adhan/` - the Tamil adhan translation recorded by ISNAD Project (`adhan-ta.mp3`); no third-party audio. See `adhan/SOURCE.txt`
 - `sw.js`, `manifest.json`, `icons/` - PWA install + offline
 - `capacitor.config.json`, `package.json`, `android-*` - APK build; the workflow is `.github/workflows/release-apk.yml` at the repo root
 
@@ -47,7 +47,7 @@ Bukhari numbers are the same everywhere. Muslim: the app text cites the internat
 The app shows only what is in this repo's API data: Quran, Sahih Bukhari, Sahih Muslim (and the Tamil articles/courses). Duas, adhkar and guide statements that rest only on Abu Dawud, Tirmidhi, Nasai or Ibn Majah were removed (Sana, Rabbighfir, Qunoot, after-prayer 6-9, some morning/evening adhkar, Monday/Thursday and white-days fasting banners, and a few guide notes). Every Bukhari number and every Muslim `(API n)` in the text is a link that opens that hadith from the packed data.
 
 ## Branding
-The ISNAD Studios logo files are in `../branding/` (profile, YouTube banner, app icon source, video watermark). The app icons (`icons/`, `android-icons/`) are generated from `branding/app-icon-source.png`.
+The ISNAD Project logo files are in `../branding/` (profile, YouTube banner, app icon source, video watermark). The app icons (`icons/`, `android-icons/`) are generated from `branding/app-icon-source.png`.
 
 ## Voice
 - Speaker button (bottom right, every screen): reads the visible text aloud with the phone's text-to-speech. Arabic blocks are skipped. For Tamil, install the Tamil voice in phone Settings > Text-to-speech (Speech Services by Google).

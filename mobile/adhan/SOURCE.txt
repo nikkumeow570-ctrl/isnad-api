@@ -1,4 +1,4 @@
 Adhan audio - source
-adhan-ta.mp3 is an original recording made by ISNAD Studios (Tamil translation of the adhan), so the app owner holds the rights.
+adhan-ta.mp3 is an original recording made by ISNAD Project (Tamil translation of the adhan), so the app owner holds the rights.
 The earlier third-party recordings (Makkah/Madinah, unverified licence) were removed.
 Before a Play Store release, keep a record of how this audio was produced (tool and plan terms, or the voice artist's written consent).

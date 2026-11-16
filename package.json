@@ -1,7 +1,7 @@
 {
   "name": "isnad-api",
   "version": "1.0.0",
-  "description": "ISNAD Studios read-only JSON API for Tamil Quran and Hadith (Bukhari) data",
+  "description": "ISNAD Project read-only JSON API for Tamil Quran and Hadith (Bukhari) data",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
