@@ -402,6 +402,36 @@ body[data-pg=times] .tbl td.r{width:38px;padding-left:0;padding-right:0}
 body.fabless #vfab{display:none!important}
 </style>
 <style>label.chk input[type=checkbox],.chk input{flex:none;min-width:20px;min-height:20px}</style>
+<style>
+/* 2026 buttons and icons: line icons, tonal surfaces, solid primary, press feedback */
+svg.i{width:1.2em;height:1.2em;vertical-align:-.22em;flex:none;display:inline-block}
+nav .ic{display:grid;place-items:center;width:60px;height:32px;border-radius:16px;font-size:24px;transition:background .18s}
+nav .ic svg.i{width:24px;height:24px}
+nav button.on .ic{background:var(--soft)}
+body.dark nav button.on .ic{background:var(--line)}
+nav button.on .lb{color:var(--g)}body.dark nav button.on .lb{color:var(--gt)}
+.tile .ti{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:24px}
+.tile .ti svg.i{width:24px;height:24px}
+body[data-pg=more] .tile .ti svg.i{color:var(--g)}
+button,.ab,.tile,.seg button,.filters button,.qbar button{transition:transform .12s ease,background-color .15s ease,box-shadow .15s ease}
+button:active:not(:disabled){transform:scale(.97)}
+:focus-visible{outline:3px solid var(--g2);outline-offset:2px}
+.ab{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 16px;border:0;border-radius:16px;background:var(--soft);color:var(--g);font-size:14px;font-weight:700}
+body.dark .ab{color:var(--gt)}
+.ab.on{background:var(--g);color:#fff}
+.ab.play{background:#e6c875;color:#063a29}
+.filters button,.qbar button{border:0;background:var(--soft);color:var(--ink2);border-radius:999px}
+.filters button.on,.qbar button.on,.seg button.on{background:var(--g);color:#fff}
+.seg button{border:0;background:var(--soft);border-radius:14px}
+.hrow button{border:0;background:var(--soft);color:var(--g);border-radius:50%}
+.vbtn svg.i{width:22px;height:22px;vertical-align:middle}
+@media (prefers-reduced-motion:reduce){button,.ab,.tile{transition:none}button:active:not(:disabled){transform:none}}
+</style>
+<style>
+.bell span::before{content:"";display:block;width:22px;height:22px;background:var(--mute);opacity:.55;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M6 16.5V11a6 6 0 0 1 9-5.2M18 11v5.5l1.6 1.8H4.4%22/%3E%3Cpath d=%22M10 21h4M4 4l16 16%22/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M6 16.5V11a6 6 0 0 1 9-5.2M18 11v5.5l1.6 1.8H4.4%22/%3E%3Cpath d=%22M10 21h4M4 4l16 16%22/%3E%3C/svg%3E") center/contain no-repeat}
+.bell input:checked+span::before{content:"";background:var(--g);opacity:1;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 1.8H4.4z%22/%3E%3Cpath d=%22M10 21h4%22/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 1.8H4.4z%22/%3E%3Cpath d=%22M10 21h4%22/%3E%3C/svg%3E")}
+body.dark .bell input:checked+span::before{background:var(--gt)}
+</style>
 </head>
 <body>
 <div id="splash" aria-hidden="true"><img src="icons/icon-192.png" alt="" width="112" height="112"><b>ISNAD</b><small>ISNAD Studios</small></div>
@@ -436,6 +466,7 @@ body.fabless #vfab{display:none!important}
 <script src="prayer.js"></script>
 <script src="i18n.js"></script>
 <script src="cities.js"></script>
+<script src="icons.js"></script>
 <script src="content.js"></script>
 <script src="voice.js"></script>
 <script src="i18n2.js"></script>

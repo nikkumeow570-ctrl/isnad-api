@@ -1408,6 +1408,7 @@ function render() {
   try { linkRefs($('main')); } catch (e) {}
   try { applyTaFix(); } catch (e) {}
   try { if (typeof voiceDecorate === 'function') voiceDecorate(); } catch (e) {}
+  try { if (typeof iconize === 'function') iconize(); } catch (e) {}
   try { a11yApply(); } catch (e) {}
   window.scrollTo(0, y);
 }

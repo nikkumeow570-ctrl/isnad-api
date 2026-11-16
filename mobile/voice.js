@@ -91,6 +91,7 @@ function voiceUi() {
   const busy = VO.on || VO.play;
   b.textContent = busy ? '⏹' : '🔊';
   b.setAttribute('aria-label', busy ? 'Stop' : 'Read aloud');
+  try { if (typeof iconize === 'function') iconize(b); } catch (e) {}
 }
 /* adds a play button to every Quran ayah row after each render */
 function voiceDecorate() {
