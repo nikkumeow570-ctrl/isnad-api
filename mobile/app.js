@@ -68,6 +68,8 @@ const PRAYERS = [
 const TIME_KEYS = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 const KEY_LABEL = { Fajr: 'ஃபஜ்ர்', Sunrise: 'சூரிய உதயம்', Dhuhr: 'ளுஹ்ர்', Asr: 'அஸ்ர்', Maghrib: 'மக்ரிப்', Isha: 'இஷா' };
 
+/* Look-back nudge: shortly before the next time starts, ask about the prayer whose time is ending. Isha is skipped (its time runs through the night). */
+const NUDGE_PAIRS = [['Fajr', 'Sunrise'], ['Dhuhr', 'Asr'], ['Asr', 'Maghrib'], ['Maghrib', 'Isha']];
 const NAMES_TA = { Fajr: 'ஃபஜ்ர்', Sunrise: 'சூரிய உதயம்', Dhuhr: 'ளுஹ்ர்', Asr: 'அஸ்ர்', Maghrib: 'மக்ரிப்', Isha: 'இஷா' };
 const NAMES_EN = { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' };
 function setNames() { Object.assign(KEY_LABEL, S.lang === 'en' ? NAMES_EN : NAMES_TA); PRAYERS.forEach((p) => { p.name = KEY_LABEL[p.key]; }); }
@@ -168,7 +170,7 @@ const TAB_LABEL = () => ({ times: tx('Today', 'இன்று'), more: tx('Serv
 const $ = (id) => document.getElementById(id);
 const DEFAULTS = {
   city: '', lat: null, lng: null, place: '', fs: 0, lang: 'en', ob: 0, bm: [], last: null, rec: 'Alafasy_128kbps', voice: '', // no built-in location: the person picks a city or uses GPS
-  method: 'Fajr18', asr: 1, lead: 10, fastRem: false, friRem: false, dhRem: true, suhoorRem: true, country: '', adhan: true, alarmScreen: true, dark: null,
+  method: 'Fajr18', asr: 1, lead: 10, fastRem: false, friRem: false, nudge: false, nudgeMin: 10, dhRem: true, suhoorRem: true, country: '', adhan: true, alarmScreen: true, dark: null,
   remind: { Fajr: true, Sunrise: false, Dhuhr: true, Asr: true, Maghrib: true, Isha: true },
   // Match the local mosque: fixed 'HH:MM' overrides the calculated time; otherwise calculated + adj minutes.
   adj: { Fajr: 0, Sunrise: 0, Dhuhr: 0, Asr: 0, Maghrib: 0, Isha: 0 },
@@ -418,6 +420,24 @@ async function scheduleNative() {
           });
         }
       });
+      if (S.nudge) {
+        const dk = dayKey(new Date(now + d * 86400000)), mins = +S.nudgeMin || 10;
+        NUDGE_PAIRS.forEach((pr, j) => {
+          const nx = t[pr[1]];
+          if (!nx || !t[pr[0]] || (TR[dk] || {})[pr[0]]) return; // already prayed: no nudge
+          const at = nx.getTime() - mins * 60000;
+          if (at <= now + 1000) return;
+          const jum = pr[0] === 'Dhuhr' && new Date(now + d * 86400000).getDay() === 5;
+          const nm = jum ? tx('Jumma', 'ஜும்ஆ') : tx(NAMES_EN[pr[0]], NAMES_TA[pr[0]]);
+          items.push({
+            id: 7400 + d * 10 + j,
+            title: tx('Did you pray ' + nm + '?', nm + ' தொழுதீர்களா?'),
+            body: tx(NAMES_EN[pr[1]] + ' in ' + mins + ' min', NAMES_TA[pr[1]] + ' ' + mins + ' நிமிடங்களில்') + ' • ' + tx('Open the app to mark it in your Prayer log', 'தொழுகைப் பதிவில் குறிக்க ஆப்பைத் திறக்கவும்'),
+            schedule: { at: new Date(at), allowWhileIdle: true },
+            channelId: 'nudge'
+          });
+        });
+      }
     }
     for (let d = 0; d < 14; d++) {
       const dt = new Date(now + d * 86400000), t = timesFor(dt), hp = hijriParts(noonOf(dt));
@@ -455,6 +475,7 @@ async function initNative() {
   await loadAdhan();
   const ch = { importance: 5, visibility: 1, vibration: true };
   try { await LN.createChannel(Object.assign({ id: 'prayer', name: 'தொழுகை நினைவூட்டல்' }, ch)); } catch (e) {}
+  try { await LN.createChannel({ id: 'nudge', name: 'Did you pray? / தொழுதீர்களா?', importance: 3, visibility: 1, vibration: false }); } catch (e) {}
   // A channel's sound is fixed once it exists, so every voice has its own channel id; older ids are removed.
   for (const id of ['adhan', 'adhan-fajr', 'adhan-s']) { try { await LN.deleteChannel({ id }); } catch (e) {} }
   if (ADH.bundled) { try { await LN.deleteChannel({ id: 'adhan-d' }); } catch (e) {} }
@@ -1261,6 +1282,8 @@ function setPage(sub) {
     <label class="chk"><input type="checkbox" data-flag="dhRem" ${S.dhRem !== false ? 'checked' : ''}><span>${tx('Daily Hadith with explanation, every morning at 6:00', 'தினமும் காலை 6:00 மணிக்கு தெளிவுரையுடன் இன்றைய ஹதீஸ்')}</span></label>
     <label class="chk"><input type="checkbox" data-flag="suhoorRem" ${S.suhoorRem ? 'checked' : ''}><span>${tx('Suhoor reminder in Ramadan (40 min before Fajr)', 'ரமளானில் ஸஹர் நினைவூட்டல் (ஃபஜ்ருக்கு 40 நிமிடம் முன்)')}</span></label>
     <label class="chk"><input type="checkbox" data-flag="fastRem" ${S.fastRem ? 'checked' : ''}><span>${tx('Evening reminder before a sunnah fast (Mon/Thu, white days, Arafah, Ashura)', 'சுன்னத் நோன்புக்கு முந்திய மாலை நினைவூட்டல் (திங்கள்/வியாழன், வெள்ளை நாட்கள், அரஃபா, ஆஷூரா)')}</span></label>
+    <label class="chk"><input type="checkbox" data-flag="nudge" ${S.nudge ? 'checked' : ''}><span>${tx('Did you pray? A reminder just before the next time starts (Fajr, Dhuhr, Asr, Maghrib; skipped if already in your Prayer log)', 'தொழுதீர்களா? அடுத்த நேரம் தொடங்கும் முன் நினைவூட்டல் (ஃபஜ்ர், ளுஹ்ர், அஸ்ர், மக்ரிப்; தொழுகைப் பதிவில் இருந்தால் வராது)')}</span></label>
+    ${S.nudge ? `<label class="field">${tx('Ask me', 'எவ்வளவு முன்')}<select id="nudgeSel">${[5, 10, 15].map((m) => `<option value="${m}" ${(+S.nudgeMin || 10) === m ? 'selected' : ''}>${m}${tx(' min before', ' நிமிடம் முன்')}</option>`).join('')}</select></label>` : ''}
     <label class="chk"><input type="checkbox" data-flag="friRem" ${S.friRem ? 'checked' : ''}><span>${tx('Friday (Jumma) reminder', 'வெள்ளிக்கிழமை (ஜும்ஆ) நினைவூட்டல்')}</span></label>
     <p class="mute">${tx('Hijri days follow the Umm al-Qura calendar; use the +/-1 day setting if your moon sighting differs.', 'ஹிஜ்ரி நாட்கள் உம்முல் குரா நாட்காட்டிப்படி; உங்கள் பிறை முடிவு வேறானால் +/-1 நாள் அமைப்பைப் பயன்படுத்தவும்.')}</p>
     <p class="mute">${tx('Tick the prayers you want on the Times screen.', 'எந்தத் தொழுகைக்கு வேண்டும் என்பதை நேரம் திரையில் டிக் செய்யவும்.')}</p></div>
@@ -1452,7 +1475,7 @@ document.addEventListener('click', (e) => {
   }
   else if (act === 'praygo') { praySub = a.dataset.v; render(); window.scrollTo(0, 0); }
   else if (act === 'prayback') { praySub = null; render(); window.scrollTo(0, 0); }
-  else if (act === 'trk') { const o = TR[a.dataset.d] || {}; o[a.dataset.k] = o[a.dataset.k] ? 0 : 1; TR[a.dataset.d] = o; trSave(); buzz(10); render(); }
+  else if (act === 'trk') { const o = TR[a.dataset.d] || {}; o[a.dataset.k] = o[a.dataset.k] ? 0 : 1; TR[a.dataset.d] = o; trSave(); if (S.nudge && LN) { clearTimeout(nativeTimer); nativeTimer = setTimeout(scheduleNative, 600); } buzz(10); render(); }
   else if (act === 'trlog') { e.preventDefault(); tab = 'more'; moreSub = 'track'; setSub = null; render(); window.scrollTo(0, 0); }
   else if (act === 'usemeth') { S.method = a.dataset.v; save(); render(); toast(tx('Method changed', 'முறை மாற்றப்பட்டது')); }
   else if (act === 'akset') { akSet = a.dataset.v; render(); }
@@ -1510,8 +1533,9 @@ document.addEventListener('change', (e) => {
     if (t.value === 'gps') useGPS();
     else if (!t.value || !CITIES[t.value]) return;
     else { S.city = t.value; S.lat = CITIES[t.value][0]; S.lng = CITIES[t.value][1]; S.place = t.value; save(); render(); }
-  } else if (t.dataset.flag) { S[t.dataset.flag] = t.checked; save(); if (t.dataset.flag === 'dhRem') scheduleNative(); }
+  } else if (t.dataset.flag) { S[t.dataset.flag] = t.checked; save(); if (t.dataset.flag === 'dhRem') scheduleNative(); if (t.dataset.flag === 'nudge') render(); }
   else if (t.id === 'methSel') { S.method = t.value; save(); render(); }
+  else if (t.id === 'nudgeSel') { S.nudgeMin = +t.value; save(); }
   else if (t.id === 'leadSel') { S.lead = +t.value; save(); toast('நினைவூட்டல்: ' + (S.lead ? S.lead + ' நிமிடத்துக்கு முன்' : 'தொழுகை நேரத்தில்')); }
   else if (t.dataset.adhan !== undefined) { S.adhan = t.checked; save(); toast(S.adhan ? 'அதான் இயக்கப்பட்டது' : 'அதான் நிறுத்தப்பட்டது'); }
   else if (t.dataset.fixed) { S.fixed[t.dataset.fixed] = t.value || ''; save(); render(); }
