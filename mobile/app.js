@@ -680,10 +680,64 @@ function reverseGeocode() {
 
 /* ---------------- UI HELPERS ---------------- */
 let toastT, bannerT;
-function toast(msg) {
-  const el = $('toast'); el.textContent = L(msg); el.classList.remove('hidden');
-  clearTimeout(toastT); toastT = setTimeout(() => el.classList.add('hidden'), 2400);
+/* Snackbar: short message at the bottom; pass { label, fn } for an action such as Undo. */
+function toast(msg, act) {
+  const el = $('toast'); el.textContent = '';
+  const s = document.createElement('span'); s.textContent = L(msg); el.appendChild(s);
+  if (act) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'tact'; b.textContent = act.label;
+    b.onclick = () => { clearTimeout(toastT); el.classList.add('hidden'); act.fn(); };
+    el.appendChild(b);
+  }
+  el.classList.remove('hidden');
+  clearTimeout(toastT); toastT = setTimeout(() => el.classList.add('hidden'), act ? 5000 : 2400);
 }
+/* Bottom sheet: sheet(title, [{ icon, label, fn }]) slides up from the bottom; tap outside, swipe down or Esc closes it. */
+let sheetOpener = null;
+function sheetClose() {
+  const el = $('sheet'); if (!el || el.classList.contains('hidden')) return;
+  el.classList.remove('open'); document.body.classList.remove('sheetopen');
+  setTimeout(() => { if (!el.classList.contains('open')) el.classList.add('hidden'); }, 240);
+  try { if (sheetOpener && sheetOpener.focus) sheetOpener.focus(); } catch (e) {}
+}
+function sheet(title, items) {
+  let el = $('sheet');
+  if (!el) {
+    el = document.createElement('div'); el.id = 'sheet'; el.className = 'sheet hidden';
+    el.innerHTML = '<div class="scrim"></div><div class="panel" role="dialog" aria-modal="true"><div class="grab"></div><h3></h3><div class="sitems"></div></div>';
+    document.body.appendChild(el);
+    const panel = el.querySelector('.panel'); let y0 = null, dy = 0;
+    el.querySelector('.scrim').addEventListener('click', sheetClose);
+    el.addEventListener('keydown', (e) => { if (e.key === 'Escape') sheetClose(); });
+    el.querySelector('.sitems').addEventListener('click', (e) => {
+      const b = e.target.closest('.sitem'); if (!b) return;
+      const it = el._items[+b.dataset.i]; sheetClose(); if (it) setTimeout(it.fn, 0);
+    });
+    panel.addEventListener('touchstart', (e) => { y0 = panel.scrollTop <= 0 ? e.touches[0].clientY : null; dy = 0; panel.style.transition = 'none'; }, { passive: true });
+    panel.addEventListener('touchmove', (e) => { if (y0 === null) return; dy = e.touches[0].clientY - y0; if (dy > 0) panel.style.transform = 'translateY(' + dy + 'px)'; }, { passive: true });
+    panel.addEventListener('touchend', () => { panel.style.transition = ''; panel.style.transform = ''; if (y0 !== null && dy > 80) sheetClose(); y0 = null; });
+  }
+  el._items = items;
+  el.querySelector('h3').textContent = L(title);
+  el.querySelector('.panel').setAttribute('aria-label', L(title));
+  const box = el.querySelector('.sitems'); box.textContent = '';
+  items.forEach((it, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'sitem'; b.dataset.i = i;
+    b.innerHTML = (typeof icon === 'function' ? icon(it.icon) : '') + '<span></span>'; b.querySelector('span').textContent = L(it.label);
+    box.appendChild(b);
+  });
+  sheetOpener = document.activeElement;
+  el.classList.remove('hidden'); document.body.classList.add('sheetopen');
+  requestAnimationFrame(() => { el.classList.add('open'); const f = box.querySelector('.sitem'); if (f) f.focus(); });
+}
+/* app bar lifts once the page scrolls; the voice button gets out of the way while reading down */
+(function () {
+  let lastY = 0;
+  addEventListener('scroll', () => {
+    const y = window.scrollY, b = document.body; b.classList.toggle('scrolled', y > 6);
+    const d = y - lastY; if (Math.abs(d) > 8) { b.classList.toggle('fabhide', d > 0 && y > 140); lastY = y; }
+  }, { passive: true });
+})();
 function banner(msg, stopBtn) {
   $('bannerTxt').textContent = L(msg); $('banner').classList.remove('hidden');
   $('bannerX').textContent = stopBtn ? tx('⏹ Stop', '⏹ நிறுத்து') : tx('OK', 'சரி');

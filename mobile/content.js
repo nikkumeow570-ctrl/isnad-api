@@ -81,7 +81,7 @@ function viewSurah(n) {
   return backBar('qback') + `<div class="card hero small"><div class="hn">${n}. ${cesc(S.lang === 'en' ? SURAH_EN[n - 1][0] + ' - ' + SURAH_EN[n - 1][1] : d.name)}</div><div class="arh">${cesc(d.ar)}</div>
     <div class="qtools"><button class="sec" data-act="qplaysurah" data-n="${n}">▶ ${tx('Play surah', 'சூராவை ஓது')}</button><label class="field qrec"><span class="mute">${tx('Reciter', 'ஓதுபவர்')}</span><select id="qrec">${RECITERS.map((r) => `<option value="${r[0]}" ${(S.rec || 'Alafasy_128kbps') === r[0] ? 'selected' : ''}>${r[1]}</option>`).join('')}</select></label></div>
     <label class="mute"><input type="checkbox" data-act="${S.lang === 'en' ? 'qta' : 'qen'}" ${(S.lang === 'en' ? ta : en) ? 'checked' : ''}> ${tx('Also show Tamil translation', 'ஆங்கிலமும் காட்டு')}</label></div>
-  ${d.v.map((v) => `<div class="ay" data-a="${v[0]}"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${ta && v[2] ? `<div class="tq" lang="ta">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}<div class="aacts"><button class="vbtn" data-act="qbm" data-n="${n}" data-a="${v[0]}" aria-pressed="${bmHas(n, v[0])}" aria-label="${tx('Bookmark', 'குறிப்பான்')}">${ICO_STAR}</button><button class="vbtn" data-act="qshare" data-n="${n}" data-a="${v[0]}" aria-label="${tx('Share', 'பகிர்')}">${ICO_SHARE}</button></div></div>`).join('')}${nav}${qFocus(d)}`;
+  ${d.v.map((v) => `<div class="ay" data-a="${v[0]}"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span><div class="arq">${cesc(v[1])}</div>${ta && v[2] ? `<div class="tq" lang="ta">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}<div class="aacts"><button class="vbtn" data-act="qbm" data-n="${n}" data-a="${v[0]}" aria-pressed="${bmHas(n, v[0])}" aria-label="${tx('Bookmark', 'குறிப்பான்')}">${ICO_STAR}</button><button class="vbtn" data-act="qmore" data-n="${n}" data-a="${v[0]}" aria-label="${tx('More', 'மேலும்')}">${icon('more')}</button></div></div>`).join('')}${nav}${qFocus(d)}`;
 }
 
 /* ---------- Hadith ---------- */
@@ -154,9 +154,21 @@ function contentAct(act, a) {
   if (act === 'qbm') {
     const k = bmKey(+a.dataset.n, +a.dataset.a), L = S.bm || (S.bm = []), i = L.indexOf(k);
     if (i >= 0) L.splice(i, 1); else L.push(k);
-    save(); a.setAttribute('aria-pressed', i < 0); toast(i >= 0 ? tx('Bookmark removed', 'குறிப்பான் நீக்கப்பட்டது') : tx('Bookmarked ✓', 'சேமிக்கப்பட்டது ✓')); return true;
+    save(); a.setAttribute('aria-pressed', i < 0);
+    if (i >= 0) toast(tx('Bookmark removed', 'குறிப்பான் நீக்கப்பட்டது'), { label: tx('Undo', 'திரும்பப் பெறு'), fn: () => { const l2 = S.bm || (S.bm = []); if (!l2.includes(k)) l2.push(k); save(); a.setAttribute('aria-pressed', 'true'); if (Q.bm) go(); } });
+    else toast(tx('Bookmarked ✓', 'சேமிக்கப்பட்டது ✓'));
+    return true;
   }
   if (act === 'qshare') { qShare(+a.dataset.n, +a.dataset.a); return true; }
+  if (act === 'qmore') {
+    const n = +a.dataset.n, v = +a.dataset.a;
+    sheet(surahName(n) + ' ' + n + ':' + v, [
+      { icon: 'share', label: tx('Share', 'பகிர்'), fn: () => qShare(n, v) },
+      { icon: 'copy', label: tx('Copy verse', 'வசனத்தை நகலெடு'), fn: () => qCopy(n, v) },
+      { icon: 'play', label: tx('Play from this verse', 'இந்த வசனத்திலிருந்து ஒலிக்கச் செய்'), fn: () => { if (typeof quranPlay === 'function') { const all = [...document.querySelectorAll('.ay')].map((e) => +e.dataset.a); quranPlay(n, v, Math.max(...all), false); } } }
+    ]);
+    return true;
+  }
   if (act === 'qplaysurah') { if (typeof quranPlay === 'function') { const all = [...document.querySelectorAll('.ay')].map((e) => +e.dataset.a); quranPlay(+a.dataset.n, 1, Math.max(...all), false); } return true; }
   if (act === 'qback') { Q.s = null; return go(); }
   if (act === 'qen') { S.qen = a.checked; save(); render(); return true; }
@@ -179,10 +191,17 @@ function contentAct(act, a) {
   return false;
 }
 /* share a verse: Arabic + translation + reference */
-function qShare(n, a) {
-  const d = CJ['data/quran/' + n + '.json'], v = ayText(d, a); if (!v) return;
+function qVerseText(n, a) {
+  const d = CJ['data/quran/' + n + '.json'], v = ayText(d, a); if (!v) return '';
   const tr = S.lang === 'en' ? (v[4] || v[2]) : (v[2] || v[4]);
-  const txt = '\uFD3F' + v[1] + '\uFD3E\n' + (tr || '') + '\n- ' + tx('Quran', 'குர்ஆன்') + ' ' + n + ':' + a + ' (' + surahName(n) + ')\nISNAD';
+  return '\uFD3F' + v[1] + '\uFD3E\n' + (tr || '') + '\n- ' + tx('Quran', 'குர்ஆன்') + ' ' + n + ':' + a + ' (' + surahName(n) + ')\nISNAD';
+}
+function qCopy(n, a) {
+  const txt = qVerseText(n, a); if (!txt) return;
+  try { navigator.clipboard.writeText(txt).then(() => toast(tx('Copied ✓', 'நகலெடுக்கப்பட்டது ✓'))).catch(() => toast(tx('Could not copy', 'நகலெடுக்க முடியவில்லை'))); } catch (e) { toast(tx('Could not copy', 'நகலெடுக்க முடியவில்லை')); }
+}
+function qShare(n, a) {
+  const txt = qVerseText(n, a); if (!txt) return;
   try { if (navigator.share) { navigator.share({ text: txt }).catch(() => {}); return; } } catch (e) {}
   try { navigator.clipboard.writeText(txt).then(() => toast(tx('Copied ✓', 'நகலெடுக்கப்பட்டது ✓'))).catch(() => toast(tx('Could not share', 'பகிர முடியவில்லை'))); } catch (e) { toast(tx('Could not share', 'பகிர முடியவில்லை')); }
 }
