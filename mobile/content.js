@@ -30,7 +30,26 @@ function viewServices() {
     ['aqeedah', 'tc3', '☝️', tx('Aqeedah', 'அகீதா')],
     ['settings', 'tc4', '⚙️', tx('Settings', 'அமைப்புகள்')]
   ];
-  return `<div class="tiles">${T.map((x) => `<button class="tile ${x[1]}" data-act="svc" data-v="${x[0]}"><span class="ti">${x[2]}</span><span class="tn">${x[3]}</span></button>`).join('')}</div>`;
+  return tasbihHero() + `<div class="tiles">${T.map((x) => `<button class="tile ${x[1]}" data-act="svc" data-v="${x[0]}"><span class="ti">${x[2]}</span><span class="tn">${x[3]}</span></button>`).join('')}</div>`;
+}
+
+/* Tactile tasbih: big tap orb, ripple, soft click (made on the phone, no sound files), chime on the target */
+let TCTX = null;
+function tsClick(ms) {
+  if (S.tsnd === false) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; TCTX = TCTX || new AC();
+    const c = TCTX, o = c.createOscillator(), g = c.createGain(), t = c.currentTime; o.connect(g); g.connect(c.destination);
+    if (ms) { o.type = 'sine'; o.frequency.setValueAtTime(528, t); o.frequency.exponentialRampToValueAtTime(792, t + .18); g.gain.setValueAtTime(.14, t); g.gain.exponentialRampToValueAtTime(.001, t + .36); o.start(t); o.stop(t + .38); }
+    else { o.type = 'triangle'; o.frequency.setValueAtTime(360, t); o.frequency.exponentialRampToValueAtTime(140, t + .045); g.gain.setValueAtTime(.09, t); g.gain.exponentialRampToValueAtTime(.001, t + .05); o.start(t); o.stop(t + .055); }
+  } catch (e) {}
+}
+function tsLine() { const tg = TS.t; return tg ? tx('target ', 'இலக்கு ') + tg + ' · ' + (TS.n % tg) + '/' + tg : tx('free count', 'வரம்பின்றி'); }
+function tasbihHero() {
+  const opts = [33, 34, 100, 0].map((n) => `<button class="${TS.t === n ? 'on' : ''}" data-act="tsbt" data-v="${n}">${n || '∞'}</button>`).join('');
+  return `<div class="tasbh"><div class="tbtop"><b>📿 ${tx('Tasbih', 'தஸ்பீஹ்')}</b><span class="tbtools"><button data-act="tsbsnd" aria-pressed="${S.tsnd !== false}" aria-label="${tx('Sound', 'ஒலி')}">${S.tsnd === false ? icon('belloff') : icon('volume')}</button><button data-act="tsbreset" aria-label="${tx('Reset', 'மீட்டமை')}">↺</button></span></div>
+    <button class="orb" data-act="tsbo" aria-label="${tx('Count', 'எண்ணு')}"><span class="orbn" id="orbn">${TS.n}</span><small id="orbs">${tsLine()}</small></button>
+    <div class="tbt" role="group" aria-label="${tx('Target', 'இலக்கு')}">${opts}</div></div>`;
 }
 
 /* ---------- Quran ---------- */
@@ -87,11 +106,31 @@ function viewSurah(n) {
   ${d.v.map((v) => `<div class="ay" data-a="${v[0]}"><span class="chip">${n}:${v[0]}${v[3] ? '–' + v[3] : ''}</span>${showAr ? `<div class="arq">${cesc(v[1])}</div>` : ''}${ta && v[2] ? `<div class="tq" lang="ta">${cesc(v[2])}</div>` : ''}${en && v[4] ? `<div class="eq">${cesc(v[4])}</div>` : ''}<div class="aacts"><button class="vbtn" data-act="qbm" data-n="${n}" data-a="${v[0]}" aria-pressed="${bmHas(n, v[0])}" aria-label="${tx('Bookmark', 'குறிப்பான்')}">${ICO_STAR}</button><button class="vbtn" data-act="qmore" data-n="${n}" data-a="${v[0]}" aria-label="${tx('More', 'மேலும்')}">${icon('more')}</button></div></div>`).join('')}${nav}${qFocus(d)}`;
 }
 
+/* ---------- Daily cards (Today and Hadith) ---------- */
+const DAILY_AYAH = [[2, 255], [112, 1], [2, 286], [39, 53], [94, 5], [13, 28], [65, 3], [2, 152], [3, 139], [20, 114], [29, 69], [94, 6], [57, 4], [2, 186], [24, 35], [49, 13], [18, 10], [3, 173], [9, 51], [21, 87]];
+function dailyAyahCard(now) {
+  const r = DAILY_AYAH[Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000) % DAILY_AYAH.length], n = r[0], a = r[1];
+  const d = cget('data/quran/' + n + '.json'), v = ayText(d, a); if (!v) return '';
+  const tr = S.lang === 'en' ? (v[4] || v[2]) : (v[2] || v[4]);
+  return `<div class="card dcard"><div class="dhead"><span>✨ ${tx('Today’s ayah', 'இன்றைய வசனம்')}</span><em>${cesc(surahName(n))} ${n}:${a}</em></div>
+    <div class="dbody"><div class="arq">${cesc(v[1])}</div><div class="tq" lang="${S.lang === 'en' ? 'en' : 'ta'}">${cesc(tr || '')}</div></div>
+    <div class="dfoot"><button class="sec" data-act="qgo" data-n="${n}" data-a="${a}">${tx('Read in context', 'தொடர்ந்து வாசிக்க')}</button><span><button class="vbtn" data-act="qbm" data-n="${n}" data-a="${a}" aria-pressed="${bmHas(n, a)}" aria-label="${tx('Bookmark', 'குறிப்பான்')}">${ICO_STAR}</button><button class="vbtn" data-act="qmore" data-n="${n}" data-a="${a}" aria-label="${tx('More', 'மேலும்')}">${icon('more')}</button></span></div></div>`;
+}
+function dailyHadithCard() {
+  if (!DAILY) { loadDaily().then(() => render()); return ''; }
+  const x = dailyFor(new Date()); if (!x) return '';
+  return `<div class="card dcard"><div class="dhead"><span>📜 ${tx('Daily hadith', 'இன்றைய ஹதீஸ்')}</span><em>${cesc(dailyRef(x))}</em></div>
+    <div class="dbody"><div class="tq clamp" lang="ta" style="white-space:pre-line">${cesc(x.h)}</div><button class="sec dmore" data-act="dmore">${tx('Read full hadith', 'முழுவதும் படிக்க')}</button>${x.e ? `<div class="dexp"><b>${tx('Explanation', 'தெளிவுரை')}</b><p>${cesc(x.e)}</p></div>` : ''}</div></div>`;
+}
+function dailyCards(now) { return dailyAyahCard(now) + dailyHadithCard(); }
+
 /* ---------- Hadith ---------- */
 function viewHadith() {
   const bx = cget('data/hadith/index.json');
   if (!bx) return backBar('moreback') + cwait('data/hadith/index.json');
-  if (!H.b) return backBar('moreback') + `<div class="card list">${bx.map((b) => `<button class="lrow" data-act="hbook" data-id="${b.id}"><span class="li">📜</span><span class="lt"><b>${cesc(hbTitle(b))}</b><small>${b.have} ${tx('hadith', 'ஹதீஸ்கள்')}${b.have < b.total ? ' / ' + b.total : ''}</small></span><span class="lc">›</span></button>`).join('')}</div>
+  if (!H.b) return `<div class="qhead"><div><h1>${tx('Hadith', 'ஹதீஸ்')}</h1><small>${tx('Tamil text · open the book, then jump to a number', 'தமிழ் உரை · நூலைத் திறந்து எண்ணுக்குச் செல்லவும்')}</small></div><span class="okpill">✅ ${tx('Offline', 'இணையம் இல்லாமல்')}</span></div>
+    <div class="hcar" role="list">${bx.map((b, i) => `<button role="listitem" class="hcol hc${i % 4}" data-act="hbook" data-id="${b.id}"><span class="hspine" aria-hidden="true"></span><b>${cesc(hbTitle(b))}</b><small>${b.have} ${tx('hadith', 'ஹதீஸ்கள்')}${b.have < b.total ? ' / ' + b.total : ''}</small></button>`).join('')}</div>
+    ${dailyHadithCard()}
     ${S.lang === 'en' ? '<div class="card amber"><b>Hadith text is in Tamil.</b><br>The hadith in this app come from the Tamil editions (TNTJ). An English translation is not in our data yet. Use the hadith number to look it up in any English edition of Bukhari or Muslim.</div>' : ''}
     <p class="mute" style="padding:0 6px">${tx('Numbers that are missing in a book are not in this edition.', 'ஒரு நூலில் இல்லாத எண்கள் இந்தப் பதிப்பில் இல்லை.')}</p>`;
   const b = bx.find((x) => x.id === H.b) || { title: H.b };
@@ -171,7 +210,7 @@ function contentAct(act, a) {
       { icon: 'share', label: tx('Share', 'பகிர்'), fn: () => qShare(n, v) },
       { icon: 'scroll', label: tx('Share as picture', 'படமாகப் பகிர்'), fn: () => qCard(n, v) },
       { icon: 'copy', label: tx('Copy verse', 'வசனத்தை நகலெடு'), fn: () => qCopy(n, v) },
-      { icon: 'play', label: tx('Play from this verse', 'இந்த வசனத்திலிருந்து ஒலிக்கச் செய்'), fn: () => { if (typeof quranPlay === 'function') { const all = [...document.querySelectorAll('.ay')].map((e) => +e.dataset.a); quranPlay(n, v, Math.max(...all), false); } } }
+      { icon: 'play', label: tx('Play from this verse', 'இந்த வசனத்திலிருந்து ஒலிக்கச் செய்'), fn: () => { if (typeof quranPlay === 'function') { const dd = CJ['data/quran/' + n + '.json']; quranPlay(n, v, dd && dd.v.length ? dd.v[dd.v.length - 1][0] : v, false); } } }
     ]);
     return true;
   }

@@ -508,6 +508,33 @@ body.dark .okpill{color:var(--gt)}
 .cardpv img{width:100%;border-radius:16px;display:block;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .cardshare{display:block;width:100%;margin:12px 0 4px;min-height:48px}
 </style>
+<style>
+/* daily cards, hadith covers, tactile tasbih */
+.dcard{padding:0;overflow:hidden}
+.dhead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 16px;background:#0F4C3A;color:#fff;font-size:13px;font-weight:700}
+.dhead em{font-style:normal;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.15);color:#F5DFB6;text-align:right}
+.dbody{padding:12px 16px 4px}.dbody .arq{font-size:26px;margin:0 0 8px}
+.dexp{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--soft)}.dexp b{font-size:12px;color:var(--g)}body.dark .dexp b{color:var(--gt)}.dexp p{margin:2px 0 0;font-size:13px;line-height:1.6;color:var(--mute)}
+.dfoot{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 12px 12px}.dfoot span{display:flex;gap:8px}
+.hcar{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 4px 14px;margin:0 -4px;-webkit-overflow-scrolling:touch}
+.hcar::-webkit-scrollbar{display:none}
+.hcol{flex:0 0 68%;max-width:260px;scroll-snap-align:start;text-align:left;border:0;border-radius:22px;padding:18px 16px 16px 24px;color:#fff;min-height:132px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;position:relative;overflow:hidden;box-shadow:0 10px 22px -14px rgba(0,0,0,.5)}
+.hcol b{font-size:17px;line-height:1.3}.hcol small{color:rgba(255,255,255,.8);font-size:12px}
+.hspine{position:absolute;left:0;top:0;bottom:0;width:10px;background:rgba(0,0,0,.18);border-right:1px solid rgba(255,255,255,.15)}
+.hc0{background:linear-gradient(150deg,#0F4C3A,#1A634C)}.hc1{background:linear-gradient(150deg,#6C5332,#98774B)}.hc2{background:linear-gradient(150deg,#1E2522,#34423C)}.hc3{background:linear-gradient(150deg,#33415C,#566384)}
+.tasbh{border-radius:28px;padding:14px 16px 16px;margin:0 0 14px;color:#fff;background:linear-gradient(155deg,#0F4C3A,#0a3d31);box-shadow:0 12px 26px -16px rgba(10,61,49,.8);text-align:center}
+.tbtop{display:flex;align-items:center;justify-content:space-between;font-size:15px}.tbtools{display:flex;gap:8px}
+.tbtools button{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;font-size:18px}
+.tbtools svg.i{width:20px;height:20px}
+.orb{position:relative;display:grid;place-items:center;width:208px;height:208px;margin:10px auto 12px;border-radius:50%;border:2px solid rgba(230,200,117,.55);color:#fff;background:radial-gradient(circle at 35% 30%,#1b7a5e,#0b3f31 70%);box-shadow:inset 0 0 40px rgba(0,0,0,.25),0 0 0 8px rgba(255,255,255,.05),0 0 0 18px rgba(255,255,255,.03);overflow:visible;-webkit-tap-highlight-color:transparent;user-select:none}
+.orb .orbn{font-size:60px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}.orb small{position:absolute;bottom:34px;font-size:12px;color:#F5DFB6}
+.orb .rip{position:absolute;inset:0;border-radius:50%;border:2px solid #E6CE9E;pointer-events:none;animation:tsrip .68s cubic-bezier(.16,1,.3,1) forwards}
+.orb.glow{box-shadow:inset 0 0 40px rgba(0,0,0,.25),0 0 0 8px rgba(230,200,117,.28),0 0 40px rgba(230,200,117,.5)}
+@keyframes tsrip{from{transform:scale(1);opacity:.8}to{transform:scale(1.5);opacity:0}}
+.tbt{display:flex;justify-content:center;gap:8px}.tbt button{min-width:56px;min-height:40px;border-radius:99px;border:0;background:rgba(255,255,255,.12);color:#fff;font-weight:700}.tbt button.on{background:#E6C875;color:#063a29}
+@media (prefers-reduced-motion:reduce){.orb .rip{animation:none;opacity:0}}
+</style>
+<style>.clamp{display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}.clamp.open{display:block;-webkit-line-clamp:unset}.dmore{margin:8px 0 4px}.qhead{text-align:left}.qhead small{display:block}.hcol{min-height:112px}</style>
 </head>
 <body>
 <div id="splash" aria-hidden="true"><img src="icons/icon-192.png" alt="" width="112" height="112"><b>ISNAD</b><small>ISNAD Project</small></div>

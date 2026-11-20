@@ -920,6 +920,7 @@ ${skyArc(now)}<div class="skytimes"><span>${KEY_LABEL.Sunrise} ${t.Sunrise ? fmt
     ${trSummary(now)}
     ${TIME_KEYS.some((k) => /^\d{2}:\d{2}$/.test(S.fixed[k]) || S.adj[k]) ? `<p class="mute">🕌 ${tx('Mosque times are in use.', 'பள்ளிவாசல் நேரம் பயன்பாட்டில் உள்ளது.')} <button class="sec" data-act="resetadj" style="padding:4px 10px">${tx('Use calculated times', 'கணக்கிட்ட நேரங்கள்')}</button></p>` : ''}</div>
   ${homeTiles(now)}
+  ${typeof dailyCards === 'function' ? dailyCards(now) : ''}
   ${extraTimes(t, now)}`;
 }
 
@@ -1566,6 +1567,14 @@ document.addEventListener('click', (e) => {
   else if (act === 'akset') { akSet = a.dataset.v; render(); }
   else if (act === 'akinc') { akCheckDay(); const k = a.dataset.set + ':' + a.dataset.id, d = ADHKAR[a.dataset.set].find((x) => x.id === a.dataset.id); if (d) { const c = (AK.c[k] || 0); if (c < d.n) { AK.c[k] = c + 1; buzz(AK.c[k] >= d.n ? [30, 40, 30] : 12); } else AK.c[k] = 0; akSave(); render(); } }
   else if (act === 'akreset') { AK = { d: dayKey(new Date()), c: {} }; akSave(); render(); }
+  else if (act === 'tsbo') {
+    TS.n++; tsSave(); const ms = !!(TS.t && TS.n % TS.t === 0); buzz(ms ? [60, 50, 60] : 12); tsClick(ms);
+    const o = $('orbn'); if (o) o.textContent = TS.n; const s = $('orbs'); if (s) s.textContent = tsLine();
+    const orb = a.closest('.orb') || a; const r = document.createElement('i'); r.className = 'rip'; orb.appendChild(r); setTimeout(() => r.remove(), 700);
+    if (ms) { orb.classList.add('glow'); setTimeout(() => orb.classList.remove('glow'), 1100); }
+  }
+  else if (act === 'dmore') { const t = a.parentNode.querySelector('.clamp'); const o = t.classList.toggle('open'); a.textContent = o ? tx('Show less', 'சுருக்கு') : tx('Read full hadith', 'முழுவதும் படிக்க'); }
+  else if (act === 'tsbsnd') { S.tsnd = S.tsnd === false; save(); render(); }
   else if (act === 'tsb') { TS.n++; tsSave(); buzz(TS.t && TS.n % TS.t === 0 ? [60, 50, 60] : 12); render(); }
   else if (act === 'tsbt') { TS.t = +a.dataset.v; TS.n = 0; tsSave(); render(); }
   else if (act === 'tsbreset') { TS.n = 0; tsSave(); render(); }
