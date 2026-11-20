@@ -229,7 +229,7 @@ function applyTheme() {
   if (document.body && document.body.classList) document.body.classList.toggle('dark', isDark());
   const b = document.getElementById('themeBtn');
   if (b) b.textContent = isDark() ? '☀️' : '🌙';
-  try { const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', isDark() ? '#091410' : '#065f46'); } catch (e) {}
+  try { const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', isDark() ? '#0A0D0C' : '#0F4C3A'); } catch (e) {}
 }
 let fired = load('thw_fired', {});
 let praySub = null, moreSub = null, setSub = null, duaOpen = null;
