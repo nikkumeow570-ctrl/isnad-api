@@ -168,13 +168,23 @@ const TABS = [
 const TAB_LABEL = () => ({ times: tx('Today', 'இன்று'), quran: tx('Quran', 'குர்ஆன்'), hadith: tx('Hadith', 'ஹதீஸ்'), more: tx('Tools', 'கருவிகள்') });
 /* sky colours follow the next prayer (pre-dawn, midday, afternoon, twilight, night) */
 const SKY = {
-  Fajr: ['linear-gradient(155deg,#1E294B 0%,#374775 55%,#7B8AB8 100%)', 'linear-gradient(155deg,#0E1529 0%,#1D2B50 55%,#344774 100%)'],
-  Dhuhr: ['linear-gradient(155deg,#4B6A7A 0%,#8FA8A6 52%,#DEC7A4 100%)', 'linear-gradient(155deg,#1A2B32 0%,#2C4649 55%,#5C5241 100%)'],
-  Asr: ['linear-gradient(155deg,#33415C 0%,#748095 48%,#C9AD88 100%)', 'linear-gradient(155deg,#162030 0%,#2F3A4B 52%,#68553E 100%)'],
-  Maghrib: ['linear-gradient(155deg,#2B2440 0%,#7C4D59 50%,#D99B66 100%)', 'linear-gradient(155deg,#171324 0%,#4A2B36 52%,#8C5B35 100%)'],
-  Isha: ['linear-gradient(155deg,#0D1614 0%,#162B24 55%,#2D4A3E 100%)', 'linear-gradient(155deg,#070B0A 0%,#0F1F1A 55%,#1D352B 100%)']
+  night: ['linear-gradient(170deg,#070B14 0%,#0E1B2E 55%,#0F4C3A 135%)', 'linear-gradient(170deg,#04070D 0%,#0A1422 55%,#0A3528 135%)'],
+  dawn: ['linear-gradient(170deg,#1B2447 0%,#4A5A8A 52%,#E6CE9E 120%)', 'linear-gradient(170deg,#0B1022 0%,#27315A 52%,#8C7550 120%)'],
+  morning: ['linear-gradient(170deg,#3F6E86 0%,#8FB3BC 55%,#F2E3C6 115%)', 'linear-gradient(170deg,#142830 0%,#2C5160 55%,#8C7C5C 115%)'],
+  noon: ['linear-gradient(170deg,#2F6F8F 0%,#6FA3B8 58%,#E9D3A9 120%)', 'linear-gradient(170deg,#10252F 0%,#24506A 58%,#85734F 120%)'],
+  golden: ['linear-gradient(170deg,#4B5E7E 0%,#C79A62 62%,#E5C76B 125%)', 'linear-gradient(170deg,#1B2538 0%,#6C5232 62%,#9B7A30 125%)'],
+  sunset: ['linear-gradient(170deg,#2A2347 0%,#8A4A5C 48%,#E08A4F 100%)', 'linear-gradient(170deg,#151126 0%,#4A2433 48%,#9A5A2D 100%)']
 };
-const SKY_LABEL = () => ({ Fajr: tx('Before dawn', 'விடியலுக்கு முன்'), Dhuhr: tx('Midday', 'நண்பகல்'), Asr: tx('Afternoon', 'பிற்பகல்'), Maghrib: tx('Twilight', 'அந்தி'), Isha: tx('Night', 'இரவு') });
+function skyPhase(t, now) {
+  if (!t || !t.Fajr || !t.Maghrib || !t.Isha) return 'night';
+  if (now >= t.Isha || now < t.Fajr) return 'night';
+  if (now >= t.Maghrib) return 'sunset';
+  if (t.Asr && now >= t.Asr) return 'golden';
+  if (t.Dhuhr && now >= t.Dhuhr) return 'noon';
+  if (t.Sunrise && now >= t.Sunrise) return 'morning';
+  return 'dawn';
+}
+const SKY_LABEL = () => ({ night: tx('Night', 'இரவு'), dawn: tx('Dawn', 'விடியல்'), morning: tx('Morning', 'காலை'), noon: tx('Midday', 'நண்பகல்'), golden: tx('Afternoon', 'பிற்பகல்'), sunset: tx('Sunset', 'அந்தி') });
 /* where the sun (day) or moon (night) sits on the arc, 0..1 */
 function skyProgress(now) {
   const t = timesFor(now), y = timesFor(new Date(now.getTime() - 864e5)), n = timesFor(new Date(now.getTime() + 864e5));
@@ -911,8 +921,8 @@ function viewTimes() {
     : ns === 'denied' ? '⛔ அறிவிப்புகள் தடுக்கப்பட்டுள்ளன - தளம்/ஆப் செட்டிங்ஸில் அனுமதிக்கவும்'
     : ns === 'unsupported' ? 'இங்கு அறிவிப்புகள் ஆதரிக்கப்படவில்லை' : '🔔 அறிவிப்புகள் இன்னும் இயக்கப்படவில்லை';
   const dateLine = now.toLocaleDateString(S.lang === 'en' ? 'en-IN' : 'ta-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  const sk = SKY[nx && SKY[nx.key] ? nx.key : (nx && nx.key === 'Sunrise' ? 'Fajr' : 'Isha')] || SKY.Isha;
-  const hero = nx ? `<div class="card hero sky" style="--sky:${sk[0]};--skyd:${sk[1]}"><div class="skytop"><div class="skybrand"><img src="icons/icon-192.png" alt="" width="22" height="22"><b>ISNAD</b><i></i><span>${SKY_LABEL()[nx && SKY[nx.key] ? nx.key : (nx.key === 'Sunrise' ? 'Fajr' : 'Isha')]}</span></div><button class="skybtn" data-act="gosettings" aria-label="${tx('Settings', 'அமைப்புகள்')}">⚙️</button></div><div class="skydate">${dateLine}${hijriString(now) ? ' • ' + hijriString(now) : ''}<br>📍 ${S.place}</div>
+  const ph = skyPhase(t, now), sk = SKY[ph];
+  const hero = nx ? `<div class="card hero sky" style="--sky:${sk[0]};--skyd:${sk[1]}"><div class="skytop"><div class="skybrand"><img src="icons/icon-192.png" alt="" width="22" height="22"><b>ISNAD</b><i></i><span>${SKY_LABEL()[ph]}</span></div><button class="skybtn" data-act="gosettings" aria-label="${tx('Settings', 'அமைப்புகள்')}">⚙️</button></div><div class="skydate">${dateLine}${hijriString(now) ? ' • ' + hijriString(now) : ''}<br>📍 ${S.place}</div>
 <div class="hn">${tx('Next', 'அடுத்தது')}: <b id="heroName">${KEY_LABEL[nx.key]}</b> <span class="ht" id="heroTime">${fmt(nx.at)}</span></div><div class="hc" id="heroCount">${tx('in ', 'இன்னும் ')}${countdown(nx.at - now)}</div>
 ${skyArc(now)}<div class="skytimes"><span>${KEY_LABEL.Sunrise} ${t.Sunrise ? fmt(t.Sunrise) : ''}</span><span>${KEY_LABEL.Dhuhr} ${t.Dhuhr ? fmt(t.Dhuhr) : ''}</span><span>${KEY_LABEL.Maghrib} ${t.Maghrib ? fmt(t.Maghrib) : ''}</span></div></div>` : '';
   return `${hero}${dayNote(now)}
@@ -1701,7 +1711,7 @@ applyTheme(); applyFs();
   if (b) b.addEventListener('click', () => { S.dark = !isDark(); applyTheme(); save(); });
   try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (S.dark === null) applyTheme(); }); } catch (e) {}
 })();
-try { const SB = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.StatusBar; if (SB) { SB.setOverlaysWebView({ overlay: false }); SB.setStyle({ style: 'LIGHT' }); SB.setBackgroundColor({ color: '#f4f1ea' }); } } catch (e) {}
+try { const SB = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.StatusBar; if (SB) { SB.setOverlaysWebView({ overlay: false }); SB.setStyle({ style: 'LIGHT' }); SB.setBackgroundColor({ color: '#F4EFE7' }); } } catch (e) {}
 render();
 tick();
 setInterval(tick, 1000);
