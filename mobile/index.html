@@ -482,6 +482,32 @@ nav .ic{width:56px;height:30px}
 .toast{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 #vfab{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 </style>
+<style>
+/* Quran: NOOR-style index (header, segmented tabs, continue card) and reader controls */
+.qhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:4px 4px 14px}
+.qhead h1{margin:0;font-size:24px;line-height:1.2;font-weight:800}.qhead small{color:var(--mute);font-size:13px}
+.okpill{flex:none;font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px;background:var(--soft);color:var(--g)}
+body.dark .okpill{color:var(--gt)}
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border-radius:99px;background:var(--soft);margin:0 0 14px}
+.seg3 button{border:0;background:none;border-radius:99px;min-height:42px;padding:6px 8px;font-size:13px;font-weight:700;color:var(--mute)}
+.seg3 button.on{background:var(--g);color:#fff}
+.qhero{display:block;width:100%;text-align:left;border:0;border-radius:26px;padding:18px 18px 16px;margin:0 0 14px;color:#fff;background:linear-gradient(150deg,#0F4C3A,#0a3d31);box-shadow:0 10px 24px -14px rgba(10,61,49,.7);position:relative;overflow:hidden}
+.qhero::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;background:url(icons/icon-192.png) center/cover;border-radius:50%;opacity:.12}
+.qhero .qh1{display:block}.qhero small{display:block;color:#E9D3A9;font-size:12px;font-weight:700;letter-spacing:.04em}
+.qhero b{display:block;font-size:22px;margin-top:2px}.qhero em{font-style:normal;font-size:13px;color:rgba(255,255,255,.8)}
+.qprog{display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.2);margin-top:12px;overflow:hidden}.qprog i{display:block;height:100%;border-radius:3px;background:#E6C875}
+.rbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rtitle{flex:1;text-align:center;font-weight:800;font-size:15px;line-height:1.2}.rtitle small{display:block;font-weight:500;color:var(--mute);font-size:11px}
+.aabtn{min-width:48px;font-weight:800}
+.ay .arq{font-size:var(--qa,30px)}.ay .tq{font-size:var(--qt,17px)}.ay .eq{font-size:calc(var(--qt,17px) - 3px)}
+.aa{padding:2px 4px 6px}.aapre{font-family:AmiriLocal,Amiri,serif;text-align:center;padding:10px 6px 14px;line-height:2}
+.aarow{display:flex;align-items:center;gap:14px;margin:6px 0;font-size:14px;font-weight:600}.aarow span{flex:0 0 42%}.aarow input{flex:1;accent-color:var(--g)}
+.aamode{margin:14px 0 10px}.aamode button{font-size:12px}
+.aareset{display:block;margin:6px auto 0}
+.sheet.light .scrim{background:rgba(0,0,0,.14)}
+.cardpv img{width:100%;border-radius:16px;display:block;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.cardshare{display:block;width:100%;margin:12px 0 4px;min-height:48px}
+</style>
 </head>
 <body>
 <div id="splash" aria-hidden="true"><img src="icons/icon-192.png" alt="" width="112" height="112"><b>ISNAD</b><small>ISNAD Project</small></div>

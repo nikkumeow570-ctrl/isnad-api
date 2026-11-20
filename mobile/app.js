@@ -727,7 +727,7 @@ function sheetClose() {
   setTimeout(() => { if (!el.classList.contains('open')) el.classList.add('hidden'); }, 240);
   try { if (sheetOpener && sheetOpener.focus) sheetOpener.focus(); } catch (e) {}
 }
-function sheet(title, items) {
+function sheet(title, items, opt) {
   let el = $('sheet');
   if (!el) {
     el = document.createElement('div'); el.id = 'sheet'; el.className = 'sheet hidden';
@@ -744,11 +744,13 @@ function sheet(title, items) {
     panel.addEventListener('touchmove', (e) => { if (y0 === null) return; dy = e.touches[0].clientY - y0; if (dy > 0) panel.style.transform = 'translateY(' + dy + 'px)'; }, { passive: true });
     panel.addEventListener('touchend', () => { panel.style.transition = ''; panel.style.transform = ''; if (y0 !== null && dy > 80) sheetClose(); y0 = null; });
   }
-  el._items = items;
+  el._items = typeof items === 'function' ? [] : items;
+  el.classList.toggle('light', !!(opt && opt.light));
   el.querySelector('h3').textContent = L(title);
   el.querySelector('.panel').setAttribute('aria-label', L(title));
   const box = el.querySelector('.sitems'); box.textContent = '';
-  items.forEach((it, i) => {
+  if (typeof items === 'function') items(box);
+  else items.forEach((it, i) => {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'sitem'; b.dataset.i = i;
     b.innerHTML = (typeof icon === 'function' ? icon(it.icon) : '') + '<span></span>'; b.querySelector('span').textContent = L(it.label);
     box.appendChild(b);
