@@ -455,6 +455,33 @@ body.fabhide #vfab{transform:scale(.5);opacity:0;pointer-events:none}
 .aacts .vbtn svg.i{width:20px;height:20px}
 @media (prefers-reduced-motion:reduce){.sheet .panel,.sheet .scrim,#vfab{transition:none}}
 </style>
+<style>
+/* NOOR-style shell: sky header that follows the prayer window, floating tab dock */
+body[data-pg=times] .ptitle{display:none}
+.hero.sky{background:var(--sky);border:0;border-radius:0 0 32px 32px;margin:0 -4px 14px;padding:16px 18px 14px;box-shadow:0 14px 30px -18px rgba(10,30,50,.55);text-align:center}
+body.dark .hero.sky{background:var(--skyd)}
+.hero.sky::before,.hero.sky::after{display:none}
+.skytop{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.skybrand{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.85)}
+.skybrand b{letter-spacing:.22em;color:#E9D3A9;font-size:12px}
+.skybrand i{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.4)}
+.skybrand img{border-radius:6px}
+.skybtn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;backdrop-filter:blur(8px)}
+.skybtn svg.i{width:20px;height:20px}
+.skydate{font-size:12px;color:rgba(255,255,255,.85);line-height:1.5}
+.hero.sky .hn{margin-top:8px;font-size:15px;color:#F5DFB6}.hero.sky .hn b{color:#F5DFB6}
+.hero.sky .hn .ht{font-size:15px;font-weight:600;line-height:inherit;text-shadow:none;color:#fff}
+.hero.sky .hc{font-size:34px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.skyarc{width:100%;height:68px;overflow:visible;margin-top:6px}
+.skytimes{display:flex;justify-content:space-between;padding:0 8px;font-size:11px;color:rgba(255,255,255,.7);font-weight:600}
+nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-bottom:0;border:1px solid var(--line);border-radius:28px;box-shadow:0 12px 32px rgba(15,76,58,.14);background:var(--navbg)}
+nav .in{max-width:520px;padding:6px 8px}
+body{padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))}
+nav .ic{width:56px;height:30px}
+@media (max-width:360px){nav .ic{width:46px}}
+.toast{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+#vfab{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+</style>
 </head>
 <body>
 <div id="splash" aria-hidden="true"><img src="icons/icon-192.png" alt="" width="112" height="112"><b>ISNAD</b><small>ISNAD Project</small></div>

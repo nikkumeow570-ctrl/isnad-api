@@ -20,8 +20,6 @@ const Q = { s: null, bm: false, focus: null }, H = { b: null, n: 1 }, C = { id: 
 function viewServices() {
   const T = [
     ['pray', 'tc1', '🕌', tx('Prayer guide', 'தொழுகை வழிகாட்டி')],
-    ['quran', 'tc2', '📖', tx('Quran', 'குர்ஆன்')],
-    ['hadith', 'tc3', '📜', tx('Hadith', 'ஹதீஸ்')],
     ['duas', 'tc4', '🤲', tx('Duas & Adhkar', 'துஆக்கள் & அதுகார்')],
     ['qibla', 'tc5', '🧭', tx('Qibla', 'கிப்லா')],
     ['courses', 'tc6', '🎓', tx('Courses', 'பாடங்கள்')],
@@ -29,7 +27,8 @@ function viewServices() {
     ['jumma', 'tc8', '🕋', tx('Jumma', 'ஜும்ஆ')],
     ['eid', 'tc1', '🌙', tx('Eid', 'பெருநாள்')],
     ['special', 'tc2', '⚰️', tx('Janazah & Taraweeh', 'ஜனாஸா & தராவீஹ்')],
-    ['aqeedah', 'tc3', '☝️', tx('Aqeedah', 'அகீதா')]
+    ['aqeedah', 'tc3', '☝️', tx('Aqeedah', 'அகீதா')],
+    ['settings', 'tc4', '⚙️', tx('Settings', 'அமைப்புகள்')]
   ];
   return `<div class="tiles">${T.map((x) => `<button class="tile ${x[1]}" data-act="svc" data-v="${x[0]}"><span class="ti">${x[2]}</span><span class="tn">${x[3]}</span></button>`).join('')}</div>`;
 }

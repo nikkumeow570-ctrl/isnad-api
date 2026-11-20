@@ -160,11 +160,38 @@ const ADHAN_LINES = [
 ];
 
 const TABS = [
-  { id: 'times', icon: '🕰️' },
-  { id: 'more', icon: '▦' },
-  { id: 'set', icon: '⚙️' }
+  { id: 'times', icon: '🌅' },
+  { id: 'quran', icon: '📖' },
+  { id: 'hadith', icon: '📜' },
+  { id: 'more', icon: '▦' }
 ];
-const TAB_LABEL = () => ({ times: tx('Today', 'இன்று'), more: tx('Services', 'சேவைகள்'), set: tx('Settings', 'அமைப்புகள்') });
+const TAB_LABEL = () => ({ times: tx('Today', 'இன்று'), quran: tx('Quran', 'குர்ஆன்'), hadith: tx('Hadith', 'ஹதீஸ்'), more: tx('Tools', 'கருவிகள்') });
+/* sky colours follow the next prayer (pre-dawn, midday, afternoon, twilight, night) */
+const SKY = {
+  Fajr: ['linear-gradient(155deg,#1E294B 0%,#374775 55%,#7B8AB8 100%)', 'linear-gradient(155deg,#0E1529 0%,#1D2B50 55%,#344774 100%)'],
+  Dhuhr: ['linear-gradient(155deg,#4B6A7A 0%,#8FA8A6 52%,#DEC7A4 100%)', 'linear-gradient(155deg,#1A2B32 0%,#2C4649 55%,#5C5241 100%)'],
+  Asr: ['linear-gradient(155deg,#33415C 0%,#748095 48%,#C9AD88 100%)', 'linear-gradient(155deg,#162030 0%,#2F3A4B 52%,#68553E 100%)'],
+  Maghrib: ['linear-gradient(155deg,#2B2440 0%,#7C4D59 50%,#D99B66 100%)', 'linear-gradient(155deg,#171324 0%,#4A2B36 52%,#8C5B35 100%)'],
+  Isha: ['linear-gradient(155deg,#0D1614 0%,#162B24 55%,#2D4A3E 100%)', 'linear-gradient(155deg,#070B0A 0%,#0F1F1A 55%,#1D352B 100%)']
+};
+const SKY_LABEL = () => ({ Fajr: tx('Before dawn', 'விடியலுக்கு முன்'), Dhuhr: tx('Midday', 'நண்பகல்'), Asr: tx('Afternoon', 'பிற்பகல்'), Maghrib: tx('Twilight', 'அந்தி'), Isha: tx('Night', 'இரவு') });
+/* where the sun (day) or moon (night) sits on the arc, 0..1 */
+function skyProgress(now) {
+  const t = timesFor(now), y = timesFor(new Date(now.getTime() - 864e5)), n = timesFor(new Date(now.getTime() + 864e5));
+  let a, b, night = false;
+  if (t.Sunrise && t.Maghrib && now >= t.Sunrise && now < t.Maghrib) { a = t.Sunrise; b = t.Maghrib; }
+  else if (t.Maghrib && n.Sunrise && now >= t.Maghrib) { a = t.Maghrib; b = n.Sunrise; night = true; }
+  else if (y.Maghrib && t.Sunrise) { a = y.Maghrib; b = t.Sunrise; night = true; }
+  else return { p: 0.5, night: false };
+  return { p: Math.max(0.05, Math.min(0.95, (now - a) / (b - a))), night };
+}
+function skyArc(now) {
+  const sp = skyProgress(now), p = sp.p, x = (1 - p) * (1 - p) * 24 + 2 * (1 - p) * p * 160 + p * p * 296, y = (1 - p) * (1 - p) * 62 + 2 * (1 - p) * p * -14 + p * p * 62;
+  const orb = sp.night
+    ? `<path d="M ${x + 3} ${y - 6} A 6.5 6.5 0 1 0 ${x + 3} ${y + 6} A 4.8 4.8 0 1 1 ${x + 3} ${y - 6} Z" fill="#FEF3C7"/>`
+    : `<circle cx="${x}" cy="${y}" r="6.2" fill="#FEF3C7" stroke="#D4AF37" stroke-width="1.5"/>`;
+  return `<svg class="skyarc" viewBox="0 0 320 74" aria-hidden="true"><defs><linearGradient id="arcg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgba(255,255,255,.18)"/><stop offset=".5" stop-color="rgba(214,185,134,.85)"/><stop offset="1" stop-color="rgba(255,255,255,.18)"/></linearGradient><radialGradient id="halo"><stop offset="0" stop-color="#FDE68A" stop-opacity=".9"/><stop offset=".55" stop-color="#D4AF37" stop-opacity=".32"/><stop offset="1" stop-color="#D4AF37" stop-opacity="0"/></radialGradient></defs><line x1="16" y1="62" x2="304" y2="62" stroke="rgba(255,255,255,.18)" stroke-dasharray="3 4"/><path d="M 24 62 Q 160 -14 296 62" fill="none" stroke="url(#arcg)" stroke-width="1.8" stroke-linecap="round"/><circle cx="24" cy="62" r="2.5" fill="rgba(255,255,255,.45)"/><circle cx="296" cy="62" r="2.5" fill="rgba(255,255,255,.45)"/><circle id="skyhalo" cx="${x}" cy="${y}" r="18" fill="url(#halo)"/><g id="skyorb">${orb}</g></svg>`;
+}
 
 /* ---------------- STATE ---------------- */
 const $ = (id) => document.getElementById(id);
@@ -882,9 +909,10 @@ function viewTimes() {
     : ns === 'denied' ? '⛔ அறிவிப்புகள் தடுக்கப்பட்டுள்ளன - தளம்/ஆப் செட்டிங்ஸில் அனுமதிக்கவும்'
     : ns === 'unsupported' ? 'இங்கு அறிவிப்புகள் ஆதரிக்கப்படவில்லை' : '🔔 அறிவிப்புகள் இன்னும் இயக்கப்படவில்லை';
   const dateLine = now.toLocaleDateString(S.lang === 'en' ? 'en-IN' : 'ta-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  const hero = nx ? `<div class="card hero"><div class="hbrand"><img src="icons/icon-192.png" alt="" width="28" height="28"><span>ISNAD</span></div><div class="mute">${dateLine} • 📍 ${S.place}</div><div class="hijri">${hijriString(now) ? '≈ ' + hijriString(now) : ''}</div>
-<div class="hn">${tx('Next', 'அடுத்தது')}: <b id="heroName">${KEY_LABEL[nx.key]}</b></div>
-    <div class="ht" id="heroTime">${fmt(nx.at)}</div><div class="hc" id="heroCount">${tx('in ', 'இன்னும் ')}${countdown(nx.at - now)}</div></div>` : '';
+  const sk = SKY[nx && SKY[nx.key] ? nx.key : (nx && nx.key === 'Sunrise' ? 'Fajr' : 'Isha')] || SKY.Isha;
+  const hero = nx ? `<div class="card hero sky" style="--sky:${sk[0]};--skyd:${sk[1]}"><div class="skytop"><div class="skybrand"><img src="icons/icon-192.png" alt="" width="22" height="22"><b>ISNAD</b><i></i><span>${SKY_LABEL()[nx && SKY[nx.key] ? nx.key : (nx.key === 'Sunrise' ? 'Fajr' : 'Isha')]}</span></div><button class="skybtn" data-act="gosettings" aria-label="${tx('Settings', 'அமைப்புகள்')}">⚙️</button></div><div class="skydate">${dateLine}${hijriString(now) ? ' • ' + hijriString(now) : ''}<br>📍 ${S.place}</div>
+<div class="hn">${tx('Next', 'அடுத்தது')}: <b id="heroName">${KEY_LABEL[nx.key]}</b> <span class="ht" id="heroTime">${fmt(nx.at)}</span></div><div class="hc" id="heroCount">${tx('in ', 'இன்னும் ')}${countdown(nx.at - now)}</div>
+${skyArc(now)}<div class="skytimes"><span>${KEY_LABEL.Sunrise} ${t.Sunrise ? fmt(t.Sunrise) : ''}</span><span>${KEY_LABEL.Dhuhr} ${t.Dhuhr ? fmt(t.Dhuhr) : ''}</span><span>${KEY_LABEL.Maghrib} ${t.Maghrib ? fmt(t.Maghrib) : ''}</span></div></div>` : '';
   return `${hero}${dayNote(now)}
   <div class="card"><table class="tbl"><tbody>${rows}</tbody></table>
     ${trSummary(now)}
@@ -1477,7 +1505,8 @@ function render() {
   const rootTitle = (tab === 'times' || (tab === 'more' && !moreSub) || (tab === 'set' && !setSub)) ? `<div class="ptitle phead"><img src="icons/icon-192.png" alt="" width="40" height="40"><span>${TAB_LABEL()[tab]}</span><em>ISNAD</em></div>` : '';
   const bf = tab === 'more' && (moreSub === 'quran' || moreSub === 'hadith') ? '<div class="brandfoot"><img src="icons/icon-192.png" alt="" width="18" height="18"> ISNAD Project</div>' : '';
   $('main').innerHTML = (rootTitle + VIEWS[tab]() + bf).replace(/\u06DD/g, ' ﴾﴿ ') + `<footer><div class="card" style="display:inline-block;padding:12px 16px;margin:0">அனைத்து முஸ்லிம் சமூகத்துக்காக<br>ஸஹீஹான ஹதீஸ்களின் அடிப்படையில் உருவாக்கப்பட்டது • ஆஃப்லைன் • v1.0</div></footer>`;
-  const navTab = (tab === 'pray' || tab === 'duas') ? 'more' : tab;
+  const navTab = tab === 'more' ? (moreSub === 'quran' ? 'quran' : moreSub === 'hadith' ? 'hadith' : 'more') : (tab === 'pray' || tab === 'duas' || tab === 'set') ? 'more' : tab;
+  if (tab === 'more' && ((moreSub === 'quran' && Q.s == null && !Q.bm) || (moreSub === 'hadith' && !H.b))) { const bb = $('main').querySelector('.backbar'); if (bb) bb.remove(); }
   $('nav').innerHTML = TABS.map((t) => `<button class="${navTab === t.id ? 'on' : ''}" data-tab="${t.id}"><span class="ic">${t.icon}</span><span class="lb">${TAB_LABEL()[t.id]}</span></button>`).join('');
   tidy();
   applyLang();
@@ -1493,7 +1522,7 @@ function render() {
 /* ---------------- EVENTS ---------------- */
 document.addEventListener('click', (e) => {
   const tb = e.target.closest('[data-tab]');
-  if (tb) { homeBack = false; if (tb.dataset.tab === 'more') { moreSub = null; setSub = null; Q.s = null; H.b = null; C.id = null; } if (tb.dataset.tab === 'set') setSub = null; if (tb.dataset.tab === 'pray') praySub = null; if (tb.dataset.tab === 'duas') { duaOpen = null; akSet = null; } tab = tb.dataset.tab; render(); window.scrollTo(0, 0); return; }
+  if (tb) { homeBack = false; if (tb.dataset.tab === 'quran') { tab = 'more'; moreSub = 'quran'; setSub = null; Q.s = null; Q.bm = false; render(); window.scrollTo(0, 0); return; } if (tb.dataset.tab === 'hadith') { tab = 'more'; moreSub = 'hadith'; setSub = null; H.b = null; render(); window.scrollTo(0, 0); return; } if (tb.dataset.tab === 'more') { moreSub = null; setSub = null; Q.s = null; H.b = null; C.id = null; } if (tb.dataset.tab === 'set') setSub = null; if (tb.dataset.tab === 'pray') praySub = null; if (tb.dataset.tab === 'duas') { duaOpen = null; akSet = null; } tab = tb.dataset.tab; render(); window.scrollTo(0, 0); return; }
   const a = e.target.closest('[data-act]');
   if (!a) return;
   const act = a.dataset.act;
@@ -1638,6 +1667,7 @@ function tick() {
     const hc = document.getElementById('heroCount');
     if (hc) { hc.textContent = tx('in ', 'இன்னும் ') + countdown(nx.at - now); document.getElementById('heroName').textContent = KEY_LABEL[nx.key]; document.getElementById('heroTime').textContent = fmt(nx.at); }
   }
+  try { const so = document.getElementById('skyorb'); if (so && tab === 'times') { const a = skyArc(now), m = a.match(/<g id="skyorb">([\s\S]*?)<\/g>/), h = a.match(/<circle id="skyhalo" cx="([\d.]+)" cy="([\d.]+)"/); if (m && h) { so.innerHTML = m[1]; const ho = document.getElementById('skyhalo'); ho.setAttribute('cx', h[1]); ho.setAttribute('cy', h[2]); } } } catch (e) {}
   checkReminders();
   if (dayKey(now) !== lastDay) { lastDay = dayKey(now); if (tab === 'times' || tab === 'pray') render(); }
 }
