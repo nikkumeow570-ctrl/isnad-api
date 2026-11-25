@@ -175,6 +175,24 @@ const SKY = {
   golden: ['linear-gradient(170deg,#4B5E7E 0%,#C79A62 62%,#E5C76B 125%)', 'linear-gradient(170deg,#1B2538 0%,#6C5232 62%,#9B7A30 125%)'],
   sunset: ['linear-gradient(170deg,#2A2347 0%,#8A4A5C 48%,#E08A4F 100%)', 'linear-gradient(170deg,#151126 0%,#4A2433 48%,#9A5A2D 100%)']
 };
+const DUNE = { night: ['#0B1F1A', '#06120F'], dawn: ['#6B5A74', '#40384F'], morning: ['#D9C29A', '#B99C6E'], noon: ['#E6CFA3', '#C9A97A'], golden: ['#C99A5E', '#9E723F'], sunset: ['#7A4048', '#3E2230'] };
+function dunes(ph) {
+  const c = DUNE[ph] || DUNE.night;
+  return `<svg class="dunes" viewBox="0 0 320 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 44 C50 22 100 56 160 38 C220 20 270 52 320 36 L320 70 L0 70Z" fill="${c[0]}" opacity=".75"/><path d="M0 58 C60 40 110 66 170 52 C230 40 280 64 320 54 L320 70 L0 70Z" fill="${c[1]}" opacity=".9"/></svg>`;
+}
+/* Day strip (all prayers top to bottom with a dot for now) beside a Qibla card */
+function dayRow(t, now) {
+  if (!t || !t.Fajr) return '';
+  const ks = TIME_KEYS.filter((k) => t[k]); let idx = -1;
+  ks.forEach((k, i) => { if (now >= t[k]) idx = i; });
+  const frac = idx < 0 ? 0 : idx >= ks.length - 1 ? 1 : (now - t[ks[idx]]) / (t[ks[idx + 1]] - t[ks[idx]]);
+  const pos = idx < 0 ? 0 : Math.min(ks.length - 1, idx + frac), top = ks.length > 1 ? pos / (ks.length - 1) * 100 : 0;
+  const items = ks.map((k, i) => `<li class="${i === idx ? 'cur' : ''} ${i < idx ? 'past' : ''}"><b>${KEY_LABEL[k]}</b><span>${fmt(t[k])}</span></li>`).join('');
+  const q = Math.round(Prayer.qibla(S.lat, S.lng));
+  const dial = `<svg viewBox="0 0 120 120" class="qdial" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.5" stroke-dasharray="1.5 4"/><text x="60" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#E6CE9E">N</text><g transform="rotate(${q} 60 60)"><line x1="60" y1="60" x2="60" y2="20" stroke="#E6CE9E" stroke-width="4" stroke-linecap="round"/><path d="M60 12 L68 26 L52 26Z" fill="#E6CE9E"/></g><circle cx="60" cy="60" r="5" fill="#fff"/></svg>`;
+  return `<div class="dayrow"><div class="card daystrip" aria-label="${tx('Today', 'இன்று')}"><div class="dsline"><i style="top:${top.toFixed(1)}%"></i></div><ul>${items}</ul></div>
+    <button class="card qcard" data-act="svc" data-v="qibla" aria-label="${tx('Open Qibla compass', 'கிப்லா திசைகாட்டி')}"><small>${tx('Qibla', 'கிப்லா')}</small>${dial}<b>${q}°</b><span>${tx('North-up. Tap to open the live compass', 'வடக்கு மேலே. நேரடி திசைகாட்டிக்குத் தொடவும்')}</span></button></div>`;
+}
 function skyPhase(t, now) {
   if (!t || !t.Fajr || !t.Maghrib || !t.Isha) return 'night';
   if (now >= t.Isha || now < t.Fajr) return 'night';
@@ -352,6 +370,18 @@ function dayNote(now) {
   const fr = fastReason(day);
   if (!fr) return ramadanSoon(day);
   return `<div class="card soft"><b>🌿 ${label}: ${tx('a sunnah fasting day', 'சுன்னத் நோன்பு நாள்')}</b> <span class="mute">- ${tx(fr.en, fr.ta)} (${fr.ref})</span></div>`;
+}
+/* Iqama (start of the congregation): estimated minutes after the adhan unless the user sets it. Shown as an estimate. */
+const IQ_MIN = { Fajr: 20, Dhuhr: 15, Asr: 15, Maghrib: 5, Isha: 15 };
+function iqamaNow(t, now) {
+  const k = currentActiveKey(t, now); if (!k || !IQ_MIN[k] || !t[k]) return null;
+  if (t.Fajr && now < t.Fajr) return null;
+  const at = new Date(t[k].getTime() + ((S.iq && +S.iq[k]) || IQ_MIN[k]) * 60000);
+  return now < at ? { key: k, at } : null;
+}
+function heroNext(t, now, nx) {
+  const iq = iqamaNow(t, now);
+  return iq ? { iq: true, key: iq.key, at: iq.at, label: tx('Iqama', 'இகாமத்') + ' · ' } : { iq: false, key: nx.key, at: nx.at, label: '' };
 }
 function currentActiveKey(t, now) {
   if (!t) return null;
@@ -921,11 +951,11 @@ function viewTimes() {
     : ns === 'denied' ? '⛔ அறிவிப்புகள் தடுக்கப்பட்டுள்ளன - தளம்/ஆப் செட்டிங்ஸில் அனுமதிக்கவும்'
     : ns === 'unsupported' ? 'இங்கு அறிவிப்புகள் ஆதரிக்கப்படவில்லை' : '🔔 அறிவிப்புகள் இன்னும் இயக்கப்படவில்லை';
   const dateLine = now.toLocaleDateString(S.lang === 'en' ? 'en-IN' : 'ta-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  const ph = skyPhase(t, now), sk = SKY[ph];
-  const hero = nx ? `<div class="card hero sky" style="--sky:${sk[0]};--skyd:${sk[1]}"><div class="skytop"><div class="skybrand"><img src="icons/icon-192.png" alt="" width="22" height="22"><b>ISNAD</b><i></i><span>${SKY_LABEL()[ph]}</span></div><button class="skybtn" data-act="gosettings" aria-label="${tx('Settings', 'அமைப்புகள்')}">⚙️</button></div><div class="skydate">${dateLine}${hijriString(now) ? ' • ' + hijriString(now) : ''}<br>📍 ${S.place}</div>
-<div class="hn">${tx('Next', 'அடுத்தது')}: <b id="heroName">${KEY_LABEL[nx.key]}</b> <span class="ht" id="heroTime">${fmt(nx.at)}</span></div><div class="hc" id="heroCount">${tx('in ', 'இன்னும் ')}${countdown(nx.at - now)}</div>
+  const ph = skyPhase(t, now), sk = SKY[ph], hn = nx ? heroNext(t, now, nx) : null;
+  const hero = nx ? `<div class="card hero sky" style="--sky:${sk[0]};--skyd:${sk[1]}">${dunes(ph)}<div class="skytop"><div class="skybrand"><img src="icons/icon-192.png" alt="" width="22" height="22"><b>ISNAD</b><i></i><span>${SKY_LABEL()[ph]}</span></div><button class="skybtn" data-act="gosettings" aria-label="${tx('Settings', 'அமைப்புகள்')}">⚙️</button></div><div class="skydate">${dateLine}${hijriString(now) ? ' • ' + hijriString(now) : ''}<br>📍 ${S.place}</div>
+<div class="hn"><span id="heroLbl">${hn.iq ? '' : tx('Next', 'அடுத்தது') + ': '}</span><b id="heroName" data-iq="${hn.iq ? 1 : 0}">${hn.label}${KEY_LABEL[hn.key]}</b> <span class="ht" id="heroTime">${fmt(hn.at)}</span></div><div class="hc" id="heroCount">${tx('in ', 'இன்னும் ')}${countdown(hn.at - now)}</div>${hn.iq ? `<div class="iqnote">${tx('Estimated · varies by mosque', 'தோராயம் · பள்ளிவாசலுக்கு ஏற்ப மாறும்')}</div>` : ''}
 ${skyArc(now)}<div class="skytimes"><span>${KEY_LABEL.Sunrise} ${t.Sunrise ? fmt(t.Sunrise) : ''}</span><span>${KEY_LABEL.Dhuhr} ${t.Dhuhr ? fmt(t.Dhuhr) : ''}</span><span>${KEY_LABEL.Maghrib} ${t.Maghrib ? fmt(t.Maghrib) : ''}</span></div></div>` : '';
-  return `${hero}${dayNote(now)}
+  return `${hero}${dayNote(now)}${dayRow(t, now)}
   <div class="card"><table class="tbl"><tbody>${rows}</tbody></table>
     ${trSummary(now)}
     ${TIME_KEYS.some((k) => /^\d{2}:\d{2}$/.test(S.fixed[k]) || S.adj[k]) ? `<p class="mute">🕌 ${tx('Mosque times are in use.', 'பள்ளிவாசல் நேரம் பயன்பாட்டில் உள்ளது.')} <button class="sec" data-act="resetadj" style="padding:4px 10px">${tx('Use calculated times', 'கணக்கிட்ட நேரங்கள்')}</button></p>` : ''}</div>
@@ -1686,7 +1716,7 @@ function tick() {
     $('nxTime').textContent = fmt(nx.at);
     $('nxCount').textContent = tx('in ', 'இன்னும் ') + countdown(nx.at - now);
     const hc = document.getElementById('heroCount');
-    if (hc) { hc.textContent = tx('in ', 'இன்னும் ') + countdown(nx.at - now); document.getElementById('heroName').textContent = KEY_LABEL[nx.key]; document.getElementById('heroTime').textContent = fmt(nx.at); }
+    if (hc) { const tt = timesFor(now), hn = heroNext(tt, now, nx); const was = document.getElementById('heroName').dataset.iq === '1'; if (was !== hn.iq) { render(); return; } hc.textContent = tx('in ', 'இன்னும் ') + countdown(hn.at - now); document.getElementById('heroName').textContent = hn.label + KEY_LABEL[hn.key]; document.getElementById('heroTime').textContent = fmt(hn.at); }
   }
   try { const so = document.getElementById('skyorb'); if (so && tab === 'times') { const a = skyArc(now), m = a.match(/<g id="skyorb">([\s\S]*?)<\/g>/), h = a.match(/<circle id="skyhalo" cx="([\d.]+)" cy="([\d.]+)"/); if (m && h) { so.innerHTML = m[1]; const ho = document.getElementById('skyhalo'); ho.setAttribute('cx', h[1]); ho.setAttribute('cy', h[2]); } } } catch (e) {}
   checkReminders();
